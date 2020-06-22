@@ -1,2 +1,2 @@
-# shopsafe
-Informed safe, shopping during COVID-19.
+# ShopSafe
+A web application for informed and safe shopping during COVID-19.
