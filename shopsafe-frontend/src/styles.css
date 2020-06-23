@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Cerebri Sans';
+    src: url('./assets/fonts/cerebrisans-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+  
+  @font-face {
+    font-family: 'Cerebri Sans';
+    src: url('./assets/fonts/cerebrisans-medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+  
+  @font-face {
+    font-family: 'Cerebri Sans';
+    src: url('./assets/fonts/cerebrisans-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+* {
+    font-family: "Cerebri Sans", sans-serif !important;
+}
+
+html, body {
+    scroll-behavior: smooth;
+}
