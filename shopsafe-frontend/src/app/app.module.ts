@@ -2,19 +2,23 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ResultsComponent } from './results/results.component';
+import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
+import { ResultComponent } from './result/result.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
-    ResultsComponent,
-    LandingComponent
+    AppComponent,
+    LandingComponent,
+    ResultComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [LandingComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
