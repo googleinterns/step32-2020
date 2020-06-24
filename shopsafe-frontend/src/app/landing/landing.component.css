@@ -1,0 +1,8 @@
+#landing .heading-text {
+    padding-top: 50px;
+    text-align: center;
+}
+
+#landing .heading-text a {
+    text-transform: uppercase;
+}

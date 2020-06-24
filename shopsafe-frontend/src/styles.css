@@ -1,30 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 @font-face {
-  font-family: 'Cerebri Sans';
-  src: url('./assets/fonts/cerebrisans-regular.ttf') format('truetype');
+  font-family: 'Avenir Next';
+  src: url('./assets/fonts/AvenirNext-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
-  
-  @font-face {
-  font-family: 'Cerebri Sans';
-  src: url('./assets/fonts/cerebrisans-medium.ttf') format('truetype');
+
+@font-face {
+  font-family: 'Avenir Next';
+  src: url('./assets/fonts/AvenirNext-Medium.ttf') format('truetype'); 
   font-weight: 500;
   font-style: normal;
 }
-  
-  @font-face {
-  font-family: 'Cerebri Sans';
-  src: url('./assets/fonts/cerebrisans-bold.ttf') format('truetype');
+
+@font-face {
+  font-family: 'Avenir Next';
+  src: url('./assets/fonts/AvenirNext-DemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Avenir Next';
+  src: url('./assets/fonts/AvenirNext-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 
-* {
-  font-family: "Cerebri Sans", sans-serif !important;
-}
-
-html, body {
+*, body{
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: grayscale;
+  font-family: "Avenir Next", sans-serif !important;
   scroll-behavior: smooth;
 }
 
@@ -50,10 +56,15 @@ h1 {
   color: #4A4A4A;
 }
 
+p {
+  font-weight: 500;
+}
+
 a {
   color: #68BBCF;
   text-decoration: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
 a:hover {
