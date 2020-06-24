@@ -1,29 +1,61 @@
 /* You can add global styles to this file, and also import other style files */
 @font-face {
-    font-family: 'Cerebri Sans';
-    src: url('./assets/fonts/cerebrisans-regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Cerebri Sans';
+  src: url('./assets/fonts/cerebrisans-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
   
   @font-face {
-    font-family: 'Cerebri Sans';
-    src: url('./assets/fonts/cerebrisans-medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
+  font-family: 'Cerebri Sans';
+  src: url('./assets/fonts/cerebrisans-medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
 }
   
   @font-face {
-    font-family: 'Cerebri Sans';
-    src: url('./assets/fonts/cerebrisans-bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'Cerebri Sans';
+  src: url('./assets/fonts/cerebrisans-bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
 }
 
 * {
-    font-family: "Cerebri Sans", sans-serif !important;
+  font-family: "Cerebri Sans", sans-serif !important;
 }
 
 html, body {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+}
+
+.segment {
+  z-index: 0;
+  height: auto;
+  min-height: 100%;
+  position: relative;
+  margin-bottom: 10%;
+}
+
+.segment-text {
+  padding-top: 130px;
+  margin-left: 25%;
+  margin-right: 25%;
+  padding-bottom: 130px;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 68px;
+  color: #4A4A4A;
+}
+
+a {
+  color: #68BBCF;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a:hover {
+  color: #2C97B1;
 }
