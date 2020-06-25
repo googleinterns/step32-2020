@@ -12,6 +12,7 @@
     height: 87px;
     background: rgba(0, 0, 0, 0.03);
     border-radius: 8px;
+    padding: 33px;
 }
 
 #result h2 {
@@ -39,6 +40,7 @@
 #result .location-icon {
     font-size: 18px;
     color: #FF8756;
+    cursor: auto;
 }
 
 #result .stores-list-location {
@@ -49,9 +51,24 @@
     color: #4A4A4A;
 }
 
-#result .markers * {
+#result .markers *, #result .stat-elem *, #result .stat-bar * {
     white-space: nowrap;
     display: inline;
+}
+
+#result .stat-elem {
+    float: left;
+    display: flex;
+    width: 33.3%;
+}
+
+#result .shopsafe-score {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 30px;
+    display: flex;
+    color: #FF8756;
 }
 
 #result .rating {
@@ -66,4 +83,12 @@
 
 #result .address {
     line-height: 0px;
+}
+
+#result .stat-obj {
+    background: rgba(104, 187, 207, 0.1);
+    border-radius: 8px;
+    padding: 10px 15px 10px;
+    color: #68BBCF;
+    margin-right: 15px;
 }
