@@ -18,10 +18,6 @@
     text-transform: uppercase;
 }
 
-#result .stores-list-wrapper {
-    padding-top: 10px;
-}
-
 #result .right-text {
     float: right;
 }
@@ -36,6 +32,8 @@
 
 #result .stores-list-heading {
     padding-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
 }
 
 #result .location-icon {
@@ -67,5 +65,5 @@
 }
 
 #result .address {
-    margin-top: -5px;
+    line-height: 0px;
 }
