@@ -17,3 +17,55 @@
 #result h2 {
     text-transform: uppercase;
 }
+
+#result .stores-list-wrapper {
+    padding-top: 10px;
+}
+
+#result .right-text {
+    float: right;
+}
+
+#result .subtext {
+    line-height: 41px;
+}
+
+#result .left-text {
+    float: left;
+}
+
+#result .stores-list-heading {
+    padding-top: 10px;
+}
+
+#result .location-icon {
+    font-size: 18px;
+    color: #FF8756;
+}
+
+#result .stores-list-location {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    padding: 10px 15px 10px;
+    text-transform: uppercase;
+    color: #4A4A4A;
+}
+
+#result .markers * {
+    white-space: nowrap;
+    display: inline;
+}
+
+#result .rating {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 30px;
+    display: flex;
+    color: #FF8756;
+    padding-left: 10px;
+}
+
+#result .address {
+    margin-top: -5px;
+}
