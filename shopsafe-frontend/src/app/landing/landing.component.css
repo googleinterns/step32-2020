@@ -1,5 +1,5 @@
 #landing .heading-text {
-    padding-top: 50px;
+    padding-top: 170px;
     text-align: center;
 }
 
@@ -15,7 +15,7 @@
 }
 
 #landing .input-container .search-icon {
-    /* padding: 15px 50px 15px; */
+    padding: 15px 50px 15px;
     color: #4A4A4A;
 }
 
@@ -31,4 +31,8 @@
 
 #landing .input-container i {
     position: absolute;
+}
+
+#landing form {
+    padding-top: 35px;
 }
