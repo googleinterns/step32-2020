@@ -8,11 +8,33 @@ import { StoreComponent } from './store/store.component';
 import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'result', component: ResultComponent },
-  { path: 'store', component: StoreComponent },
-  { path: 'about', component: AboutComponent },
-  { path: "**", component: PageNotFoundComponent },
+  { 
+    path: '', 
+    component: LandingComponent 
+  },
+  {
+    path: 'result', 
+    component: ResultComponent, 
+  },
+  { 
+    path: 'store', 
+    component: StoreComponent,
+    children: [
+      {
+        path: 'store/:name',
+        component: StoreComponent,
+      }
+      // TODO: dynamic routing based on store name using https://medium.com/@itsyou/angular-dynamic-routes-with-easy-example-c3fa64fbc768
+    ] 
+  },
+  { 
+    path: 'about', 
+    component: AboutComponent 
+  },
+  { 
+    path: "**", 
+    component: PageNotFoundComponent 
+  },
 ];
 
 @NgModule({
