@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/shopsafe-frontend",
+            "outputPath": "../shopsafe-backend/src/main/webapp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "shopsafe-frontend"
+  "defaultProject": "shopsafe-frontend",
+  "cli": {
+    "analytics": "e25e360a-4fab-4a80-bcd2-7ae5434ff26c"
+  }
 }
