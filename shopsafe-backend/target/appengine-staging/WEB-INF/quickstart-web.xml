@@ -273,7 +273,7 @@
       <secure>false</secure>
       <max-age>-1</max-age>
     </cookie-config>
-    <tracking-mode>URL</tracking-mode>
     <tracking-mode>COOKIE</tracking-mode>
+    <tracking-mode>URL</tracking-mode>
   </session-config>
 </web-app>
