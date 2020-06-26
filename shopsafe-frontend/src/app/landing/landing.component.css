@@ -1,0 +1,38 @@
+#landing .heading-text {
+    padding-top: 170px;
+    text-align: center;
+}
+
+#landing .heading-text a {
+    text-transform: uppercase;
+}
+
+#landing .input-container {
+    padding-top: 30px;
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#landing .input-container .search-icon {
+    padding: 15px 50px 15px;
+    color: #4A4A4A;
+}
+
+#landing .input-field {
+    width: 100%;
+    padding: 15px 50px 15px;
+    outline: none;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.03);
+    border: none;
+    font-weight: 500;
+}
+
+#landing .input-container i {
+    position: absolute;
+}
+
+#landing form {
+    padding-top: 35px;
+}
