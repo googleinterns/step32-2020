@@ -83,5 +83,11 @@ a {
 a:hover {
   color: #2C97B1;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.right-text {
+  float: right;
+}
+
+.left-text {
+  float: left;
+}

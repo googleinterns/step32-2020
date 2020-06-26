@@ -19,16 +19,8 @@
     text-transform: uppercase;
 }
 
-#store .right-text {
-    float: right;
-}
-
 #store .subtext {
     line-height: 41px;
-}
-
-#store .left-text {
-    float: left;
 }
 
 #store .markers *, #store .stat-elem *, #store .stat-bar * {
