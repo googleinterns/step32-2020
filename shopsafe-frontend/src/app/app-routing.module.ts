@@ -4,10 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingComponent } from './landing/landing.component';
 import { ResultComponent } from './result/result.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { StoreComponent } from './store/store.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'result', component: ResultComponent },
+  { path: 'store', component: StoreComponent },
   { path: "**", component: PageNotFoundComponent },
 ];
 
