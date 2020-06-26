@@ -8,6 +8,7 @@ import { ResultComponent } from './result/result.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreComponent } from './store/store.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { StoreComponent } from './store/store.component';
     LandingComponent,
     ResultComponent,
     PageNotFoundComponent,
-    StoreComponent
+    StoreComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
