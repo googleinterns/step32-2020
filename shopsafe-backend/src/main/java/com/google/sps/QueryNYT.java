@@ -24,14 +24,24 @@ import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.TableResult;
 import java.util.UUID;
 
+
+/*
+ *Class for using BigQuery to query New York Times dataset
+ */
 public class QueryNYT {
 
+    /*
+     * On success, returns number of reported covid-19 cases for county. On error,
+     * returns 0.
+     */
     static public long exampleQuery(String state, String county) {
 
+        //BigQuery Service
         BigQuery bigquery = BigQueryOptions
               .newBuilder().setProjectId("shopsafe-step-2020").build()
                 .getService();
 
+        //Prepare SQL query for BigQuery
         QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
                 "SELECT confirmed_cases FROM `bigquery-public-data.covid19_nyt.us_counties` " +
                         "WHERE lower(state_name) = \"" + state.toLowerCase() + "\"" +
@@ -39,6 +49,7 @@ public class QueryNYT {
                         "ORDER BY date DESC"
         ).setUseLegacySql(false).build();
 
+        //Set unique Job ID
         JobId jobId = JobId.of(UUID.randomUUID().toString());
         Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).setJobId(jobId).build());
 
@@ -65,7 +76,7 @@ public class QueryNYT {
             //Error, did not find any query results
             return 0;
         } catch (InterruptedException exception) {
-            System.out.println("Error!!");
+            System.out.println("Error: Big Query Failure!");
             return 0;
         }
     }

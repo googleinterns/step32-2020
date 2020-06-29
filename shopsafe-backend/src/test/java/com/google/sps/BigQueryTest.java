@@ -20,13 +20,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/** */
+
 @RunWith(JUnit4.class)
 public final class BigQueryTest {
 
+    /*
+     * Should return the same number of confirmed cases as we handle case in
+     * in bigquery search.
+     */
     @Test
-    public void newYorkCounty() {
+    public void simpleCaseTest() {
         Assert.assertEquals(QueryNYT.exampleQuery("new York", "new york city"),
-                QueryNYT.exampleQuery("New York", "new york city"));
+                QueryNYT.exampleQuery("New York", "NEW YORK CITY"));
     }
 }
