@@ -6,7 +6,6 @@ import { ResultComponent } from './components/result/result.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { StoreComponent } from './components/store/store.component';
 import { AboutComponent } from './components/about/about.component';
-import { CheckInModalComponent } from './components/check-in-modal/check-in-modal.component';
 
 const routes: Routes = [
   { 
@@ -31,10 +30,6 @@ const routes: Routes = [
   { 
     path: 'about', 
     component: AboutComponent 
-  },
-  {
-    path: 'modal-test',
-    component: CheckInModalComponent
   },
   { 
     path: "**", 

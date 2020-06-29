@@ -14,8 +14,9 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CheckInModalComponent } from './components/check-in-modal/check-in-modal.component';
 
 // Material Angular components
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSliderModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],
