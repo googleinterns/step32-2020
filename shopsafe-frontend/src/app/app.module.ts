@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+// Custom components
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app.component';
 import { LandingComponent } from './components/landing/landing.component';
@@ -12,6 +13,10 @@ import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CheckInModalComponent } from './components/check-in-modal/check-in-modal.component';
 
+// Material Angular components
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,14 +26,19 @@ import { CheckInModalComponent } from './components/check-in-modal/check-in-moda
     StoreComponent,
     AboutComponent,
     FooterComponent,
-    CheckInModalComponent
+    CheckInModalComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  // Set of components to compile when NgModule is defined to be
+  // dynamically loaded into view
+  entryComponents: [CheckInModalComponent]
 })
 export class AppModule { }

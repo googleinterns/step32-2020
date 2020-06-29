@@ -61,7 +61,7 @@
     margin-right: 15px;
 }
 
-#store .check-in-button {
+#store #check-in-button {
     background: rgba(104, 187, 207, 0.1);
     border-radius: 8px;
     padding: 10px 15px 10px;
@@ -75,6 +75,6 @@
     cursor: pointer;
 }
 
-#store .check-in-button:hover {
+#store #check-in-button:hover {
     background: rgba(104, 187, 207, 0.3);
 }
