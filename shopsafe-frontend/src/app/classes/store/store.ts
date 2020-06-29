@@ -1,7 +1,7 @@
 export class Store {
 
     // store variables
-    id: number;
+    id: string = '';
     name: string = '';
     address: string = '';
     score: number;
