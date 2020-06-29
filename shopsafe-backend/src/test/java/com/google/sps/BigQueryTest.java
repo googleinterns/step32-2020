@@ -26,7 +26,7 @@ public final class BigQueryTest {
 
     @Test
     public void newYorkCounty() {
-        Assert.assertEquals(QueryNy.exampleQuery("new York", "new york city"),
-                QueryNy.exampleQuery("New York", "new york city"));
+        Assert.assertEquals(QueryNYT.exampleQuery("new York", "new york city"),
+                QueryNYT.exampleQuery("New York", "new york city"));
     }
 }

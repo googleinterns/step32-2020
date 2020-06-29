@@ -24,19 +24,18 @@ import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.TableResult;
 import java.util.UUID;
 
-public class QueryNy {
+public class QueryNYT {
 
     static public long exampleQuery(String state, String county) {
 
         BigQuery bigquery = BigQueryOptions
-//               .newBuilder().setProjectId("shopsafe-step-2020").build()
-                .getDefaultInstance()
+              .newBuilder().setProjectId("shopsafe-step-2020").build()
                 .getService();
 
         QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
-                "SELECT confimed_cases FROM  'bigquery-public-data.covid19_nyt.us_counties' " +
-                        "WHERE lower(state_name) = '" + state.toLowerCase() + "' " +
-                        "AND lower(county) = '" + county.toLowerCase() + "' " +
+                "SELECT confirmed_cases FROM `bigquery-public-data.covid19_nyt.us_counties` " +
+                        "WHERE lower(state_name) = \"" + state.toLowerCase() + "\"" +
+                        "AND lower(county) = \"" + county.toLowerCase() + "\"" +
                         "ORDER BY date DESC"
         ).setUseLegacySql(false).build();
 
@@ -59,6 +58,8 @@ public class QueryNy {
 
             for (FieldValueList row : result.iterateAll()) {
                 long confirmedCases = row.get("confirmed_cases").getLongValue();
+                
+                //return latest date
                 return confirmedCases;
             }
             //Error, did not find any query results
