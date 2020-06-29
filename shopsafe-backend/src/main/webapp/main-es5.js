@@ -843,7 +843,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   /***/
   function _(module, exports, __webpack_require__) {
     module.exports = __webpack_require__(
-    /*! /home/raulpalomo/shopsafe/shopsafe-frontend/src/main.ts */
+    /*! /home/caroljli/step32-2020/shopsafe-frontend/src/main.ts */
     "./src/main.ts");
     /***/
   }

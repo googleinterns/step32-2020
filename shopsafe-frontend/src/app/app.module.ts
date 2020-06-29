@@ -7,13 +7,19 @@ import { LandingComponent } from './landing/landing.component';
 import { ResultComponent } from './result/result.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreComponent } from './store/store.component';
+import { AboutComponent } from './about/about.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
     ResultComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    StoreComponent,
+    AboutComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
