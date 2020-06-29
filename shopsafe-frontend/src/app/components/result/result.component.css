@@ -1,13 +1,13 @@
-#store .heading-text h1 {
+#result .heading-text h1 {
     text-transform: uppercase;
 }
 
-#store .heading-text {
+#result .heading-text {
     padding-bottom: 20px;
     text-align: center;
 }
 
-#store .stat-bar {
+#result .stat-bar {
     width: 100%;
     height: 87px;
     background: rgba(0, 0, 0, 0.03);
@@ -15,26 +15,54 @@
     padding: 33px;
 }
 
-#store h2 {
+#result h2 {
     text-transform: uppercase;
 }
 
-#store .subtext {
+#result .right-text {
+    float: right;
+}
+
+#result .subtext {
     line-height: 41px;
 }
 
-#store .markers *, #store .stat-elem *, #store .stat-bar * {
+#result .left-text {
+    float: left;
+}
+
+#result .stores-list-heading {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
+}
+
+#result .location-icon {
+    font-size: 18px;
+    color: #FF8756;
+    cursor: auto;
+}
+
+#result .stores-list-location {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    padding: 10px 15px 10px;
+    text-transform: uppercase;
+    color: #4A4A4A;
+}
+
+#result .markers *, #result .stat-elem *, #result .stat-bar * {
     white-space: nowrap;
     display: inline;
 }
 
-#store .stat-elem {
+#result .stat-elem {
     float: left;
     display: flex;
     width: 33.3%;
 }
 
-#store .shopsafe-score {
+#result .shopsafe-score {
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
@@ -43,7 +71,7 @@
     color: #FF8756;
 }
 
-#store .rating {
+#result .rating {
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
@@ -53,28 +81,15 @@
     padding-left: 10px;
 }
 
-#store .stat-obj, #store .maps-button {
+#result .address {
+    line-height: 0px;
+}
+
+#result .stat-obj {
     background: rgba(104, 187, 207, 0.1);
     border-radius: 8px;
     padding: 10px 15px 10px;
     color: #68BBCF;
     margin-right: 15px;
-}
-
-#store .check-in-button {
-    background: rgba(104, 187, 207, 0.1);
-    border-radius: 8px;
-    padding: 10px 15px 10px;
-    color: #68BBCF;
-    margin-right: 15px;
-    border: none;
-    font-weight: 600;
-    width: 100%;
-    font-size: 15px;
-    margin-top: 20px;
-    cursor: pointer;
-}
-
-#store .check-in-button:hover {
-    background: rgba(104, 187, 207, 0.3);
+    cursor: auto;
 }

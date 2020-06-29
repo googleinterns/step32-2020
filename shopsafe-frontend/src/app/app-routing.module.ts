@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LandingComponent } from './landing/landing.component';
-import { ResultComponent } from './result/result.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { StoreComponent } from './store/store.component';
-import { AboutComponent } from './about/about.component';
+import { LandingComponent } from './components/landing/landing.component';
+import { ResultComponent } from './components/result/result.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { StoreComponent } from './components/store/store.component';
+import { AboutComponent } from './components/about/about.component';
 
 const routes: Routes = [
   { 
