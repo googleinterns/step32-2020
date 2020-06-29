@@ -10,10 +10,16 @@
     margin-top: 11px;
     width: 220px;
     color: rgba(196, 196, 196, 0.2);
+    text-align: right;
 }
 
 #check-in-modal .option {
-    padding-top: 10px;
+    white-space: pre-line; 
+}
+
+#check-in-modal .left-text {
+    width: 40%;
+    clear: left;
 }
 
 #check-in-modal #submit-check-in-button {
