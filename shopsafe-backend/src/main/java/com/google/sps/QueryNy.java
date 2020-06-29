@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.Data;
+package com.google.sps;
 
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
@@ -26,9 +26,12 @@ import java.util.UUID;
 
 public class QueryNy {
 
-    public long exampleQuery(String state, String county) {
+    static public long exampleQuery(String state, String county) {
 
-        BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+        BigQuery bigquery = BigQueryOptions
+//               .newBuilder().setProjectId("shopsafe-step-2020").build()
+                .getDefaultInstance()
+                .getService();
 
         QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
                 "SELECT confimed_cases FROM  'bigquery-public-data.covid19_nyt.us_counties' " +
