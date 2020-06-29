@@ -61,6 +61,10 @@
     margin-right: 15px;
 }
 
+#store .stat-obj {
+    cursor: auto;
+}
+
 #store #check-in-button {
     background: rgba(104, 187, 207, 0.1);
     border-radius: 8px;
