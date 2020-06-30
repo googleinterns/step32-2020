@@ -15,4 +15,15 @@ const API_URL = environment.apiUrl;
 export class ApiService {
 
   constructor(private http: HttpClient) { }
+
+
+  /**
+   * Handles error when calling API
+   * @param error Response that returns an error
+   * @returns Observable that throws the error
+   */
+  private handleError(error: Response | any) {
+    console.error('ApiService::handleError', error);
+    return Observable.throw(error);
+  }
 }
