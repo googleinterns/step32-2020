@@ -38,10 +38,6 @@ import org.json.JSONObject;
 @WebServlet("/stores")
 public class StoresServlet extends HttpServlet {
 
-    // FCC api url for county information
-    public static final String FCC_BASE_URL = "https://geo.fcc.gov/api/census/area?lat=";
-    public static final String FCC_END_URL = "&format=json";
-
     /**
      * For a get request, return all nearby stores world.
      */
@@ -58,7 +54,7 @@ public class StoresServlet extends HttpServlet {
 
         // Get county based on LatLon - for each store
         LatLng location = new LatLng(21.575404,-157.9727195);
-        County county = getCounty(location);
+        County county = County.GetCounty(location);
 
         // Todo: Get Covid stats based on county - for each store
 
@@ -70,37 +66,5 @@ public class StoresServlet extends HttpServlet {
 
         response.setContentType("text/html");
         response.getWriter().println(county.getCountyName());
-    }
-
-     /**
-     * Returns the county name based on a LatLng, or empty county if error.
-     */
-    private County GetCounty(LatLng location) {
-        try {
-
-            // Read response of call to FCC API given lat and lng.
-            URL fccUrl = new URL(FCC_BASE_URL + location.getLatitude() + "&lon=" + location.getLongitude() + FCC_END_URL);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fccUrl.openStream()));
-            
-            // Store response in json, by reading each line.
-            StringBuffer json = new StringBuffer();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                json.append(line);
-            }
-            reader.close();
-
-            // Convert json to json object with just the first result.
-            JSONObject result = new JSONObject(new String(json)).getJSONArray("results").getJSONObject(0);
-
-            // Return county using strings from the results.
-            return new County(result.getString("county_name"), result.getString("state_name"), result.getString("county_fips"));
-        } 
-
-        // If error, print error, and return empty county object
-        catch (Exception e) {
-            e.printStackTrace();
-            return new County("", "", "");
-        }
     }
 }
