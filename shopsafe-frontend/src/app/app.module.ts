@@ -19,6 +19,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+// Services
+import { ApiService } from './api.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatTooltipModule
   ],
-  providers: [],
+  providers: [ApiService],
   bootstrap: [AppComponent],
   // Set of components to compile when NgModule is defined to be
   // dynamically loaded into view
