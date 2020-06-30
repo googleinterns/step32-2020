@@ -26,7 +26,6 @@ import { ApiService } from './api.service';
 @NgModule({
   declarations: [
     AppComponent,
-    HttpClientModule,
     LandingComponent,
     ResultComponent,
     PageNotFoundComponent,
@@ -42,7 +41,8 @@ import { ApiService } from './api.service';
     MatDialogModule,
     MatSliderModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    HttpClientModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
