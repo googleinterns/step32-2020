@@ -17,6 +17,7 @@ import { CheckInModalComponent } from './components/check-in-modal/check-in-moda
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserAnimationsModule,
     MatDialogModule,
     MatSliderModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent],

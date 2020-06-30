@@ -2,3 +2,15 @@
     padding-bottom: 20px;
     text-align: center;
 }
+
+#about .box p {
+    text-align: justify;
+}
+
+#about .box p:hover {
+    color: rgb(255, 135, 86, 0.7);
+}
+
+#about .section {
+    padding-top: 20px;
+}

@@ -23,8 +23,8 @@ export class StoreComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.id = "check-in-modal";
-    dialogConfig.height = "470px";
-    dialogConfig.width = "454px";
+    dialogConfig.height = "500px";
+    dialogConfig.width = "460px";
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
   }
 

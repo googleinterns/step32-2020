@@ -1,8 +1,17 @@
 <div id="check-in-modal">
     <h2 class="title-text">Check-In Form</h2>
+    <p>Use the sliders to input the statuses of the store to check in. High values indicates a good status, and low values indicate a bad status.</p>
     <div class="modal-content">
         <div class="option">
-            <h2 class="left-text">Busy &nbsp; <a><i class="far fa-question-circle"></i></a></h2>
+            <h2 class="left-text">
+                Busy &nbsp; 
+                <a 
+                matTooltip="How crowded is it inside the store? Essentially, is there 
+                            enough space to social distance, maintain 6 feet? 1 indicates 
+                            very busy (bad), and 10 indicates not busy at all (good)">
+                    <i class="far fa-question-circle"></i>
+                </a>
+            </h2>
             <mat-slider 
                 min="1" 
                 max="10" 
@@ -12,7 +21,14 @@
             ></mat-slider>
         </div>
         <div class="option">
-            <h2 class="left-text">Line &nbsp; <a><i class="far fa-question-circle"></i></a></h2>
+            <h2 class="left-text">
+                Line &nbsp; 
+                <a 
+                matTooltip="How long is the line to get into the store from the outside?
+                            1 indicates very long (bad), and 10 indicates not long at all (good)">
+                    <i class="far fa-question-circle"></i>
+                </a>
+            </h2>
             <mat-slider 
                 min="1" 
                 max="10" 
@@ -22,7 +38,16 @@
             ></mat-slider>
         </div>
         <div class="option">
-            <h2 class="left-text">Hygiene &nbsp; <a><i class="far fa-question-circle"></i></a></h2>
+            <h2 class="left-text">
+                Hygiene &nbsp; 
+                <a 
+                matTooltip="How clean is the store overall? Are the shared carts, 
+                            baskets, and surfaces sanitized? 1 indicates poor hygiene 
+                            (bad), and 10 indicates good hygiene (good)"
+                >
+                    <i class="far fa-question-circle"></i>
+                </a>
+            </h2>
             <mat-slider 
                 min="1" 
                 max="10" 
@@ -32,7 +57,15 @@
             ></mat-slider>
         </div>
         <div class="option">
-            <h2 class="left-text">Masks &nbsp; <a><i class="far fa-question-circle"></i></a></h2>
+            <h2 class="left-text">
+                Mask &nbsp; 
+                <a 
+                matTooltip="How strict is the store with masks? Are the customers and workers 
+                            wearing masks properly? 1 indicates no to little mask policy 
+                            and presence (bad), and 10 indicates excellent mask usage (good)">
+                    <i class="far fa-question-circle"></i>
+                </a>
+            </h2>
             <mat-slider 
                 min="1" 
                 max="10" 

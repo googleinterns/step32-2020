@@ -2,6 +2,11 @@
     text-transform: uppercase;
 }
 
+#check-in-modal p {
+    font-size: 13px;
+    text-align: center;
+}
+
 #check-in-modal h2.title-text {
     text-align: center;
 }
@@ -38,4 +43,8 @@
 
 #check-in-modal #submit-check-in-button:hover {
     background: rgba(104, 187, 207, 0.3);
+}
+
+#check-in-modal .mat-tooltip {
+    font-size: 13px !important;
 }
