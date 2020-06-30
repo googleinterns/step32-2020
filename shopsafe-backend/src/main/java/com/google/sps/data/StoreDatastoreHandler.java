@@ -28,7 +28,9 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory.Builder;
 
-
+/*
+ * Class that updates(or creates) Store entries in datastore.
+ */
 public class StoreDatastoreHandler {
     
     private String id;

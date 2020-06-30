@@ -47,7 +47,7 @@ public class CheckInServlet extends HttpServlet {
      *    .....
      *    *TODO: Solidify rating fields and values*
      *
-     * Updates datastore to
+     * Updates datastore to reflect new rating
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
@@ -57,6 +57,7 @@ public class CheckInServlet extends HttpServlet {
         StoreDatastoreHandler store = new StoreDatastoreHandler(placesID);
         
         Map<String, String[]> ratingsMap =  request.getParameterMap();
+        //leave just the ratings
         ratingsMap.remove("StoreId");
 
         store.placeStore(ratingsMap);
