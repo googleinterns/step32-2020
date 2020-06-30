@@ -56,7 +56,7 @@ public final class County {
     }
 
     /**
-     * Returns the county name based on a LatLng, or empty county if error.
+     * Returns the county based on a LatLng, or empty county if error.
      */
     public static County GetCounty(LatLng location) {
         try {
