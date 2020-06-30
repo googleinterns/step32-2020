@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 // Provides HTTP client used to make HTTP requests within the Angular application
 // Returns Observables (can be synchronous), not Promises (always asynchronous)

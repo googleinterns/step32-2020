@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Services
-import { ApiService } from '../api/api.service';
+import { ApiService } from './api/api.service';
 
 @NgModule({
   declarations: [
