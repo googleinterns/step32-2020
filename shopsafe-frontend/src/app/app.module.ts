@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 // Custom components
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './components/app.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { ResultComponent } from './components/result/result.component';
@@ -25,6 +26,7 @@ import { ApiService } from './api.service';
 @NgModule({
   declarations: [
     AppComponent,
+    HttpClientModule,
     LandingComponent,
     ResultComponent,
     PageNotFoundComponent,
