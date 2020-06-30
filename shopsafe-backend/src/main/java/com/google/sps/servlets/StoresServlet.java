@@ -24,6 +24,8 @@ import com.google.sps.data.StoreStats;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -31,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner; 
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,7 +51,7 @@ public class StoresServlet extends HttpServlet {
 
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
     public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
-    private String PLACE_KEY = "&key=YOUR_API_KEY";
+    private String PLACE_KEY;
 
     /**
      * For a get request, return all nearby stores world.
@@ -56,8 +59,23 @@ public class StoresServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // Todo: Get address from response
+        // Gets API key for places from shopsafe-backend
+        try {
+            File myObj = new File("../../key.txt");
+            Scanner myReader = new Scanner(myObj);
+            PLACE_KEY = "&key=" + myReader.nextLine();
+            myReader.close();
+        }
+        
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            response.setContentType("text/html;");
+            response.getWriter().println("Could not get api key."));
+            return;
+        }
 
+        // Todo: Get address from response
+        
         // Todo: Check address and get LatLon
         LatLng location = new LatLng(40.163249, -76.395991);
 
@@ -86,7 +104,7 @@ public class StoresServlet extends HttpServlet {
 
         // Todo: Get score of each store
 
-        // Todo: Return stores with 
+        // Todo: Return stores with scores
         Gson gson = new Gson();
         response.setContentType("application/json;");
         response.getWriter().println(gson.toJson(new Result(stores)));
