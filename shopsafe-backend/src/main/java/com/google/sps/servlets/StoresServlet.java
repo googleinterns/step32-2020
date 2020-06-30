@@ -48,7 +48,7 @@ public class StoresServlet extends HttpServlet {
 
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
     public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
-    private String PLACE_KEY = "&key=AIzaSyDX3ywWTrsHLSkoCUfii4GyG6gXELhPQMc";
+    private String PLACE_KEY = "&key=YOUR_API_KEY";
 
     /**
      * For a get request, return all nearby stores world.
