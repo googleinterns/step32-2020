@@ -29,7 +29,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory.Builder;
 
 /*
- * Class that updates(or creates) Store entries in datastore.
+ * Class that modifies Store entries in datastore.
  */
 public class StoreDatastoreHandler {
     
@@ -39,7 +39,7 @@ public class StoreDatastoreHandler {
 
     public StoreDatastoreHandler(String id) {
         this.id = id;
-        this.key = new Builder("store", id).getKey();
+        this.key = new Builder("Store", id).getKey();
     }
 
     /*
@@ -60,7 +60,7 @@ public class StoreDatastoreHandler {
      * Creates Rating Entity, does not put in datastore
      */
     private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
-        Entity ratingEntity = new Entity("rating");
+        Entity ratingEntity = new Entity("Rating");
         ratingsMap.forEach((String ratingField, String[] ratingValue) -> {
             
             /* http request getParamMap method formats in array instead of
@@ -76,7 +76,7 @@ public class StoreDatastoreHandler {
      */
     private void newStore(Map<String, String[]> ratingsMap) {
         
-        Entity storeEntity = new Entity("store", id);
+        Entity storeEntity = new Entity("Store", id);
 
         Entity ratingEntity = createRatingsEntity(ratingsMap);
 
@@ -103,6 +103,23 @@ public class StoreDatastoreHandler {
 
             datastore.put(ratingEntity);
             datastore.put(storeEntity);
+    }
+    /*
+     * Deletes all entries in Datastore, 
+     */
+    public void deleteData() {
+        deleteQuery(new Query("Store"));
+        deleteQuery(new Query("Range"));
+    }
+
+    /*
+     * Deletes all entries in query
+     */
+    private void deleteQuery(Query query) {
+        PreparedQuery queryResults = datastore.prepare(query);
+        for (Entity entry: queryResults.asIterable()) {
+            datastore.delete(entry.getKey());
+        }
     }
 
 }
