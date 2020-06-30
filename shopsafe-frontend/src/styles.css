@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import url( 'https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons');
+
 @font-face {
   font-family: 'Avenir Next';
   src: url('./assets/fonts/AvenirNext-Regular.ttf') format('truetype');
@@ -36,6 +37,10 @@
   font-family: "Avenir Next", sans-serif !important;
   scroll-behavior: smooth;
   box-sizing: border-box;
+}
+
+mat-icon {
+  font-family: 'Material Icons' !important;
 }
 
 .segment {
