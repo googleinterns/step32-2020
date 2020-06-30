@@ -44,3 +44,7 @@
 #check-in-modal #submit-check-in-button:hover {
     background: rgba(104, 187, 207, 0.3);
 }
+
+#check-in-modal .tooltip {
+    font-size: 13px !important;
+}
