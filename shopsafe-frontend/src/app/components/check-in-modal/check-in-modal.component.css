@@ -2,6 +2,11 @@
     text-transform: uppercase;
 }
 
+#check-in-modal p {
+    font-size: 13px;
+    text-align: center;
+}
+
 #check-in-modal h2.title-text {
     text-align: center;
 }
