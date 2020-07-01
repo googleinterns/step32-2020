@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Store } from '../classes/store/store';
 
 // Provides HTTP client used to make HTTP requests within the Angular application
 // Returns Observables (can be synchronous), not Promises (always asynchronous)
@@ -19,10 +20,9 @@ export class ApiService {
   }
 
   constructor(private http: HttpClient) { }
-  
 
   /**
-   * Creates new check-in for specific store ID
+   * Creates new check-in for specific store ID and sends to API as POST request
    * @param storeId ID of the store that the check-in occurs for
    * @returns Observable 
    */
@@ -40,6 +40,19 @@ export class ApiService {
       .post(API_URL + '/checkin', params, this.httpOptions)
       .pipe(
         tap(_ => console.log("added new checkin")),
+        catchError(error => throwError(error.message || error))
+      );
+  }
+
+  /**
+   * Gets all nearby stores from backend via GET request
+   * @returns Observable of array of stores
+   */
+  public getNearbyStores(): Observable<Store[]> {
+    return this.http
+      .get<Store[]>(API_URL + '/stores')
+      .pipe(
+        tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))
       );
   }
