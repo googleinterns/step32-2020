@@ -53,6 +53,7 @@ public class StoresServlet extends HttpServlet {
 
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
     public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
+    public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private String PLACE_KEY;
 
     /**
@@ -77,9 +78,36 @@ public class StoresServlet extends HttpServlet {
         }
 
         // Todo: Get address from response
-        
-        // Todo: Check address and get LatLng
-        LatLng location = new LatLng(40.163249, -76.395991);
+        String address = "33+Market+Square,+Manheim,+PA";
+        LatLng location;
+
+        // Get LatLng location based on address
+        try {
+
+            // Read response of call to FCC API given lat and lng.
+            URL url = new URL(GEOCODE_URL + address + PLACE_KEY);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            
+            // Store response in json, by reading each line.
+            StringBuilder json = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+            reader.close();
+
+            // Convert json to json object with just the json location, then convert to LatLng.
+            JSONObject jsonLocation = new JSONObject(new String(json)).getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+            location = new LatLng(jsonLocation.getDouble("lat"), jsonLocation.getDouble("lng"));
+        } 
+
+        // If error, print error, and return.
+        catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("text/html;");
+            response.getWriter().println("Could not get location information.");
+            return;
+        }
 
         // Get all grocery stores based on LatLng and migrate to StoreNoScore class.
         List<StoreNoScore> storesNoScores = getStores(location);
