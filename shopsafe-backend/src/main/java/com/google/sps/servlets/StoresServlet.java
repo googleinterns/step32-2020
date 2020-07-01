@@ -79,7 +79,7 @@ public class StoresServlet extends HttpServlet {
         // Todo: Check address and get LatLng
         LatLng location = new LatLng(40.163249, -76.395991);
 
-        // Get all grocery stores based on LatLon and migrate to StoreNoScore class.
+        // Get all grocery stores based on LatLng and migrate to StoreNoScore class.
         List<StoreNoScore> storesNoScores = getStores(location);
 
         // Add fake score values to the stores.
@@ -95,7 +95,7 @@ public class StoresServlet extends HttpServlet {
                 12));
         }
 
-        // Get county based on LatLon - for each store
+        // Get county based on LatLng - for each store
         County county = County.GetCounty(location);
 
         // Todo: Get Covid stats based on county - for each store
