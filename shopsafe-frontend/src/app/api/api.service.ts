@@ -67,7 +67,7 @@ export class ApiService {
    * TODO: implement get servlet
    */
   public getStoreById(id: string) : Observable<Store> {
-    const url = API_URL + '/get-store/${id}';
+    const url = API_URL + '/store/${id}';
     return this.http
       .get<Store>(url)
       .pipe(
