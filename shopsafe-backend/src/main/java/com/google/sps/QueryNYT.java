@@ -23,6 +23,7 @@ import com.google.cloud.bigquery.JobInfo;
 import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.TableResult;
 import java.util.UUID;
+import java.lang.Long;
 
 
 /*
@@ -30,11 +31,56 @@ import java.util.UUID;
  */
 public class QueryNYT {
 
+    private long cases;
+    private long deaths;
+    private boolean failedQuery;
+
+    private QueryNYT(long cases, long deaths, boolean failedQuery) {
+        this.cases = cases;
+        this.deaths = deaths;
+        this.failedQuery = failedQuery;
+    }
+
+    public long getCases() {
+        return cases;
+    }
+
+    public long getDeaths() {
+        return deaths;
+    }
+
+    public boolean failedQuery() {
+        return failedQuery;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // If the object is compared with itself then return true   
+        if (o == this) { 
+            return true; 
+        } 
+  
+        /* Check if o is an instance of QueryNYT or not 
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof QueryNYT)) { 
+            return false; 
+        } 
+          
+        // typecast o to QueryNYT so that we can compare data members  
+        QueryNYT other = (QueryNYT) o; 
+
+        return (this.cases == other.cases &&
+            this.deaths == other.deaths &&
+            this.failedQuery == other.failedQuery
+            );
+    }
+    
+
     /*
      * On success, returns number of reported covid-19 cases for county. On error,
      * returns 0.
      */
-    static public long exampleQuery(String state, String county) {
+    public static QueryNYT exampleQuery(String state, String county) {
 
         //BigQuery Service
         BigQuery bigquery = BigQueryOptions
@@ -43,7 +89,7 @@ public class QueryNYT {
 
         //Prepare SQL query for BigQuery
         QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
-                "SELECT confirmed_cases FROM `bigquery-public-data.covid19_nyt.us_counties` " +
+                "SELECT confirmed_cases, deaths FROM `bigquery-public-data.covid19_nyt.us_counties` " +
                         "WHERE lower(state_name) = \"" + state.toLowerCase() + "\"" +
                         "AND lower(county) = \"" + county.toLowerCase() + "\"" +
                         "ORDER BY date DESC"
@@ -69,15 +115,16 @@ public class QueryNYT {
 
             for (FieldValueList row : result.iterateAll()) {
                 long confirmedCases = row.get("confirmed_cases").getLongValue();
+                long deaths = row.get("deaths").getLongValue();
                 
                 //return latest date
-                return confirmedCases;
+                return new QueryNYT(confirmedCases, deaths, false);
             }
             //Error, did not find any query results
-            return 0;
+            return new QueryNYT(0, 0, true);
         } catch (InterruptedException exception) {
             System.out.println("Error: Big Query Failure!");
-            return 0;
+            return new QueryNYT(0, 0, true);
         }
     }
 }
