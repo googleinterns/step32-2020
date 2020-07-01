@@ -12,7 +12,8 @@
                     <i class="far fa-question-circle"></i>
                 </a>
             </h2>
-            <mat-slider 
+            <mat-slider
+                [(ngModel)]="busy"
                 min="1" 
                 max="10" 
                 step="1" 
@@ -29,7 +30,8 @@
                     <i class="far fa-question-circle"></i>
                 </a>
             </h2>
-            <mat-slider 
+            <mat-slider
+                [(ngModel)]="line"
                 min="1" 
                 max="10" 
                 step="1" 
@@ -49,6 +51,7 @@
                 </a>
             </h2>
             <mat-slider 
+                [(ngModel)]="hygiene"
                 min="1" 
                 max="10" 
                 step="1" 
@@ -66,7 +69,8 @@
                     <i class="far fa-question-circle"></i>
                 </a>
             </h2>
-            <mat-slider 
+            <mat-slider
+                [(ngModel)]="mask"
                 min="1" 
                 max="10" 
                 step="1" 
@@ -75,5 +79,5 @@
             ></mat-slider>
         </div>
     </div>
-    <button id='submit-check-in-button'>CHECK IN AT THIS STORE</button>
+    <button id='submit-check-in-button' (click) = "checkIn()">CHECK IN AT THIS STORE</button>
 </div>

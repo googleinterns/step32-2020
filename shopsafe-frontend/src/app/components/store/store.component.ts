@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
+import { ApiService } from '../../api/api.service';
 
 @Component({
   selector: 'app-store',
@@ -9,8 +10,14 @@ import { CheckInModalComponent } from '../check-in-modal/check-in-modal.componen
 })
 export class StoreComponent implements OnInit {
 
-  constructor(public matDialog: MatDialog) { }
+  constructor(
+    public matDialog: MatDialog,
+    private apiService: ApiService
+    ) { }
 
+  /**
+   * Runs when component is loaded
+   */
   ngOnInit(): void {
   }
 
@@ -21,9 +28,8 @@ export class StoreComponent implements OnInit {
    */
   openModal() {
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.id = "check-in-modal";
-    dialogConfig.height = "500px";
+    dialogConfig.height = "510px";
     dialogConfig.width = "460px";
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
   }
