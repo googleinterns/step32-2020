@@ -15,23 +15,29 @@
 package com.google.sps.data;
 
 import com.google.sps.data.County;
+import com.google.sps.QueryNYT;
 
-/** Class contains the name, state, and fips of a county. */
+/** Class contains the name, state, population and covid cases and deaths of a county. */
 public final class CountyStats {
 
     // County properties
     private final String countyName;
     private final String stateName;
-    private final int cases;
-    private final int deaths;
-    private final int population;
+    private final long cases;
+    private final long deaths;
+    private final long population;
 
-    public CountyStats(County county, int cases, int deaths, int population) {
+    public CountyStats(County county) {
         this.countyName = county.getCountyName();
         this.stateName = county.getStateName();
-        this.cases = cases;
-        this.deaths = deaths;
-        this.population = population;
+
+        //Query NYT dataset for covid cases and deaths
+        QueryNYT queryResults = QueryNYT.exampleQuery(countyName, stateName);
+        this.cases = queryResults.getCases();
+        this.deaths = queryResults.getDeaths();
+
+        //TODO: need to get actuall population of count
+        this.population = 8080;
     }
 
     public String getCountyName() {
@@ -42,15 +48,15 @@ public final class CountyStats {
         return stateName;
     }
 
-    public int getCases() {
+    public long getCases() {
         return cases;
     }
 
-    public int getDeaths() {
+    public long getDeaths() {
         return deaths;
     }
     
-    public int getPopulation() {
+    public long getPopulation() {
         return population;
     }
 }
