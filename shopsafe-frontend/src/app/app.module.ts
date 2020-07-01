@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 // Custom components
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule }   from '@angular/forms';
+
 import { AppComponent } from './components/app.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { ResultComponent } from './components/result/result.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreComponent } from './components/store/store.component';
 import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -42,7 +44,8 @@ import { ApiService } from './api/api.service';
     MatSliderModule,
     MatIconModule,
     MatTooltipModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

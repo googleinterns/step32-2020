@@ -14,8 +14,7 @@ export class StoreComponent implements OnInit {
     public matDialog: MatDialog,
     private apiService: ApiService
     ) { }
-  
-  
+
   /**
    * Runs when component is loaded
    */
@@ -29,23 +28,10 @@ export class StoreComponent implements OnInit {
    */
   openModal() {
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.id = "check-in-modal";
-    dialogConfig.height = "500px";
+    dialogConfig.height = "510px";
     dialogConfig.width = "460px";
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
-  }
-
-  /**
-   * Sends check-in user data to API
-   * @param id ID of store that check-in is for
-   * @param busy user input busy score
-   * @param line user input line score
-   * @param hygiene user input hygiene score
-   * @param mask user input mask score
-   */
-  checkIn(storeId: string, busy: number, line: number, hygiene: number, mask: number): void {
-    this.apiService.createCheckIn(storeId, busy, line, hygiene, mask);
   }
 
 }
