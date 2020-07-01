@@ -9,23 +9,59 @@ import { Observable } from 'rxjs';
   styleUrls: ['./result.component.css']
 })
 export class ResultComponent implements OnInit {
-
   stores: Store[] = [];
+  location: "";
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
     // Fetches all nearby stores on component load
-    this.getNearbyStores()
-        .subscribe((stores) => {
-          this.stores = stores;
-        })
+    // this.getNearbyStores(this.location)
+    //     .subscribe((stores) => {
+    //       this.stores = stores;
+    //     })
+    this.initStores();
   }
 
-  getNearbyStores() : Observable<Store[]> {
-    return this.apiService.getNearbyStores();
+  // FIXME: make this as function in landing/search
+  getNearbyStores(location: string) : Observable<Store[]> {
+    return this.apiService.getNearbyStores(location);
+  }
+
+  // TODO: dynamic URL rendering based on each unique store
+  // TODO: implement search bar
+  // TODO: render all results
+
+  initStores() : void {
+    this.stores.push(new Store({
+      id: 'temp',
+      name: 'test',
+      address: '1234 Test St.',
+      score: 10,
+      checkedIn: 10,
+      status: true,
+      latLng: [0, 0],
+      busy: 1,
+      line: 1,
+      hygiene: 1,
+      masks: 1
+    }));
+
+    this.stores.push(new Store({
+      id: 'temp',
+      name: 'test',
+      address: '1234 Test St.',
+      score: 10,
+      checkedIn: 10,
+      status: true,
+      latLng: [0, 0],
+      busy: 1,
+      line: 1,
+      hygiene: 1,
+      masks: 1
+    }));
   }
 
 }

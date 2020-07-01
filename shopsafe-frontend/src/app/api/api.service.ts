@@ -19,7 +19,9 @@ export class ApiService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+    ) { }
 
   /**
    * Creates new check-in for specific store ID and sends to API as POST request
@@ -28,8 +30,6 @@ export class ApiService {
    */
   public createCheckIn(storeId: string, busy: number, line: number, hygiene: number, mask: number): Observable<Object> {
     let params = new HttpParams();
-
-    // FIXME: Must convert to double in the backend
     params = params
               .set('storeId', storeId.toString())
               .set('busy', busy.toString())
@@ -46,11 +46,13 @@ export class ApiService {
 
   /**
    * Gets all nearby stores from backend via GET request
+   * @param location inputted by user
    * @returns Observable of array of stores
    */
-  public getNearbyStores(): Observable<Store[]> {
+  public getNearbyStores(location: string): Observable<Store[]> {
+    const url = API_URL + 'stores/${location}';
     return this.http
-      .get<Store[]>(API_URL + '/stores')
+      .get<Store[]>(url)
       .pipe(
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))

@@ -33,6 +33,7 @@ export class CheckInModalComponent implements OnInit {
   checkIn(): void {
     // let storeId = this.storeId.toString();
     // console.log(storeId);
+    // FIXME: add actual store id from store URL
     this.apiService.createCheckIn('temp', Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask));
     this.dialogRef.close();
   }
