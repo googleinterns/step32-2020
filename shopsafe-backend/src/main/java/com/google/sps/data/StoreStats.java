@@ -14,19 +14,44 @@
 
 package com.google.sps.data;
 
-/** Class contains all the stats for a store. */
+
+import java.util.ArrayList;
+
+
+import com.google.sps.data.StoreDatastoreHandler;
+import com.google.appengine.api.datastore.Entity;
+
+/** Class contains all the averaged stats for a store. */
 public final class StoreStats {
 
-  private final double busy;
-  private final double line;
-  private final double hygiene;
-  private final double masks;
+  private double busy = 0.0;
+  private double line = 0.0;
+  private double hygiene = 0.0;
+  private double masks = 0.0;
+  private int numReviews = 0;
 
-  public StoreStats(double busy, double line, double hygiene, double masks) {
-    this.busy = busy;
-    this.line = line;
-    this.hygiene = hygiene;
-    this.masks = masks;
+  public StoreStats(String storeId) {
+    
+    
+    //Get datastore Ratings of store; 
+    StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
+    ArrayList<Entity> ratingEntities = dataStoreService.getRatings();
+    numReviews = ratingEntities.size();
+
+    //update StoreStats instance to represent average user ratings
+    for (Entity ratingEntity: ratingEntities) {
+        busy += (double) ratingEntity.getProperty("busy");
+        line += (double) ratingEntity.getProperty("line");
+        hygiene += (double) ratingEntity.getProperty("hygiene");
+        masks += (double) ratingEntity.getProperty("masks");
+    }
+    //Only if there are user ratings
+    if (numReviews != 0) {
+        busy = busy/(1.0 * numReviews);
+        line = line/(1.0 * numReviews);
+        hygiene = hygiene/(1.0 * numReviews);
+        masks = masks/(1.0 * numReviews);
+    }
   }
 
   public double getBusy() {
@@ -43,5 +68,9 @@ public final class StoreStats {
 
   public double getMasks() {
     return masks;
+  }
+
+  public int getNumReviews() {
+      return numReviews;
   }
 }

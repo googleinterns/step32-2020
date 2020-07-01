@@ -104,20 +104,28 @@ public class StoresServlet extends HttpServlet {
             if (!countyScores.containsKey(county.getCountyFips())) {
 
                 // Todo: Get Covid stats based on county.
-                CountyStats countyStats = new CountyStats(county, 1000, 50, 25000);
+                CountyStats countyStats = new CountyStats(county);
                 counties.add(countyStats);
 
-                // To score for county.
+                // TODO: Calculate score for county.
+                long countyCases = countyStats.getCases();
+                long countyDeaths = countyStats.getDeaths();
+
                 double countyScore = 3.2;
                 countyScores.put(county.getCountyFips(), countyScore);
             }
 
             // Todo: Get reviews for a store.
-            StoreStats storeStats = new StoreStats(2.5, 2.5, 2.5, 2.5);
-            int storeReviewCount = 12;
+            StoreStats storeStats = new StoreStats(storeNoScore.getId());
+            int storeReviewCount = storeStats.getNumReviews();
 
-            // Todo: Get real score of each store.
-            double storeScore = countyScores.get(county.getCountyFips());
+            // TODO: Get calculate score of each store.
+            Double busy = storeStats.getBusy();
+            Double line = storeStats.getLine();
+            Double hygiene = storeStats.getHygiene();
+            Double masks = storeStats.getMasks();
+
+            double storeScore = 3.2;
 
             // Add score and review stats to the store.
             stores.add(new Store(
