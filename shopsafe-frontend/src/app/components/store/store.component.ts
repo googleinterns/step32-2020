@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-store',
@@ -12,13 +14,21 @@ export class StoreComponent implements OnInit {
 
   constructor(
     public matDialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private router: Router,
     ) { }
+
+    store; 
 
   /**
    * Runs when component is loaded
    */
   ngOnInit(): void {
+    this.store = this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => 
+      this.apiService.getStoreById(params.get('id')))
+    );
   }
 
 

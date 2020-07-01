@@ -51,6 +51,10 @@
     color: #4A4A4A;
 }
 
+#result .stores-list-location:hover {
+    background-color: rgb(255, 135, 86, 0.7);
+}
+
 #result .markers *, #result .stat-elem *, #result .stat-bar * {
     white-space: nowrap;
     display: inline;
@@ -92,4 +96,9 @@
     color: #68BBCF;
     margin-right: 15px;
     cursor: auto;
+}
+
+#result .stores-list-item {
+    clear: both; 
+    padding-top: 20px;
 }

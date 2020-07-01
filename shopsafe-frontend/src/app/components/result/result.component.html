@@ -18,7 +18,7 @@
                     <a class="stat-obj">TOTAL DEATHS</a>
                     <p>2334610</p>
                 </div>
-                <div class="stat-elem" style="text-align: right;">
+                <div class="stat-elem" style="text-align: right; margin-top: -5px">
                     <a class="stat-obj">SHOPSAFE SCORE</a>
                     <p class="shopsafe-score">8/10</p>
                 </div>
@@ -28,15 +28,20 @@
             <h2 class="left-text">Local Grocery Stores</h2>
             <p class="right-text subtext">Click on a store to view store statistics</p>
         </div>
-        <div class="stores-list">
+        <div class="stores-list" *ngFor="let store of stores">
             <div class="stores-list-item">
                 <div class="left-text markers">
                     <a class="location-icon"><i class="fas fa-map-marker-alt"></i></a> &nbsp;
-                    <a class="stores-list-location">Whole Foods Market</a>
-                    <a class="rating">8/10</a>
+                    <a 
+                        class="stores-list-location" 
+                        [routerLink]="['/store', store.id]"
+                    >
+                        {{ store.name }}
+                    </a>
+                    <a class="rating">{{ store.score }}/10</a>
                 </div>
                 <div class="right-text">
-                    <p class="address">5555 Street Ave. New York, NY 00000</p>
+                    <p class="address">{{ store.address }}</p>
                 </div>
             </div>
         </div>

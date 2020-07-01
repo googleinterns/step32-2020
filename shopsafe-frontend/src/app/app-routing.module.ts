@@ -17,15 +17,8 @@ const routes: Routes = [
     component: ResultComponent, 
   },
   { 
-    path: 'store', 
+    path: 'store/:id', 
     component: StoreComponent,
-    children: [
-      {
-        path: 'store/:name',
-        component: StoreComponent,
-      }
-      // TODO: dynamic routing based on store name using https://medium.com/@itsyou/angular-dynamic-routes-with-easy-example-c3fa64fbc768
-    ] 
   },
   { 
     path: 'about', 
