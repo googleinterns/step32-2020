@@ -17,7 +17,6 @@ package com.google.sps.data;
 
 import java.util.ArrayList;
 
-
 import com.google.sps.data.StoreDatastoreHandler;
 import com.google.appengine.api.datastore.Entity;
 
@@ -32,7 +31,6 @@ public final class StoreStats {
 
   public StoreStats(String storeId) {
     
-    
     //Get datastore Ratings of store; 
     StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
     ArrayList<Entity> ratingEntities = dataStoreService.getRatings();
@@ -45,6 +43,7 @@ public final class StoreStats {
         hygiene += (double) ratingEntity.getProperty("hygiene");
         masks += (double) ratingEntity.getProperty("masks");
     }
+    
     //Only if there are user ratings
     if (numReviews != 0) {
         busy = busy/(1.0 * numReviews);

@@ -36,7 +36,6 @@ public final class CountyStats {
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
 
-
         //TODO: need to get actuall population of count
         this.population = 8080;
     }
