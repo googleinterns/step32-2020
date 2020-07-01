@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
-import { StoreDataService } from '../../classes/store/store-data.service';
+import { ApiService } from '../../api/api.service';
 
 @Component({
   selector: 'app-store',
@@ -12,7 +12,7 @@ export class StoreComponent implements OnInit {
 
   constructor(
     public matDialog: MatDialog,
-    private storeDataService: StoreDataService
+    private apiService: ApiService
     ) { }
   
   
@@ -37,12 +37,15 @@ export class StoreComponent implements OnInit {
   }
 
   /**
-   * Sends check-in user data to backend for computation
+   * Sends check-in user data to API
    * @param id ID of store that check-in is for
+   * @param busy user input busy score
+   * @param line user input line score
+   * @param hygiene user input hygiene score
+   * @param mask user input mask score
    */
-  onCheckIn(id) {
-    this.storeDataService
-      .createCheckIn(id)
+  checkIn(storeId: string, busy: number, line: number, hygiene: number, mask: number): void {
+    this.apiService.createCheckIn(storeId, busy, line, hygiene, mask);
   }
 
 }
