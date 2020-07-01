@@ -54,7 +54,7 @@ public class StoresServlet extends HttpServlet {
     private String PLACE_KEY;
 
     /**
-     * For a get request, return all nearby stores world.
+     * For a get request, return all nearby stores.
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,7 +76,7 @@ public class StoresServlet extends HttpServlet {
 
         // Todo: Get address from response
         
-        // Todo: Check address and get LatLon
+        // Todo: Check address and get LatLng
         LatLng location = new LatLng(40.163249, -76.395991);
 
         // Get all grocery stores based on LatLon and migrate to StoreNoScore class.
@@ -125,7 +125,7 @@ public class StoresServlet extends HttpServlet {
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             
             // Store response in json, by reading each line.
-            StringBuffer json = new StringBuffer();
+            StringBuilder json = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 json.append(line);
@@ -146,7 +146,7 @@ public class StoresServlet extends HttpServlet {
                     store.getString("id"),
                     store.getString("name"),
                     store.getString("vicinity"),
-                    store.getJSONObject("opening_hours").getBoolean("open_now"),
+                    (store.has("opening_hours")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
                     new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng"))));
             }
 

@@ -66,7 +66,7 @@ public final class County {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fccUrl.openStream()));
             
             // Store response in json, by reading each line.
-            StringBuffer json = new StringBuffer();
+            StringBuilder json = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 json.append(line);
