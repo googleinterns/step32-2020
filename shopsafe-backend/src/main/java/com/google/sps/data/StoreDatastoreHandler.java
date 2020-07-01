@@ -29,7 +29,8 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory.Builder;
 
 /*
- * Class that modifies Store entries in datastore.
+ * Class that communicates with datastore to get, create, update, and delete 
+ * Store and Ratings Entries in datastore. 
  */
 public class StoreDatastoreHandler {
     
@@ -59,7 +60,7 @@ public class StoreDatastoreHandler {
     /*
      * Creates Rating Entity, does not put in datastore
      */
-    private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
+    public static Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
         Entity ratingEntity = new Entity("Rating");
         ratingsMap.forEach((String ratingField, String[] ratingValue) -> {
             
@@ -75,17 +76,20 @@ public class StoreDatastoreHandler {
      * Places new store along with rating
      */
     private void newStore(Map<String, String[]> ratingsMap) {
-        
+
+        //Create new Store and Rating Entities
         Entity storeEntity = new Entity("Store", id);
-
         Entity ratingEntity = createRatingsEntity(ratingsMap);
+        datastore.put(ratingEntity);
 
-        String ratingEntityIdName = ratingEntity.getKey().getName();
-        ArrayList<String> storeRatingIds = new ArrayList();
+        //Embed Rating into store by storing an array of Rating Ids in 
+        //Store entry
+        Long ratingEntityIdName = ratingEntity.getKey().getId();
+        ArrayList<Long> storeRatingIds = new ArrayList();
         storeRatingIds.add(ratingEntityIdName);
         storeEntity.setProperty("ratings", storeRatingIds);
-        
-        datastore.put(ratingEntity);
+
+        //Place store entity into datastore
         datastore.put(storeEntity);
     }
 
@@ -93,23 +97,85 @@ public class StoreDatastoreHandler {
      * Updates existing store with new rating
      */
     private void updateStore(Entity storeEntity, Map<String, String[]> ratingsMap) {
+        //Create new Rating Entity
         Entity ratingEntity = createRatingsEntity(ratingsMap);
+        datastore.put(ratingEntity);
+        
+        //Retreive exisiting list of Rating Ids already withing store
+        //and add new rating
         @SuppressWarnings("unchecked")
-            ArrayList<String> previousRatingIds = (ArrayList<String>) storeEntity
-                .getProperty("ratings");
-            String ratingEntityIdName = ratingEntity.getKey().getName();
-            previousRatingIds.add(ratingEntityIdName);
-            storeEntity.setProperty("ratings", previousRatingIds);
+        ArrayList<Long> previousRatingIds = (ArrayList<Long>) storeEntity
+            .getProperty("ratings");
+        Long ratingEntityIdName = ratingEntity.getKey().getId();
+        previousRatingIds.add(ratingEntityIdName);
+        storeEntity.setProperty("ratings", previousRatingIds);
 
-            datastore.put(ratingEntity);
-            datastore.put(storeEntity);
+        datastore.put(storeEntity);
     }
+
+    /*
+     * Returns the Rating Entitys embedded in the Store entry in datastore
+     */
+    public ArrayList<Entity> getRatings() {
+        return this.compileRatings(this.getRatingIds());
+    }
+
+    /*
+     * The ratings associated with a store are stored in datastore as an array of longs,
+     * this function retrieves that array. On error returns an empty array.
+     */
+    private ArrayList<Long> getRatingIds() {
+        try {
+            Entity storeEntity = datastore.get(this.key);
+            @SuppressWarnings("unchecked")
+            ArrayList<Long> previousRatingIds = (ArrayList<Long>) storeEntity
+                .getProperty("ratings");
+            return previousRatingIds;
+        } catch(Exception EntityNotFoundException) {
+            System.out.println("DataStore: id <" + this.key.getId() + "> not found!");
+            return new ArrayList();
+        }
+    }
+
+    /*
+     * Given a list of ids referencing Rating entries in datastore, this function retrieves
+     * the Rating entities associated with the ids, on error returns an empty array.
+     */
+    private ArrayList<Entity> compileRatings(ArrayList<Long> ratingIds) {
+        try {
+            ArrayList<Entity> entityList = new ArrayList();
+            for (Long id: ratingIds) {
+                Key ratingKey = new Builder("Rating", id).getKey();
+                Entity ratingEntity = datastore.get(ratingKey);
+                entityList.add(ratingEntity);
+            }
+            return entityList;
+        } catch(Exception EntityNotFoundException) {
+            System.out.println("Rating entity not found: " + ratingIds);
+            return new ArrayList();
+        }
+    }
+
+    /* Tools For Debugging and Development */
+
+    /*
+     * Deletes store and its ratings from Datastore
+     */
+    public void deleteStoreAndRatings() {
+        ArrayList<Long> ratingIds = this.getRatingIds();
+        for (long id: ratingIds) {
+            Key ratingKey =  new Builder("Rating", id).getKey();
+            datastore.delete(ratingKey);
+        }
+        datastore.delete(this.key);
+    }
+
     /*
      * Deletes all entries in Datastore, 
      */
     public void deleteData() {
         deleteQuery(new Query("Store"));
-        deleteQuery(new Query("Range"));
+        deleteQuery(new Query("Rating"));
     }
 
     /*

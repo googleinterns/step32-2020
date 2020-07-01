@@ -34,11 +34,6 @@ import com.google.appengine.api.datastore.KeyFactory.Builder;
 @WebServlet("/checkin")
 public class CheckInServlet extends HttpServlet {
 
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    }
-
     /*
      * Request:
      *    StoreId - valid Places API ID
