@@ -25,16 +25,7 @@ export class ResultComponent implements OnInit {
     this.initStores();
   }
 
-  // FIXME: make this as function in landing/search
-  getNearbyStores(location: string) : Observable<Store[]> {
-    return this.apiService.getNearbyStores(location);
-  }
-
-  // TODO: dynamic URL rendering based on each unique store
-  // TODO: implement search bar
-  // TODO: render all results
-
-  // testing dummy method
+  // dummy method
   initStores() : void {
     this.stores.push(new Store({
       id: 'temp',

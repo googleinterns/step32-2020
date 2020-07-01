@@ -50,10 +50,10 @@ export class ApiService {
    * @returns Observable of array of stores
    * FIXME: change return type to general observable and modify such that elements have to be accessed
    */
-  public getNearbyStores(location: string): Observable<Store[]> {
+  public getNearbyStores(location: string): Observable<Object> {
     const url = API_URL + '/stores/${location}';
     return this.http
-      .get<Store[]>(url)
+      .get<Object>(url)
       .pipe(
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))

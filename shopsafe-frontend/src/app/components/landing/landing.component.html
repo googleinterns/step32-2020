@@ -9,7 +9,14 @@
         <form>
             <div class="input-container">
                 <mat-icon class="search-icon">search</mat-icon>
-                <input class="input-field" type="text" placeholder="ENTER YOUR LOCATION TO FIND NEARBY GROCERY STORES" name="search">
+                <input
+                    class="input-field"
+                    type="text"
+                    placeholder="ENTER YOUR LOCATION TO FIND NEARBY GROCERY STORES"
+                    name="search"
+                    [(ngModel)]="location"
+                    (keyup.enter) = "testOutput()"
+                >
             </div>
         </form>
     </div>

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiService } from '../../api/api.service';
+import { Router } from "@angular/router"
 
 @Component({
   selector: 'app-landing',
@@ -7,9 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingComponent implements OnInit {
 
-  constructor() { }
+  location = '';
+
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  getNearbyStores() : Observable<Object> {
+    return this.apiService.getNearbyStores(this.location);
+  }
+
+  testOutput() {
+    console.log(this.location);
+    this.router.navigate(['/result'])
   }
 
 }
