@@ -56,7 +56,7 @@ public final class County {
     }
 
     /**
-     * Returns the county name based on a LatLng, or empty county if error.
+     * Returns the county based on a LatLng, or empty county if error.
      */
     public static County GetCounty(LatLng location) {
         try {
@@ -66,7 +66,7 @@ public final class County {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fccUrl.openStream()));
             
             // Store response in json, by reading each line.
-            StringBuffer json = new StringBuffer();
+            StringBuilder json = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 json.append(line);
