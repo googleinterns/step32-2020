@@ -70,6 +70,7 @@ public class StoresServlet extends HttpServlet {
             myReader.close();
         }
         
+        // If error, print error, and return.
         catch (FileNotFoundException e) {
             e.printStackTrace();
             response.setContentType("text/html;");
