@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.sps.data.County;
+import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
 import com.google.sps.data.Result;
 import com.google.sps.data.Store;
@@ -33,7 +34,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner; 
+import java.util.Scanner;
+import java.util.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -82,32 +84,53 @@ public class StoresServlet extends HttpServlet {
         // Get all grocery stores based on LatLng and migrate to StoreNoScore class.
         List<StoreNoScore> storesNoScores = getStores(location);
 
+        HashMap<String, Double> countyScores = new HashMap<String, Double>();
+        List<CountyStats> counties = new ArrayList<>();
+
         // Add fake score values to the stores.
         List<Store> stores = new ArrayList<>();
+
+        // For every store, get reviews and county data and add scores to the store.
         int count = storesNoScores.size(); 
         for (int i=0 ; i< count; i++) {
+
+            // Get store without the score.
             StoreNoScore storeNoScore = storesNoScores.get(i);
             
+            // Get county based on location of the store
+            County county = County.GetCounty(storeNoScore.getLocation());
+
+            // If county not in hashmap, add to hashmap and counties list.
+            if (!countyScores.containsKey(county.getCountyFips())) {
+
+                // Todo: Get Covid stats based on county.
+                CountyStats countyStats = new CountyStats(county, 1000, 50, 25000);
+                counties.add(countyStats);
+
+                // To score for county.
+                double countyScore = 3.2;
+                countyScores.put(county.getCountyFips(), countyScore);
+            }
+
+            // Todo: Get reviews for a store.
+            StoreStats storeStats = new StoreStats(2.5, 2.5, 2.5, 2.5);
+            int storeReviewCount = 12;
+
+            // Todo: Get real score of each store.
+            double storeScore = countyScores.get(county.getCountyFips());
+
+            // Add score and review stats to the store.
             stores.add(new Store(
                 storeNoScore,
-                9.53,
-                new StoreStats(2.5, 2.5, 2.5, 2.5),
-                12));
+                storeScore,
+                storeStats,
+                storeReviewCount));
         }
 
-        // Get county based on LatLng - for each store
-        County county = County.GetCounty(location);
-
-        // Todo: Get Covid stats based on county - for each store
-
-        // Todo: Get reviews for a store
-
-        // Todo: Get score of each store
-
-        // Todo: Return stores with scores
+        // Todo: Return stores with scores and county info as json as result.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(stores)));
+        response.getWriter().println(gson.toJson(new Result(stores, counties)));
     }
 
     /**
