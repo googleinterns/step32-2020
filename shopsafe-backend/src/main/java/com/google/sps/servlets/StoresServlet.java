@@ -21,6 +21,7 @@ import com.google.sps.data.Result;
 import com.google.sps.data.Store;
 import com.google.sps.data.StoreNoScore;
 import com.google.sps.data.StoreStats;
+import com.google.sps.data.ShopSafeScoring;
 
 import com.google.gson.Gson;
 
@@ -110,8 +111,8 @@ public class StoresServlet extends HttpServlet {
                 // TODO: Calculate score for county.
                 long countyCases = countyStats.getCases();
                 long countyDeaths = countyStats.getDeaths();
-
-                double countyScore = 3.2;
+                long countyPopulation = countyStats.getPopulation();
+                double countyScore = ShopSafeScoring.countyScore(countyCases, countyDeaths, countyPopulation);
                 countyScores.put(county.getCountyFips(), countyScore);
             }
 
@@ -125,7 +126,7 @@ public class StoresServlet extends HttpServlet {
             Double hygiene = storeStats.getHygiene();
             Double masks = storeStats.getMasks();
 
-            double storeScore = 3.2;
+            double storeScore = ShopSafeScoring.storeScore(busy, line, hygiene, masks);
 
             // Add score and review stats to the store.
             stores.add(new Store(
