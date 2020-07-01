@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../api/api.service';
 import { Router } from "@angular/router"
+import { ResultComponent } from '../result/result.component';
 
 @Component({
   selector: 'app-landing',
@@ -14,7 +15,8 @@ export class LandingComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private resultComponent: ResultComponent
   ) { }
 
   ngOnInit(): void {
@@ -23,7 +25,7 @@ export class LandingComponent implements OnInit {
   getNearbyStores() : Observable<Object> {
     this.router.navigate(['/result']);
     console.log("redirecting to results");
-    return this.apiService.getNearbyStores(this.location);
+    return this.resultComponent.getNearbyStores(this.location);
   }
 
 }

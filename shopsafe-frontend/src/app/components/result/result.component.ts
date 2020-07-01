@@ -2,11 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Store } from '../../classes/store/store';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css']
+})
+
+@Injectable({
+  providedIn: 'root'
 })
 export class ResultComponent implements OnInit {
   stores: Store[] = [];
@@ -23,6 +28,11 @@ export class ResultComponent implements OnInit {
     //       this.stores = stores;
     //     })
     this.initStores();
+  }
+
+  getNearbyStores(location: string) : Observable<Object> {
+    console.log('results api call');
+    return this.apiService.getNearbyStores(location);
   }
 
   // dummy method
