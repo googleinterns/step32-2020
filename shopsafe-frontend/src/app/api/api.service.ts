@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Store } from '../classes/store/store';
+import { Result } from '../classes/result/result';
 
 // Provides HTTP client used to make HTTP requests within the Angular application
 // Returns Observables (can be synchronous), not Promises (always asynchronous)
@@ -50,10 +51,10 @@ export class ApiService {
    * @returns Observable of array of stores
    * FIXME: change return type to general observable and modify such that elements have to be accessed
    */
-  public getNearbyStores(location: string): Observable<Object> {
+  public getNearbyStores(location: string): Observable<Result> {
     const url = API_URL + '/stores/${location}';
     return this.http
-      .get<Object>(url)
+      .get<Result>(url)
       .pipe(
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))

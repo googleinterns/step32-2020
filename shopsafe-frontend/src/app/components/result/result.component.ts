@@ -14,6 +14,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ResultComponent implements OnInit {
+  result;
   stores: Store[] = [];
   location: "";
 
