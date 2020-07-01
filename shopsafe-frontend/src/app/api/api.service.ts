@@ -48,14 +48,31 @@ export class ApiService {
    * Gets all nearby stores from backend via GET request
    * @param location inputted by user
    * @returns Observable of array of stores
+   * FIXME: change return type to general observable and modify such that elements have to be accessed
    */
   public getNearbyStores(location: string): Observable<Store[]> {
-    const url = API_URL + 'stores/${location}';
+    const url = API_URL + '/stores/${location}';
     return this.http
       .get<Store[]>(url)
       .pipe(
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))
       );
+  }
+
+  /**
+   * Gets current store by ID
+   * @param id ID of the store to fetch store from
+   * @returns store of given ID
+   * TODO: implement get servlet
+   */
+  public getStoreById(id: string) : Observable<Store> {
+    const url = API_URL + '/get-store/${id}';
+    return this.http
+      .get<Store>(url)
+      .pipe(
+        tap(_ => console.log('fetched store id=${id}')),
+        catchError(error => throwError(error.message || error))
+      )
   }
 }

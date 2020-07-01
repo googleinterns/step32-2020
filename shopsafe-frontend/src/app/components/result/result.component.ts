@@ -34,6 +34,7 @@ export class ResultComponent implements OnInit {
   // TODO: implement search bar
   // TODO: render all results
 
+  // testing dummy method
   initStores() : void {
     this.stores.push(new Store({
       id: 'temp',
