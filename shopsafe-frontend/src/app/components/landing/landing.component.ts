@@ -21,12 +21,9 @@ export class LandingComponent implements OnInit {
   }
 
   getNearbyStores() : Observable<Object> {
+    this.router.navigate(['/result']);
+    console.log("redirecting to results");
     return this.apiService.getNearbyStores(this.location);
-  }
-
-  testOutput() {
-    console.log(this.location);
-    this.router.navigate(['/result'])
   }
 
 }
