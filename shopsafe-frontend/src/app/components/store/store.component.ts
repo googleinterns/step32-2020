@@ -23,13 +23,42 @@ export class StoreComponent implements OnInit {
    * Runs when component is loaded
    */
   ngOnInit(): void {
-    this.getStore();
+    // this.getStore();
+    this.initStore();
   }
 
   getStore(): void {
     const id = this.route.snapshot.paramMap.get('id').toString();
     this.apiService.getStoreById(id)
-      .subscribe(store => this.store = store);
+      .subscribe(data => this.store = {
+        id: (data as any).id,
+        name: (data as any).name,
+        address: (data as any).address,
+        score: (data as any).score,
+        reviewCount: (data as any).reviewCount,
+        status: (data as any).status,
+        latLng: (data as any).latLng,
+        busy: (data as any).busy,
+        line: (data as any).line,
+        hygiene: (data as any).hygiene,
+        masks: (data as any).masks
+      });
+  }
+
+  initStore(): void {
+    this.store = new Store({
+      id: '2347',
+      name: 'test',
+      address: '1234 Test St.',
+      score: 10,
+      checkedIn: 10,
+      status: true,
+      latLng: [0, 0],
+      busy: 1,
+      line: 1,
+      hygiene: 1,
+      masks: 1
+    })
   }
 
   /**

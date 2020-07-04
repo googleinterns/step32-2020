@@ -18,30 +18,30 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ResultComponent implements OnInit {
   @Input() result: Result;
   stores: Store[] = [];
-  location: "";
+  location: string;
 
   constructor(
     private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
-    // Fetches all nearby stores on component load
-    // this.getNearbyStores(this.location)
-    //     .subscribe((stores) => {
-    //       this.stores = stores;
-    //     })
     this.initStores();
   }
 
   getResult(location: string): void {
     console.log('results api call');
+    this.location = location;
     this.apiService.getNearbyStores(location)
-      .subscribe(result => this.result = result);
+      .subscribe(data => this.result = {
+        nearbyStores: (data as any).nearbyStores,
+        countyStats: (data as any).countyStats
+      });
     this.stores = this.result.nearbyStores;
   }
 
   // dummy method
   initStores() : void {
+    this.location = '1234 Test St.';
     this.stores.push(new Store({
       id: '2347',
       name: 'test',

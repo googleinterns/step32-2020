@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Store } from '../classes/store/store';
-import { Result } from '../classes/result/result';
+import { Store } from '../interfaces/store';
+import { Result } from '../interfaces/result';
 
 // Provides HTTP client used to make HTTP requests within the Angular application
 // Returns Observables (can be synchronous), not Promises (always asynchronous)
@@ -48,22 +48,13 @@ export class ApiService {
   /**
    * Gets all nearby stores from backend via GET request
    * @param location inputted by user
-   * @returns Observable of response 
-   * FIXME: assign variables
+   * @returns result as observable
    */
   public getNearbyStores(location: string): Observable<Result> {
     const url = API_URL + '/stores/${location}';
     return this.http
       .get<Result>(url)
       .pipe(
-        // TODO: make result interface
-        // map(item => {
-        //   return new Result({
-        //     item.stores.map(store => {
-
-        //     })
-        //   })
-        // }),
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))
       );
@@ -72,8 +63,7 @@ export class ApiService {
   /**
    * Gets current store by ID
    * @param id ID of the store to fetch store from
-   * @returns store of given ID
-   * TODO: implement get servlet
+   * @returns store of given ID as observable
    */
   public getStoreById(id: string) : Observable<Store> {
     const url = API_URL + '/store/${id}';
