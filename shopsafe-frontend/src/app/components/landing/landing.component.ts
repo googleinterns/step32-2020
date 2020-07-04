@@ -22,10 +22,10 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getNearbyStores() : Observable<Object> {
+  getNearbyStores(): void {
     this.router.navigate(['/result']);
     console.log("redirecting to results");
-    return this.resultComponent.getNearbyStores(this.location);
+    this.resultComponent.getResult(this.location);
   }
 
 }

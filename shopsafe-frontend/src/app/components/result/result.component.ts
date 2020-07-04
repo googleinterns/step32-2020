@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Store } from '../../classes/store/store';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { Result } from '../../classes/result/result';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-result',
@@ -14,7 +16,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ResultComponent implements OnInit {
-  result;
+  @Input() result: Result;
   stores: Store[] = [];
   location: "";
 
@@ -31,15 +33,17 @@ export class ResultComponent implements OnInit {
     this.initStores();
   }
 
-  getNearbyStores(location: string) : Observable<Object> {
+  getResult(location: string): void {
     console.log('results api call');
-    return this.apiService.getNearbyStores(location);
+    this.apiService.getNearbyStores(location)
+      .subscribe(result => this.result = result);
+    this.stores = this.result.nearbyStores;
   }
 
   // dummy method
   initStores() : void {
     this.stores.push(new Store({
-      id: 'temp',
+      id: '2347',
       name: 'test',
       address: '1234 Test St.',
       score: 10,
@@ -53,7 +57,7 @@ export class ResultComponent implements OnInit {
     }));
 
     this.stores.push(new Store({
-      id: 'temp',
+      id: '1234',
       name: 'test',
       address: '1234 Test St.',
       score: 10,

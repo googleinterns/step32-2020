@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Store } from 'src/app/classes/store/store';
 
 @Component({
-  selector: 'app-store',
+  selector: 'app-store', 
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.css']
 })
 export class StoreComponent implements OnInit {
+  @Input() store: Store;
 
   constructor(
     public matDialog: MatDialog,
@@ -18,19 +19,18 @@ export class StoreComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     ) { }
-
-    store; 
-
   /**
    * Runs when component is loaded
    */
   ngOnInit(): void {
-    this.store = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => 
-      this.apiService.getStoreById(params.get('id')))
-    );
+    this.getStore();
   }
 
+  getStore(): void {
+    const id = this.route.snapshot.paramMap.get('id').toString();
+    this.apiService.getStoreById(id)
+      .subscribe(store => this.store = store);
+  }
 
   /**
    * Opens check in modal dialog using check in modal component

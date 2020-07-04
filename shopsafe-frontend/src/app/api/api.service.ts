@@ -7,7 +7,7 @@ import { Result } from '../classes/result/result';
 // Returns Observables (can be synchronous), not Promises (always asynchronous)
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 const API_URL = environment.apiUrl;
 
@@ -48,14 +48,22 @@ export class ApiService {
   /**
    * Gets all nearby stores from backend via GET request
    * @param location inputted by user
-   * @returns Observable of array of stores
-   * FIXME: change return type to general observable and modify such that elements have to be accessed
+   * @returns Observable of response 
+   * FIXME: assign variables
    */
   public getNearbyStores(location: string): Observable<Result> {
     const url = API_URL + '/stores/${location}';
     return this.http
       .get<Result>(url)
       .pipe(
+        // TODO: make result interface
+        // map(item => {
+        //   return new Result({
+        //     item.stores.map(store => {
+
+        //     })
+        //   })
+        // }),
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))
       );

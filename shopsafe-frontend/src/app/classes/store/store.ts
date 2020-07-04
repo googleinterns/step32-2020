@@ -5,7 +5,7 @@ export class Store {
     name: string = '';
     address: string = '';
     score: number;
-    checkedIn: number;
+    reviewCount: number;
     status: boolean;
     latLng: [number, number];
 
