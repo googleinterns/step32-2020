@@ -204,7 +204,7 @@ public class StoresServlet extends HttpServlet {
                 JSONObject storeLocation = store.getJSONObject("geometry").getJSONObject("location");
                 
                 stores.add(new StoreNoScore(
-                    store.getString("id"),
+                    store.getString("place_id"),
                     store.getString("name"),
                     store.getString("vicinity"),
                     (store.has("opening_hours")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
