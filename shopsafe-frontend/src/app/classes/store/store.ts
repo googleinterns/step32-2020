@@ -1,4 +1,6 @@
-export class Store {
+import { StoreInterface } from 'src/app/interfaces/interface';
+
+export class Store implements StoreInterface {
 
     // store variables
     id: string = '';

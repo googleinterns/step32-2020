@@ -54,13 +54,15 @@ export class ApiService {
     return this.http
       .get<ResultInterface>(url)
       .pipe(
+        map(res => res as ResultInterface),
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))
       );
   }
 
   /**
-   * Gets current store by ID
+   * Gets current store by ID, requires mapping because JSON doesn't match 
+   * interface typing
    * @param id ID of the store to fetch store from
    * @returns store of given ID as observable
    */
@@ -69,6 +71,21 @@ export class ApiService {
     return this.http
       .get<StoreInterface>(url)
       .pipe(
+        map((res: any) => {
+          return <StoreInterface> {
+            id: res.id,
+            name: res.name,
+            address: res.address,
+            status: res.open,
+            score: res.score,
+            reviewCount: res.reviewCount,
+            latLng: [res.location.latitude, res.location.longitude],
+            busy: res.stats.busy,
+            line: res.stats.line,
+            hygiene: res.stats.hygiene,
+            masks: res.stats.masks
+          }
+        }),
         tap(_ => console.log('fetched store id=${id}')),
         catchError(error => throwError(error.message || error))
       )

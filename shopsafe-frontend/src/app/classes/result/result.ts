@@ -1,9 +1,10 @@
 import { Store } from '../store/store';
 import { CountyStats } from '../county-stats/county-stats';
+import { ResultInterface } from 'src/app/interfaces/interface';
 /**
  * Result that is rendered in the template search result form
  */
-export class Result {
+export class Result implements ResultInterface {
     nearbyStores: Store[];
     countyStats: CountyStats;
 
