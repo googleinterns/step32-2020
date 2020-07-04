@@ -22,3 +22,11 @@ export interface StoreInterface {
     hygiene: number;
     masks: number;
 }
+
+export interface CountyStatsInterface {
+    countyName: string;
+    stateName: string;
+    cases: number;
+    deaths: number;
+    population: number;
+}

@@ -1,10 +1,16 @@
 #store .heading-text h1 {
+    clear: both;
     text-transform: uppercase;
 }
 
 #store .heading-text {
     padding-bottom: 20px;
     text-align: center;
+}
+
+#store .back-link {
+    text-transform: uppercase;
+    float: left !important;
 }
 
 #store .stat-bar {

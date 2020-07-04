@@ -82,4 +82,8 @@ export class StoreComponent implements OnInit {
     this.document.location.href = url;
   }
 
+  goBack() {
+    window.history.back();
+  }
+
 }

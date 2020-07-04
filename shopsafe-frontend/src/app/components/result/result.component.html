@@ -8,19 +8,19 @@
             <!-- TODO: integrate charts api -->
         </div>
         <div class="stat-bar-wrapper">
-            <h2>Statistics for St. Lawrence County</h2>
+            <h2>Statistics for {{ result.countyStats.countyName }} County</h2>
             <div class="stat-bar">
                 <div class="stat-elem">
                     <a class="stat-obj">TOTAL CASES</a>
-                    <p>2334610</p>
+                    <p>{{ result.countyStats.cases }}</p>
                 </div>
                 <div class="stat-elem" style="text-align: center;">
                     <a class="stat-obj">TOTAL DEATHS</a>
-                    <p>2334610</p>
+                    <p>{{ result.countyStats.deaths }}</p>
                 </div>
                 <div class="stat-elem" style="text-align: right; margin-top: -5px">
-                    <a class="stat-obj">SHOPSAFE SCORE</a>
-                    <p class="shopsafe-score">8/10</p>
+                    <a class="stat-obj">PROPORTION</a>
+                    <p class="shopsafe-score">{{ proportion }}</p>
                 </div>
             </div>
         </div>
