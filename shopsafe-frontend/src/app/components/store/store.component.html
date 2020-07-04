@@ -1,26 +1,26 @@
 <div id="store" class="segment">
     <div class="segment-text">
         <div class="heading-text">
-            <h1>WHOLE FOODS MARKET</h1>
-            <div id="store-id" hidden>12345</div>
+            <h1>{{ store.name }}</h1>
+            <div id="store-id" hidden>{{ store.id }}</div>
             <p>
-                5555 Street Ave. New York, NY 00000 US &nbsp; &nbsp; 
-                <a class="maps-button">VIEW ON MAPS</a>
+                {{ store.address }} &nbsp; &nbsp; 
+                <a class="maps-button" (click)="redirectToMap()">VIEW ON MAPS</a>
             </p>
         </div>
         <div class="stat-bar-wrapper">
             <div class="stat-bar">
                 <div class="stat-elem">
-                    <a class="stat-obj">TOTAL CASES</a>
-                    <p>2334610</p>
+                    <a class="stat-obj">CHECKED IN</a>
+                    <p>{{ store.reviewCount }}</p>
                 </div>
                 <div class="stat-elem" style="text-align: center;">
-                    <a class="stat-obj">TOTAL DEATHS</a>
-                    <p>2334610</p>
+                    <a class="stat-obj">STATUS</a>
+                    <p>{{ store.status ? 'OPEN' : 'CLOSED' }}</p>
                 </div>
                 <div class="stat-elem" style="text-align: right; margin-top: -5px">
                     <a class="stat-obj">SHOPSAFE SCORE</a>
-                    <p class="shopsafe-score">8/10</p>
+                    <p class="shopsafe-score">{{ store.score }}/10</p>
                 </div>
             </div>
         </div>

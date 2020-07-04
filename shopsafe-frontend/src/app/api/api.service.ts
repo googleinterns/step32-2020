@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Store } from '../interfaces/store';
-import { Result } from '../interfaces/result';
+import { StoreInterface, ResultInterface } from '../interfaces/interface';
 
 // Provides HTTP client used to make HTTP requests within the Angular application
 // Returns Observables (can be synchronous), not Promises (always asynchronous)
@@ -50,10 +49,10 @@ export class ApiService {
    * @param location inputted by user
    * @returns result as observable
    */
-  public getNearbyStores(location: string): Observable<Result> {
+  public getNearbyStores(location: string): Observable<ResultInterface> {
     const url = API_URL + '/stores/${location}';
     return this.http
-      .get<Result>(url)
+      .get<ResultInterface>(url)
       .pipe(
         tap(_ => console.log("get nearby stores")),
         catchError(error => throwError(error.message || error))
@@ -65,10 +64,10 @@ export class ApiService {
    * @param id ID of the store to fetch store from
    * @returns store of given ID as observable
    */
-  public getStoreById(id: string) : Observable<Store> {
+  public getStoreById(id: string) : Observable<StoreInterface> {
     const url = API_URL + '/store/${id}';
     return this.http
-      .get<Store>(url)
+      .get<StoreInterface>(url)
       .pipe(
         tap(_ => console.log('fetched store id=${id}')),
         catchError(error => throwError(error.message || error))

@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from 'src/app/classes/store/store';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-store', 
@@ -12,12 +13,14 @@ import { Store } from 'src/app/classes/store/store';
 })
 export class StoreComponent implements OnInit {
   @Input() store: Store;
+  latLng: string;
 
   constructor(
     public matDialog: MatDialog,
     private apiService: ApiService,
     private route: ActivatedRoute,
     private router: Router,
+    @Inject(DOCUMENT) private document: Document,
     ) { }
   /**
    * Runs when component is loaded
@@ -51,14 +54,15 @@ export class StoreComponent implements OnInit {
       name: 'test',
       address: '1234 Test St.',
       score: 10,
-      checkedIn: 10,
+      reviewCount: 10,
       status: true,
       latLng: [0, 0],
       busy: 1,
       line: 1,
       hygiene: 1,
       masks: 1
-    })
+    });
+    this.latLng = this.store.latLng[0] + "," + this.store.latLng[1];
   }
 
   /**
@@ -71,6 +75,11 @@ export class StoreComponent implements OnInit {
     dialogConfig.height = "510px";
     dialogConfig.width = "460px";
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
+  }
+
+  redirectToMap() {
+    const url = 'https://www.google.com/maps/search/?api=1&query=' + this.latLng;
+    this.document.location.href = url;
   }
 
 }
