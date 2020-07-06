@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+
 package com.google.sps.data;
 
 /** Class that calculates the score for a store and a county */
@@ -27,7 +29,7 @@ public final class ShopSafeScoring {
     // static private final double CASES_WEIGHT;
     // static private final double DEATH_WEIGHT;
 
-    static public double storeScore (double busyRating, double lineRating, double hygiengeRating, double maskRating) {
+    static public double storeScore (StoreStats storeStats) {
         return 9.0;
         // return busyRating * BUSY_WEIGHT +
         //     lineRating * LINE_WEIGHT +
@@ -35,8 +37,11 @@ public final class ShopSafeScoring {
         //     maskRating * MASK_WEIGHT;
     }
 
-    static public double countyScore (long cases, long deaths, long population) {
-        //TODO: determine method for countyScore
-        return 9.0;
+    static public double countyScore (CountyStats countyStats) {
+        long populationUS = 331002651;
+        long casesUS = 2930000;
+        double percentageUS = casesUS / populationUS;
+        double percentageCounty = countyStats.getCases() / countyStats.getPopulation();
+        return (percentageCounty - percentageUS) * 5 + 5;
     }
 }

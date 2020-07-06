@@ -133,15 +133,12 @@ public class StoresServlet extends HttpServlet {
             // If county not in hashmap, add to hashmap and counties list.
             if (!countyScores.containsKey(county.getCountyFips())) {
 
-                // Todo: Get Covid stats based on county.
+                // Get Covid stats based on county.
                 CountyStats countyStats = new CountyStats(county);
                 counties.add(countyStats);
 
-                // TODO: Calculate score for county.
-                long countyCases = countyStats.getCases();
-                long countyDeaths = countyStats.getDeaths();
-                long countyPopulation = countyStats.getPopulation();
-                double countyScore = ShopSafeScoring.countyScore(countyCases, countyDeaths, countyPopulation);
+                // Calculate score for county.
+                double countyScore = ShopSafeScoring.countyScore(countyStats);
                 countyScores.put(county.getCountyFips(), countyScore);
             }
 
@@ -150,12 +147,7 @@ public class StoresServlet extends HttpServlet {
             int storeReviewCount = storeStats.getNumReviews();
 
             // TODO: Get calculate score of each store.
-            Double busy = storeStats.getBusy();
-            Double line = storeStats.getLine();
-            Double hygiene = storeStats.getHygiene();
-            Double masks = storeStats.getMasks();
-
-            double storeScore = ShopSafeScoring.storeScore(busy, line, hygiene, masks);
+            double storeScore = ShopSafeScoring.storeScore(storeStats) * .5 + .5 * countyScores.get(county.getCountyFips());
 
             // Add score and review stats to the store.
             stores.add(new Store(
