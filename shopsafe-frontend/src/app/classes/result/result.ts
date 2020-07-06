@@ -9,9 +9,13 @@ export class Result implements ResultInterface {
   countyStats: CountyStats[];
 
   // Allows for constructing of obj by declaring all class variables
-  // TODO: update tests to meet new constructor
-  constructor(result: any) {
-    this.nearbyStores = result.nearbyStores;
-    this.countyStats = result.countyStats;
+  constructor(values: Object = {}) {
+      Object.assign(this, values);
   }
+
+  // TODO: update tests to meet new constructor
+  // constructor(result: any) {
+  //   this.nearbyStores = result.nearbyStores;
+  //   this.countyStats = result.countyStats;
+  // }
 }

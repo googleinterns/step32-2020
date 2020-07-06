@@ -35,13 +35,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApiService", function() { return ApiService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _classes_store_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../classes/store/store */ "./src/app/classes/store/store.ts");
-/* harmony import */ var _classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../classes/county-stats/county-stats */ "./src/app/classes/county-stats/county-stats.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
-
-
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
 
 
 // Provides HTTP client used to make HTTP requests within the Angular application
@@ -56,7 +52,7 @@ class ApiService {
     constructor(http) {
         this.http = http;
         this.httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpHeaders"]({ 'Content-Type': 'application/json' })
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({ 'Content-Type': 'application/json' })
         };
     }
     /**
@@ -65,7 +61,7 @@ class ApiService {
      * @returns Observable
      */
     createCheckIn(storeId, busy, line, hygiene, mask) {
-        let params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpParams"]();
+        let params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
         params = params
             .set('storeId', storeId.toString())
             .set('busy', busy.toString())
@@ -74,7 +70,7 @@ class ApiService {
             .set('mask', mask.toString());
         return this.http
             .post(API_URL + '/checkin', params, this.httpOptions)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["tap"])(_ => console.log("added new checkin")), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["throwError"])(error.message || error)));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log("added new checkin")), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
     }
     /**
      * Gets all nearby stores from backend via GET request
@@ -89,13 +85,10 @@ class ApiService {
             .get(url)
             .pipe(
         // map(res => res as ResultInterface),
-        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])((res) => {
+        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => {
             console.log(res);
-            return {
-                nearbyStores: res.stores.map((stores) => stores.map((store) => new _classes_store_store__WEBPACK_IMPORTED_MODULE_2__["Store"](store))),
-                countyStats: new _classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__["CountyStats"](res.countyStats)
-            };
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["tap"])(_ => console.log("API: fetch nearby stores for location " + location)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["throwError"])(error.message || error)));
+            return {};
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log("API: fetch nearby stores for location " + location)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
     }
     /**
      * Gets current store by ID, requires mapping because JSON doesn't match
@@ -107,7 +100,7 @@ class ApiService {
         const url = API_URL + '/store/${id}';
         return this.http
             .get(url)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])((res) => {
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => {
             return {
                 id: res.id,
                 name: res.name,
@@ -121,17 +114,17 @@ class ApiService {
                 hygiene: res.stats.hygiene,
                 masks: res.stats.masks
             };
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["tap"])(_ => console.log('AP: fetched store id=${id}')), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["throwError"])(error.message || error)));
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log('AP: fetched store id=${id}')), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
     }
 }
-ApiService.ɵfac = function ApiService_Factory(t) { return new (t || ApiService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"])); };
+ApiService.ɵfac = function ApiService_Factory(t) { return new (t || ApiService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
 ApiService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: ApiService, factory: ApiService.ɵfac, providedIn: 'root' });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](ApiService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
                 providedIn: 'root'
             }]
-    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"] }]; }, null); })();
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }]; }, null); })();
 
 
 /***/ }),
@@ -329,14 +322,17 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CountyStats", function() { return CountyStats; });
 class CountyStats {
-    constructor(countyStats) {
+    // constructor(countyStats: any) {
+    //   this.countyName = countyStats.countyName;
+    //   this.stateName = countyStats.stateName;
+    //   this.cases = countyStats.cases;
+    //   this.deaths = countyStats.deaths;
+    //   this.population = countyStats.population;
+    // }
+    constructor(values = {}) {
         this.countyName = '';
         this.stateName = '';
-        this.countyName = countyStats.countyName;
-        this.stateName = countyStats.stateName;
-        this.cases = countyStats.cases;
-        this.deaths = countyStats.deaths;
-        this.population = countyStats.population;
+        Object.assign(this, values);
     }
 }
 
@@ -358,10 +354,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 class Result {
     // Allows for constructing of obj by declaring all class variables
-    // TODO: update tests to meet new constructor
-    constructor(result) {
-        this.nearbyStores = result.nearbyStores;
-        this.countyStats = result.countyStats;
+    constructor(values = {}) {
+        Object.assign(this, values);
     }
 }
 
@@ -379,22 +373,25 @@ class Result {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
 class Store {
-    constructor(store) {
+    // constructor(store: any) {
+    //   this.id = store.id;
+    //   this.name = store.name;
+    //   this.address = store.address;
+    //   this.status = store.open;
+    //   this.score = store.score;
+    //   this.reviewCount = store.reviewCount;
+    //   this.latLng = [store.location.latitude, store.location.longitude];
+    //   this.busy = store.stats.busy;
+    //   this.line = store.stats.line;
+    //   this.hygiene = store.stats.hygiene;
+    //   this.masks = store.stats.masks;
+    // }
+    constructor(values = {}) {
         // store variables
         this.id = '';
         this.name = '';
         this.address = '';
-        this.id = store.id;
-        this.name = store.name;
-        this.address = store.address;
-        this.status = store.open;
-        this.score = store.score;
-        this.reviewCount = store.reviewCount;
-        this.latLng = [store.location.latitude, store.location.longitude];
-        this.busy = store.stats.busy;
-        this.line = store.stats.line;
-        this.hygiene = store.stats.hygiene;
-        this.masks = store.stats.masks;
+        Object.assign(this, values);
     }
 }
 
@@ -909,7 +906,7 @@ class ResultComponent {
         this.stores = [];
     }
     ngOnInit() {
-        // this.init();
+        this.init();
     }
     getResult(location) {
         console.log('results api call');
@@ -924,7 +921,7 @@ class ResultComponent {
     initResult() {
         this.stores = this.result.nearbyStores;
         // Round proportion to 2 decimal places
-        this.proportion = Math.round((this.result.countyStats.cases / this.result.countyStats.population) * 100) / 100;
+        this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
     }
     // dummy method
     init() {
@@ -958,13 +955,13 @@ class ResultComponent {
         this.location = '1234 Test St.';
         this.result = new _classes_result_result__WEBPACK_IMPORTED_MODULE_2__["Result"]({
             nearbyStores: tempStores,
-            countyStats: new src_app_classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__["CountyStats"]({
+            countyStats: [].push(new src_app_classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__["CountyStats"]({
                 countyName: 'St. Lawrence',
                 stateName: 'New York',
                 cases: 234098,
                 deaths: 43,
                 population: 623408
-            })
+            }))
         });
     }
 }
@@ -1027,11 +1024,11 @@ ResultComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](4);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.location);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("Statistics for ", ctx.result.countyStats.countyName, " County");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("Statistics for ", ctx.result.countyStats[0].countyName, " County");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats.cases);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats[0].cases);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats.deaths);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats[0].deaths);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.proportion);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);

@@ -45,7 +45,7 @@ export class ResultComponent implements OnInit {
   initResult(): void {
     this.stores = this.result.nearbyStores;
     // Round proportion to 2 decimal places
-    this.proportion = Math.round((this.result.countyStats.cases / this.result.countyStats.population) * 100) / 100;
+    this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
   }
 
   // dummy method
@@ -83,13 +83,13 @@ export class ResultComponent implements OnInit {
 
     this.result = new Result({
       nearbyStores: tempStores,
-      countyStats: new CountyStats({
+      countyStats: [].push(new CountyStats({
         countyName: 'St. Lawrence',
         stateName: 'New York',
         cases: 234098,
         deaths: 43,
         population: 623408
-      })
+      }))
     })
   }
 

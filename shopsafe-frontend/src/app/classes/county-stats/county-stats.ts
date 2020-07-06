@@ -7,11 +7,14 @@ export class CountyStats implements CountyStatsInterface {
   deaths: number;
   population: number;
 
-  constructor(countyStats: any) {
-    this.countyName = countyStats.countyName;
-    this.stateName = countyStats.stateName;
-    this.cases = countyStats.cases;
-    this.deaths = countyStats.deaths;
-    this.population = countyStats.population;
+  // constructor(countyStats: any) {
+  //   this.countyName = countyStats.countyName;
+  //   this.stateName = countyStats.stateName;
+  //   this.cases = countyStats.cases;
+  //   this.deaths = countyStats.deaths;
+  //   this.population = countyStats.population;
+  // }
+  constructor(values: Object = {}) {
+    Object.assign(this, values);
   }
 }

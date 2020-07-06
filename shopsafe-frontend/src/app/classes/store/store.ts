@@ -17,17 +17,21 @@ export class Store implements StoreInterface {
   hygiene: number;
   masks: number;
 
-  constructor(store: any) {
-    this.id = store.id;
-    this.name = store.name;
-    this.address = store.address;
-    this.status = store.open;
-    this.score = store.score;
-    this.reviewCount = store.reviewCount;
-    this.latLng = [store.location.latitude, store.location.longitude];
-    this.busy = store.stats.busy;
-    this.line = store.stats.line;
-    this.hygiene = store.stats.hygiene;
-    this.masks = store.stats.masks;
+  // constructor(store: any) {
+  //   this.id = store.id;
+  //   this.name = store.name;
+  //   this.address = store.address;
+  //   this.status = store.open;
+  //   this.score = store.score;
+  //   this.reviewCount = store.reviewCount;
+  //   this.latLng = [store.location.latitude, store.location.longitude];
+  //   this.busy = store.stats.busy;
+  //   this.line = store.stats.line;
+  //   this.hygiene = store.stats.hygiene;
+  //   this.masks = store.stats.masks;
+  // }
+
+  constructor(values: Object = {}) {
+    Object.assign(this, values);
   }
 }

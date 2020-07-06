@@ -69,31 +69,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony import */
 
 
-    var _classes_store_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-    /*! ../classes/store/store */
-    "./src/app/classes/store/store.ts");
-    /* harmony import */
-
-
-    var _classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-    /*! ../classes/county-stats/county-stats */
-    "./src/app/classes/county-stats/county-stats.ts");
-    /* harmony import */
-
-
-    var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! @angular/common/http */
     "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
     /* harmony import */
 
 
-    var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
     /*! rxjs */
     "./node_modules/rxjs/_esm2015/index.js");
     /* harmony import */
 
 
-    var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+    var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
     /*! rxjs/operators */
     "./node_modules/rxjs/_esm2015/operators/index.js"); // Provides HTTP client used to make HTTP requests within the Angular application
     // Returns Observables (can be synchronous), not Promises (always asynchronous)
@@ -107,7 +95,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
         this.http = http;
         this.httpOptions = {
-          headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpHeaders"]({
+          headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
             'Content-Type': 'application/json'
           })
         };
@@ -122,12 +110,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _createClass(ApiService, [{
         key: "createCheckIn",
         value: function createCheckIn(storeId, busy, line, hygiene, mask) {
-          var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpParams"]();
+          var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
           params = params.set('storeId', storeId.toString()).set('busy', busy.toString()).set('line', line.toString()).set('hygiene', hygiene.toString()).set('mask', mask.toString());
-          return this.http.post(API_URL + '/checkin', params, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["tap"])(function (_) {
+          return this.http.post(API_URL + '/checkin', params, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
             return console.log("added new checkin");
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(function (error) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["throwError"])(error.message || error);
+          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (error) {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error);
           }));
         }
         /**
@@ -143,20 +131,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           // Uncomment above when location url is fetched
           var url = API_URL + '/stores';
           return this.http.get(url).pipe( // map(res => res as ResultInterface),
-          Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(function (res) {
+          Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
             console.log(res);
-            return {
-              nearbyStores: res.stores.map(function (stores) {
-                return stores.map(function (store) {
-                  return new _classes_store_store__WEBPACK_IMPORTED_MODULE_2__["Store"](store);
-                });
-              }),
-              countyStats: new _classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__["CountyStats"](res.countyStats)
-            };
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["tap"])(function (_) {
+            return {};
+          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
             return console.log("API: fetch nearby stores for location " + location);
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(function (error) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["throwError"])(error.message || error);
+          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (error) {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error);
           }));
         }
         /**
@@ -170,7 +151,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "getStoreById",
         value: function getStoreById(id) {
           var url = API_URL + '/store/${id}';
-          return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(function (res) {
+          return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
             return {
               id: res.id,
               name: res.name,
@@ -184,10 +165,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               hygiene: res.stats.hygiene,
               masks: res.stats.masks
             };
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["tap"])(function (_) {
+          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
             return console.log('AP: fetched store id=${id}');
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(function (error) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["throwError"])(error.message || error);
+          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (error) {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error);
           }));
         }
       }]);
@@ -196,7 +177,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }();
 
     ApiService.ɵfac = function ApiService_Factory(t) {
-      return new (t || ApiService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"]));
+      return new (t || ApiService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]));
     };
 
     ApiService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
@@ -214,7 +195,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         }]
       }], function () {
         return [{
-          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"]
+          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
         }];
       }, null);
     })();
@@ -537,16 +518,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       return CountyStats;
     });
 
-    var CountyStats = function CountyStats(countyStats) {
+    var CountyStats = // constructor(countyStats: any) {
+    //   this.countyName = countyStats.countyName;
+    //   this.stateName = countyStats.stateName;
+    //   this.cases = countyStats.cases;
+    //   this.deaths = countyStats.deaths;
+    //   this.population = countyStats.population;
+    // }
+    function CountyStats() {
+      var values = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
       _classCallCheck(this, CountyStats);
 
       this.countyName = '';
       this.stateName = '';
-      this.countyName = countyStats.countyName;
-      this.stateName = countyStats.stateName;
-      this.cases = countyStats.cases;
-      this.deaths = countyStats.deaths;
-      this.population = countyStats.population;
+      Object.assign(this, values);
     };
     /***/
 
@@ -577,12 +563,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
     var Result = // Allows for constructing of obj by declaring all class variables
-    // TODO: update tests to meet new constructor
-    function Result(result) {
+    function Result() {
+      var values = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
       _classCallCheck(this, Result);
 
-      this.nearbyStores = result.nearbyStores;
-      this.countyStats = result.countyStats;
+      Object.assign(this, values);
     };
     /***/
 
@@ -608,24 +594,29 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       return Store;
     });
 
-    var Store = function Store(store) {
+    var Store = // constructor(store: any) {
+    //   this.id = store.id;
+    //   this.name = store.name;
+    //   this.address = store.address;
+    //   this.status = store.open;
+    //   this.score = store.score;
+    //   this.reviewCount = store.reviewCount;
+    //   this.latLng = [store.location.latitude, store.location.longitude];
+    //   this.busy = store.stats.busy;
+    //   this.line = store.stats.line;
+    //   this.hygiene = store.stats.hygiene;
+    //   this.masks = store.stats.masks;
+    // }
+    function Store() {
+      var values = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
       _classCallCheck(this, Store);
 
       // store variables
       this.id = '';
       this.name = '';
       this.address = '';
-      this.id = store.id;
-      this.name = store.name;
-      this.address = store.address;
-      this.status = store.open;
-      this.score = store.score;
-      this.reviewCount = store.reviewCount;
-      this.latLng = [store.location.latitude, store.location.longitude];
-      this.busy = store.stats.busy;
-      this.line = store.stats.line;
-      this.hygiene = store.stats.hygiene;
-      this.masks = store.stats.masks;
+      Object.assign(this, values);
     };
     /***/
 
@@ -1711,7 +1702,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       _createClass(ResultComponent, [{
         key: "ngOnInit",
-        value: function ngOnInit() {// this.init();
+        value: function ngOnInit() {
+          this.init();
         }
       }, {
         key: "getResult",
@@ -1733,7 +1725,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function initResult() {
           this.stores = this.result.nearbyStores; // Round proportion to 2 decimal places
 
-          this.proportion = Math.round(this.result.countyStats.cases / this.result.countyStats.population * 100) / 100;
+          this.proportion = Math.round(this.result.countyStats[0].cases / this.result.countyStats[0].population * 100) / 100;
         } // dummy method
 
       }, {
@@ -1769,13 +1761,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           this.location = '1234 Test St.';
           this.result = new _classes_result_result__WEBPACK_IMPORTED_MODULE_2__["Result"]({
             nearbyStores: tempStores,
-            countyStats: new src_app_classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__["CountyStats"]({
+            countyStats: [].push(new src_app_classes_county_stats_county_stats__WEBPACK_IMPORTED_MODULE_3__["CountyStats"]({
               countyName: 'St. Lawrence',
               stateName: 'New York',
               cases: 234098,
               deaths: 43,
               population: 623408
-            })
+            }))
           });
         }
       }]);
@@ -1912,15 +1904,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("Statistics for ", ctx.result.countyStats.countyName, " County");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("Statistics for ", ctx.result.countyStats[0].countyName, " County");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats.cases);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats[0].cases);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats.deaths);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.result.countyStats[0].deaths);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
 
