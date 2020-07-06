@@ -26,8 +26,8 @@ export class StoreComponent implements OnInit {
    * Runs when component is loaded
    */
   ngOnInit(): void {
-    // this.getStore();
-    this.initStore();
+    this.getStore();
+    // this.initStore();
   }
 
   getStore(): void {

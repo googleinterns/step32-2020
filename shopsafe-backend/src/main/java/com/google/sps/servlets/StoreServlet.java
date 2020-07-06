@@ -120,13 +120,15 @@ public class StoreServlet extends HttpServlet {
         County county = County.GetCounty(storeNoScore.getLocation());
 
         // Get Covid stats based on county.
-        CountyStats countyStats = new CountyStats(county, 1000, 50, 25000);
+        // CountyStats countyStats = new CountyStats(county, 1000, 50, 25000);
+        CountyStats countyStats = new CountyStats(county);
 
         // Get score based on county stats.
         double countyScore = 3.2;
 
         // Get reviews for a store.
-        StoreStats storeStats = new StoreStats(2.5, 2.5, 2.5, 2.5);
+        // StoreStats storeStats = new StoreStats(2.5, 2.5, 2.5, 2.5);
+        StoreStats storeStats = new StoreStats(id);
         int storeReviewCount = 12;
 
         // Todo: Get real score of each store.

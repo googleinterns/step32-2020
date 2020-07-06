@@ -27,10 +27,7 @@ export class ResultComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.init();
-    this.stores = this.result.nearbyStores;
-    // Round proportion to 2 decimal places
-    this.proportion = Math.round((this.result.countyStats.cases / this.result.countyStats.population) * 100) / 100;
+    // this.init();
   }
 
   getResult(location: string): void {
@@ -41,10 +38,18 @@ export class ResultComponent implements OnInit {
         nearbyStores: (data as any).nearbyStores,
         countyStats: (data as any).countyStats
       });
+
+    this.initResult();
+  }
+
+  initResult(): void {
+    this.stores = this.result.nearbyStores;
+    // Round proportion to 2 decimal places
+    this.proportion = Math.round((this.result.countyStats.cases / this.result.countyStats.population) * 100) / 100;
   }
 
   // dummy method
-  init() : void {
+  init(): void {
     var tempStores = [];
     tempStores.push(new Store({
       id: '2347',

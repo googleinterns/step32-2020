@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { StoreInterface, ResultInterface } from '../interfaces/interface';
+import { StoreInterface, ResultInterface, CountyStatsInterface } from '../interfaces/interface';
+import { Result } from '../classes/result/result';
+import { Store } from '../classes/store/store';
+import { CountyStats } from '../classes/county-stats/county-stats';
 
 // Provides HTTP client used to make HTTP requests within the Angular application
 // Returns Observables (can be synchronous), not Promises (always asynchronous)
@@ -50,12 +53,23 @@ export class ApiService {
    * @returns result as observable
    */
   public getNearbyStores(location: string): Observable<ResultInterface> {
-    const url = API_URL + '/stores/${location}';
+    // const url = API_URL + '/stores/${location}';
+    // Uncomment above when location url is fetched
+    const url = API_URL + '/stores';
     return this.http
       .get<ResultInterface>(url)
       .pipe(
-        map(res => res as ResultInterface),
-        tap(_ => console.log("get nearby stores")),
+        // map(res => res as ResultInterface),
+        map((res: any) => {
+          console.log(res);
+          return <ResultInterface> {
+            nearbyStores: res.stores.map((stores: any[]) => stores.map((store: any) => 
+              new Store(store)
+            )),
+            countyStats: new CountyStats(res.countyStats)
+          }
+        }),
+        tap(_ => console.log("API: fetch nearby stores for location " + location)),
         catchError(error => throwError(error.message || error))
       );
   }
@@ -86,7 +100,7 @@ export class ApiService {
             masks: res.stats.masks
           }
         }),
-        tap(_ => console.log('fetched store id=${id}')),
+        tap(_ => console.log('AP: fetched store id=${id}')),
         catchError(error => throwError(error.message || error))
       )
   }
