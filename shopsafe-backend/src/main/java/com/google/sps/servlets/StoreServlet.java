@@ -96,7 +96,7 @@ public class StoreServlet extends HttpServlet {
             }
             reader.close();
 
-            // Convert json to json object with just the first result.
+            // Convert json to json object with just the one store.
             JSONObject result = new JSONObject(new String(json)).getJSONObject("result");
             JSONObject storeLocation = result.getJSONObject("geometry").getJSONObject("location");
             
@@ -120,13 +120,13 @@ public class StoreServlet extends HttpServlet {
         County county = County.GetCounty(storeNoScore.getLocation());
 
         // Get Covid stats based on county.
-        CountyStats countyStats = new CountyStats(county, 1000, 50, 25000);
+        CountyStats countyStats = new CountyStats(county);
 
         // Get score based on county stats.
         double countyScore = 3.2;
 
         // Get reviews for a store.
-        StoreStats storeStats = new StoreStats(2.5, 2.5, 2.5, 2.5);
+        StoreStats storeStats = new StoreStats(id);
         int storeReviewCount = 12;
 
         // Todo: Get real score of each store.
@@ -139,7 +139,7 @@ public class StoreServlet extends HttpServlet {
             storeStats,
             storeReviewCount);
 
-        // Return stores with scores and county info as json as result.
+        // Return score and stats for one store.
         Gson gson = new Gson();
         response.setContentType("application/json;");
         response.getWriter().println(gson.toJson(store));
