@@ -1,15 +1,12 @@
 import { Store } from '../store/store';
+import { CountyStats } from '../county-stats/county-stats';
+import { ResultInterface } from 'src/app/interfaces/interface';
 /**
  * Result that is rendered in the template search result form
  */
-export class Result {
-    id: string = '';
-    fips: number;
-    county: string = '';
-    state: string = '';
-    confirmedCases: number;
-    confirmedDeaths: number;
+export class Result implements ResultInterface {
     nearbyStores: Store[];
+    countyStats: CountyStats;
 
     // Allows for constructing of obj by declaring all class variables
     constructor(values: Object = {}) {

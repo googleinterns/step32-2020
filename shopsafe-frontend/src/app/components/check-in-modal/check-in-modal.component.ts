@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-check-in-modal',
@@ -11,7 +12,8 @@ export class CheckInModalComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private dialogRef: MatDialogRef<CheckInModalComponent>
+    private dialogRef: MatDialogRef<CheckInModalComponent>,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -31,10 +33,9 @@ export class CheckInModalComponent implements OnInit {
    * @param mask user input mask score
    */
   checkIn(): void {
-    // let storeId = this.storeId.toString();
-    // console.log(storeId);
-    // FIXME: add actual store id from store URL
-    this.apiService.createCheckIn('temp', Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask));
+    console.log("check-in api call");
+    const id = this.route.snapshot.paramMap.get('id').toString();
+    this.apiService.createCheckIn(id, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask));
     this.dialogRef.close();
   }
 

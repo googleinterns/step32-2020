@@ -1,4 +1,4 @@
-import { Result } from './result';
+import { Result } from '../classes/result/result';
 
 describe('Result', () => {
   // Checks if constructor creates instance

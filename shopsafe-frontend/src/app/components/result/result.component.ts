@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Store } from '../../classes/store/store';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { Result } from '../../classes/result/result';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CountyStats } from 'src/app/classes/county-stats/county-stats';
 
 @Component({
   selector: 'app-result',
@@ -14,36 +17,41 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ResultComponent implements OnInit {
-  result;
+  @Input() result: Result;
   stores: Store[] = [];
-  location: "";
+  location: string;
+  proportion: number;
 
   constructor(
     private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
-    // Fetches all nearby stores on component load
-    // this.getNearbyStores(this.location)
-    //     .subscribe((stores) => {
-    //       this.stores = stores;
-    //     })
-    this.initStores();
+    this.init();
+    this.stores = this.result.nearbyStores;
+    // Round proportion to 2 decimal places
+    this.proportion = Math.round((this.result.countyStats.cases / this.result.countyStats.population) * 100) / 100;
   }
 
-  getNearbyStores(location: string) : Observable<Object> {
+  getResult(location: string): void {
     console.log('results api call');
-    return this.apiService.getNearbyStores(location);
+    this.location = location;
+    this.apiService.getNearbyStores(location)
+      .subscribe(data => this.result = {
+        nearbyStores: (data as any).nearbyStores,
+        countyStats: (data as any).countyStats
+      });
   }
 
   // dummy method
-  initStores() : void {
-    this.stores.push(new Store({
-      id: 'temp',
+  init() : void {
+    var tempStores = [];
+    tempStores.push(new Store({
+      id: '2347',
       name: 'test',
       address: '1234 Test St.',
       score: 10,
-      checkedIn: 10,
+      reviewCount: 10,
       status: true,
       latLng: [0, 0],
       busy: 1,
@@ -52,12 +60,12 @@ export class ResultComponent implements OnInit {
       masks: 1
     }));
 
-    this.stores.push(new Store({
-      id: 'temp',
+    tempStores.push(new Store({
+      id: '1234',
       name: 'test',
       address: '1234 Test St.',
       score: 10,
-      checkedIn: 10,
+      reviewCount: 10,
       status: true,
       latLng: [0, 0],
       busy: 1,
@@ -65,6 +73,19 @@ export class ResultComponent implements OnInit {
       hygiene: 1,
       masks: 1
     }));
+    
+    this.location = '1234 Test St.';
+
+    this.result = new Result({
+      nearbyStores: tempStores,
+      countyStats: new CountyStats({
+        countyName: 'St. Lawrence',
+        stateName: 'New York',
+        cases: 234098,
+        deaths: 43,
+        population: 623408
+      })
+    })
   }
 
 }
