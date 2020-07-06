@@ -58,11 +58,11 @@ public final class County {
     /**
      * Returns the county based on a LatLng, or empty county if error.
      */
-    public static County GetCounty(LatLng location) {
+    public static County GetCounty(Store store) {
         try {
 
             // Read response of call to FCC API given lat and lng.
-            URL fccUrl = new URL(FCC_BASE_URL + location.getLatitude() + "&lon=" + location.getLongitude() + FCC_END_URL);
+            URL fccUrl = new URL(FCC_BASE_URL + store.getLatitude() + "&lon=" + store.getLongitude() + FCC_END_URL);
             BufferedReader reader = new BufferedReader(new InputStreamReader(fccUrl.openStream()));
             
             // Store response in json, by reading each line.

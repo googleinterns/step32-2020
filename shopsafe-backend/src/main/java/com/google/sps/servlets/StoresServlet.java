@@ -14,12 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
 import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
 import com.google.sps.data.Result;
 import com.google.sps.data.Store;
-import com.google.sps.data.StoreNoScore;
 import com.google.sps.data.StoreStats;
 import com.google.sps.data.ShopSafeScoring;
 
@@ -111,73 +111,71 @@ public class StoresServlet extends HttpServlet {
             return;
         }
 
-        // Get all grocery stores based on LatLng and migrate to StoreNoScore class.
-        List<StoreNoScore> storesNoScores = getStores(location);
+        // Get all grocery stores based on LatLng and migrate to the Store class.
+        List<Store> stores = getStores(location);
 
         HashMap<String, Double> countyScores = new HashMap<String, Double>();
-        List<CountyStats> counties = new ArrayList<>();
+        List<CountyStats> countyStats = new ArrayList<>();
 
         // Add fake score values to the stores.
-        List<Store> stores = new ArrayList<>();
+        List<StoreStats> storeStats = new ArrayList<>();
 
         // For every store, get reviews and county data and add scores to the store.
-        int count = storesNoScores.size(); 
+        int count = stores.size(); 
         for (int i=0 ; i< count; i++) {
 
             // Get store without the score.
-            StoreNoScore storeNoScore = storesNoScores.get(i);
+            Store store = stores.get(i);
             
             // Get county based on location of the store
-            County county = County.GetCounty(storeNoScore.getLocation());
+            County county = County.GetCounty(store);
 
             // If county not in hashmap, add to hashmap and counties list.
             if (!countyScores.containsKey(county.getCountyFips())) {
 
                 // Todo: Get Covid stats based on county.
-                CountyStats countyStats = new CountyStats(county);
-                counties.add(countyStats);
+                CountyStats countyStat = new CountyStats(county);
+                countyStats.add(countyStat);
 
                 // TODO: Calculate score for county.
-                long countyCases = countyStats.getCases();
-                long countyDeaths = countyStats.getDeaths();
-                long countyPopulation = countyStats.getPopulation();
+                long countyCases = countyStat.getCases();
+                long countyDeaths = countyStat.getDeaths();
+                long countyPopulation = countyStat.getPopulation();
                 double countyScore = ShopSafeScoring.countyScore(countyCases, countyDeaths, countyPopulation);
                 countyScores.put(county.getCountyFips(), countyScore);
             }
 
             // Todo: Get reviews for a store.
-            StoreStats storeStats = new StoreStats(storeNoScore.getId());
-            int storeReviewCount = storeStats.getNumReviews();
+            CheckInStats checkInStats = new CheckInStats(store.getId());
 
             // TODO: Get calculate score of each store.
-            Double busy = storeStats.getBusy();
-            Double line = storeStats.getLine();
-            Double hygiene = storeStats.getHygiene();
-            Double masks = storeStats.getMasks();
+            Double busy = checkInStats.getBusy();
+            Double line = checkInStats.getLine();
+            Double hygiene = checkInStats.getHygiene();
+            Double masks = checkInStats.getMasks();
 
             double storeScore = ShopSafeScoring.storeScore(busy, line, hygiene, masks);
 
             // Add score and review stats to the store.
-            stores.add(new Store(
-                storeNoScore,
+            storeStats.add(new StoreStats(
+                store,
                 storeScore,
-                storeStats,
-                storeReviewCount));
+                checkInStats));
         }
 
         // Todo: Return stores with scores and county info as json as result.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(stores, counties)));
+        response.getWriter().println(gson.toJson(new Result(storeStats, countyStats)));
     }
 
     /**
      * Returns a list of Stores without scores.
      */
-    public List<StoreNoScore> getStores(LatLng location) {
+    public List<Store> getStores(LatLng location) {
 
         // List of stores that will be returned, it will be empty if there is an exception.
-        List<StoreNoScore> stores = new ArrayList<>();
+        List<Store> stores = new ArrayList<>();
         
         try {
 
@@ -203,7 +201,7 @@ public class StoresServlet extends HttpServlet {
                 JSONObject store = results.getJSONObject(i);
                 JSONObject storeLocation = store.getJSONObject("geometry").getJSONObject("location");
                 
-                stores.add(new StoreNoScore(
+                stores.add(new Store(
                     store.getString("place_id"),
                     store.getString("name"),
                     store.getString("vicinity"),

@@ -14,7 +14,7 @@
 
 package com.google.sps.data;
 
-import com.google.sps.data.Store;
+import com.google.sps.data.StoreStats;
 import com.google.sps.data.CountyStats;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ import java.util.List;
 /** Class containing a list of the comments, the total number of comments, and user info. */
 public final class Result {
 
-    private final List<Store> stores;
+    private final List<StoreStats> stores;
     private final List<CountyStats> countyStats;
 
-    public Result(List<Store> stores, List<CountyStats> countyStats) {
+    public Result(List<StoreStats> stores, List<CountyStats> countyStats) {
         this.stores = stores;
         this.countyStats = countyStats;
     }

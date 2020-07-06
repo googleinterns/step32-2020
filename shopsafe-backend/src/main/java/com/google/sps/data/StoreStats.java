@@ -14,62 +14,86 @@
 
 package com.google.sps.data;
 
+import com.google.sps.data.LatLng;
+import com.google.sps.data.Store;
+import com.google.sps.data.CheckInStats;
 
-import java.util.ArrayList;
-
-import com.google.sps.data.StoreDatastoreHandler;
-import com.google.appengine.api.datastore.Entity;
-
-/** Class contains all the averaged stats for a store. */
+/** Class contains all the information for a store. */
 public final class StoreStats {
 
-  private double busy = 0.0;
-  private double line = 0.0;
-  private double hygiene = 0.0;
-  private double masks = 0.0;
-  private int numReviews = 0;
+    private final String id;
+    private final String name;
+    private final String address;
+    private final Boolean open;
+    private final double latitude;
+    private final double longitude;
+    private final double score;
+    private final double busy;
+    private final double line;
+    private final double hygiene;
+    private final double masks;
+    private final long checkInCount;
 
-  public StoreStats(String storeId) {
-    
-    //Get datastore Ratings of store; 
-    StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
-    ArrayList<Entity> ratingEntities = dataStoreService.getRatings();
-    numReviews = ratingEntities.size();
-
-    //update StoreStats instance to represent average user ratings
-    for (Entity ratingEntity: ratingEntities) {
-        busy += (double) ratingEntity.getProperty("busy");
-        line += (double) ratingEntity.getProperty("line");
-        hygiene += (double) ratingEntity.getProperty("hygiene");
-        masks += (double) ratingEntity.getProperty("masks");
+    public StoreStats(Store store, double countyScore, CheckInStats stats) {
+        this.id = store.getId();
+        this.name = store.getName();
+        this.address = store.getAddress();
+        this.open = store.getOpen();
+        this.latitude = store.getLatitude();
+        this.longitude = store.getLongitude();
+        this.score = countyScore;
+        this.busy = stats.getBusy();
+        this.line = stats.getLine();
+        this.hygiene = stats.getHygiene();
+        this.masks = stats.getMasks();
+        this.checkInCount = stats.getCheckInCount();
     }
-    
-    //Only if there are user ratings
-    if (numReviews != 0) {
-        busy = busy/(1.0 * numReviews);
-        line = line/(1.0 * numReviews);
-        hygiene = hygiene/(1.0 * numReviews);
-        masks = masks/(1.0 * numReviews);
+
+    public String getName() {
+        return name;
     }
-  }
 
-  public double getBusy() {
-    return busy;
-  }
+    public String getAddress() {
+        return address;
+    }
 
-  public double getLine() {
-    return line;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public double getHygiene() {
-    return hygiene;
-  }
+    public Boolean getOpen() {
+        return open;
+    }
 
-  public double getMasks() {
-    return masks;
-  }
+    public double getLatitude() {
+        return latitude;
+    }
 
-  public int getNumReviews() {
-      return numReviews;
-  }
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public double getBusy() {
+        return busy;
+    }
+
+    public double getLine() {
+        return line;
+    }
+
+    public double getHygiene() {
+        return hygiene;
+    }
+
+    public double getMasks() {
+        return masks;
+    }
+
+    public long getCheckInCount() {
+        return checkInCount;
+    }
 }
