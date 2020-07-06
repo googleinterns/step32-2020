@@ -59,13 +59,13 @@ export class ApiService {
     return this.http
       .get<ResultInterface>(url)
       .pipe(
-        // map(res => res as ResultInterface),
-        map((res: any) => {
-          console.log(res);
-          return <ResultInterface> {
+        map((res: any) => res as ResultInterface),
+        // map((res: any) => {
+        //   console.log(res);
+        //   return <ResultInterface> {
             
-          }
-        }),
+        //   }
+        // }),
         tap(_ => console.log("API: fetch nearby stores for location " + location)),
         catchError(error => throwError(error.message || error))
       );
@@ -82,21 +82,22 @@ export class ApiService {
     return this.http
       .get<StoreInterface>(url)
       .pipe(
-        map((res: any) => {
-          return <StoreInterface> {
-            id: res.id,
-            name: res.name,
-            address: res.address,
-            status: res.open,
-            score: res.score,
-            reviewCount: res.reviewCount,
-            latLng: [res.location.latitude, res.location.longitude],
-            busy: res.stats.busy,
-            line: res.stats.line,
-            hygiene: res.stats.hygiene,
-            masks: res.stats.masks
-          }
-        }),
+        map(res => res as StoreInterface),
+        // map((res: any) => {
+        //   return <StoreInterface> {
+        //     id: res.id,
+        //     name: res.name,
+        //     address: res.address,
+        //     status: res.open,
+        //     score: res.score,
+        //     reviewCount: res.reviewCount,
+        //     latLng: [res.location.latitude, res.location.longitude],
+        //     busy: res.stats.busy,
+        //     line: res.stats.line,
+        //     hygiene: res.stats.hygiene,
+        //     masks: res.stats.masks
+        //   }
+        // }),
         tap(_ => console.log('AP: fetched store id=${id}')),
         catchError(error => throwError(error.message || error))
       )

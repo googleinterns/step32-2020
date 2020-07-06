@@ -28,18 +28,29 @@ export class ResultComponent implements OnInit {
 
   ngOnInit(): void {
     // this.init();
+    // this.getResult();
+    this.apiService.getNearbyStores(this.location)
+      .subscribe(data => this.result = {
+        nearbyStores: (data as any).nearbyStores,
+        countyStats: (data as any).countyStats
+      });
+    this.initResult();
   }
 
-  getResult(location: string): void {
+  getResult(): void {
     console.log('results api call');
-    this.location = location;
-    this.apiService.getNearbyStores(location)
+    this.apiService.getNearbyStores(this.location)
       .subscribe(data => this.result = {
         nearbyStores: (data as any).nearbyStores,
         countyStats: (data as any).countyStats
       });
 
     this.initResult();
+  }
+
+  callResult(location: string): void {
+    console.log("called on results page at " + location);
+    this.location = location;
   }
 
   initResult(): void {
@@ -49,6 +60,7 @@ export class ResultComponent implements OnInit {
   }
 
   // dummy method
+  // FIXME: out of date
   init(): void {
     var tempStores = [];
     tempStores.push(new Store({

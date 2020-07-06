@@ -83,12 +83,13 @@ class ApiService {
         const url = API_URL + '/stores';
         return this.http
             .get(url)
-            .pipe(
-        // map(res => res as ResultInterface),
-        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => {
-            console.log(res);
-            return {};
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log("API: fetch nearby stores for location " + location)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => res), 
+        // map((res: any) => {
+        //   console.log(res);
+        //   return <ResultInterface> {
+        //   }
+        // }),
+        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log("API: fetch nearby stores for location " + location)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
     }
     /**
      * Gets current store by ID, requires mapping because JSON doesn't match
@@ -100,21 +101,23 @@ class ApiService {
         const url = API_URL + '/store/${id}';
         return this.http
             .get(url)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => {
-            return {
-                id: res.id,
-                name: res.name,
-                address: res.address,
-                status: res.open,
-                score: res.score,
-                reviewCount: res.reviewCount,
-                latLng: [res.location.latitude, res.location.longitude],
-                busy: res.stats.busy,
-                line: res.stats.line,
-                hygiene: res.stats.hygiene,
-                masks: res.stats.masks
-            };
-        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log('AP: fetched store id=${id}')), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(res => res), 
+        // map((res: any) => {
+        //   return <StoreInterface> {
+        //     id: res.id,
+        //     name: res.name,
+        //     address: res.address,
+        //     status: res.open,
+        //     score: res.score,
+        //     reviewCount: res.reviewCount,
+        //     latLng: [res.location.latitude, res.location.longitude],
+        //     busy: res.stats.busy,
+        //     line: res.stats.line,
+        //     hygiene: res.stats.hygiene,
+        //     masks: res.stats.masks
+        //   }
+        // }),
+        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log('AP: fetched store id=${id}')), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
     }
 }
 ApiService.ɵfac = function ApiService_Factory(t) { return new (t || ApiService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
@@ -373,24 +376,7 @@ class Result {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
 class Store {
-    // constructor(store: any) {
-    //   this.id = store.id;
-    //   this.name = store.name;
-    //   this.address = store.address;
-    //   this.status = store.open;
-    //   this.score = store.score;
-    //   this.reviewCount = store.reviewCount;
-    //   this.latLng = [store.location.latitude, store.location.longitude];
-    //   this.busy = store.stats.busy;
-    //   this.line = store.stats.line;
-    //   this.hygiene = store.stats.hygiene;
-    //   this.masks = store.stats.masks;
-    // }
     constructor(values = {}) {
-        // store variables
-        this.id = '';
-        this.name = '';
-        this.address = '';
         Object.assign(this, values);
     }
 }
@@ -745,7 +731,7 @@ class LandingComponent {
     getNearbyStores() {
         this.router.navigate(['/result']);
         console.log("redirecting to results");
-        this.resultComponent.getResult(this.location);
+        this.resultComponent.callResult(this.location);
     }
 }
 LandingComponent.ɵfac = function LandingComponent_Factory(t) { return new (t || LandingComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_api_api_service__WEBPACK_IMPORTED_MODULE_1__["ApiService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_result_result_component__WEBPACK_IMPORTED_MODULE_3__["ResultComponent"])); };
@@ -906,17 +892,27 @@ class ResultComponent {
         this.stores = [];
     }
     ngOnInit() {
-        this.init();
-    }
-    getResult(location) {
-        console.log('results api call');
-        this.location = location;
-        this.apiService.getNearbyStores(location)
+        // this.init();
+        // this.getResult();
+        this.apiService.getNearbyStores(this.location)
             .subscribe(data => this.result = {
             nearbyStores: data.nearbyStores,
             countyStats: data.countyStats
         });
         this.initResult();
+    }
+    getResult() {
+        console.log('results api call');
+        this.apiService.getNearbyStores(this.location)
+            .subscribe(data => this.result = {
+            nearbyStores: data.nearbyStores,
+            countyStats: data.countyStats
+        });
+        this.initResult();
+    }
+    callResult(location) {
+        console.log("called on results page at " + location);
+        this.location = location;
     }
     initResult() {
         this.stores = this.result.nearbyStores;
@@ -924,6 +920,7 @@ class ResultComponent {
         this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
     }
     // dummy method
+    // FIXME: out of date
     init() {
         var tempStores = [];
         tempStores.push(new _classes_store_store__WEBPACK_IMPORTED_MODULE_1__["Store"]({
@@ -1097,22 +1094,27 @@ class StoreComponent {
         this.getStore();
         // this.initStore();
     }
+    // FIXME: update
     getStore() {
         const id = this.route.snapshot.paramMap.get('id').toString();
         this.apiService.getStoreById(id)
-            .subscribe(data => this.store = {
-            id: data.id,
-            name: data.name,
-            address: data.address,
-            score: data.score,
-            reviewCount: data.reviewCount,
-            status: data.status,
-            latLng: data.latLng,
-            busy: data.busy,
-            line: data.line,
-            hygiene: data.hygiene,
-            masks: data.masks
+            // .subscribe(data => this.store = {
+            //   id: (data as any).id,
+            //   name: (data as any).name,
+            //   address: (data as any).address,
+            //   score: (data as any).score,
+            //   reviewCount: (data as any).reviewCount,
+            //   open: (data as any).open,
+            //   latLng: (data as any).latLng,
+            //   busy: (data as any).busy,
+            //   line: (data as any).line,
+            //   hygiene: (data as any).hygiene,
+            //   masks: (data as any).masks
+            // });
+            .subscribe((res) => {
+            this.store = res;
         });
+        this.latLng = this.store.latitude + "," + this.store.longitude;
     }
     initStore() {
         this.store = new src_app_classes_store_store__WEBPACK_IMPORTED_MODULE_3__["Store"]({
@@ -1122,13 +1124,14 @@ class StoreComponent {
             score: 10,
             reviewCount: 10,
             status: true,
-            latLng: [0, 0],
+            longitude: 0,
+            latitude: 0,
             busy: 1,
             line: 1,
             hygiene: 1,
             masks: 1
         });
-        this.latLng = this.store.latLng[0] + "," + this.store.latLng[1];
+        this.latLng = this.store.latitude + "," + this.store.longitude;
     }
     /**
      * Opens check in modal dialog using check in modal component
@@ -1220,9 +1223,9 @@ StoreComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCom
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.store.reviewCount);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction1"](7, _c0, ctx.store.status ? "#7AC665" : "#FF5151"));
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction1"](7, _c0, ctx.store.open ? "#7AC665" : "#FF5151"));
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.store.status ? "OPEN" : "CLOSED");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.store.open ? "OPEN" : "CLOSED");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("", ctx.store.score, "/10");
     } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["NgStyle"]], styles: ["#store[_ngcontent-%COMP%]   .heading-text[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n    clear: both;\n    text-transform: uppercase;\n}\n\n#store[_ngcontent-%COMP%]   .heading-text[_ngcontent-%COMP%] {\n    padding-bottom: 20px;\n    text-align: center;\n}\n\n#store[_ngcontent-%COMP%]   .back-link[_ngcontent-%COMP%] {\n    text-transform: uppercase;\n    float: left !important;\n}\n\n#store[_ngcontent-%COMP%]   .stat-bar[_ngcontent-%COMP%] {\n    width: 100%;\n    height: 87px;\n    background: rgba(0, 0, 0, 0.03);\n    border-radius: 8px;\n    padding: 33px;\n}\n\n#store[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n    text-transform: uppercase;\n}\n\n#store[_ngcontent-%COMP%]   .subtext[_ngcontent-%COMP%] {\n    line-height: 41px;\n}\n\n#store[_ngcontent-%COMP%]   .markers[_ngcontent-%COMP%]   *[_ngcontent-%COMP%], #store[_ngcontent-%COMP%]   .stat-elem[_ngcontent-%COMP%]   *[_ngcontent-%COMP%], #store[_ngcontent-%COMP%]   .stat-bar[_ngcontent-%COMP%]   *[_ngcontent-%COMP%] {\n    white-space: nowrap;\n    display: inline;\n}\n\n#store[_ngcontent-%COMP%]   .stat-elem[_ngcontent-%COMP%] {\n    float: left;\n    display: flex;\n    width: 33.3%;\n}\n\n#store[_ngcontent-%COMP%]   .shopsafe-score[_ngcontent-%COMP%] {\n    font-style: normal;\n    font-weight: bold;\n    font-size: 15px;\n    line-height: 30px;\n    display: flex;\n    color: #FF8756;\n}\n\n#store[_ngcontent-%COMP%]   .rating[_ngcontent-%COMP%] {\n    font-style: normal;\n    font-weight: bold;\n    font-size: 15px;\n    line-height: 30px;\n    display: flex;\n    color: #FF8756;\n    padding-left: 10px;\n}\n\n#store[_ngcontent-%COMP%]   .stat-obj[_ngcontent-%COMP%], #store[_ngcontent-%COMP%]   .maps-button[_ngcontent-%COMP%] {\n    background: rgba(104, 187, 207, 0.1);\n    border-radius: 8px;\n    padding: 10px 15px 10px;\n    color: #68BBCF;\n    margin-right: 15px;\n}\n\n#store[_ngcontent-%COMP%]   .stat-obj[_ngcontent-%COMP%] {\n    cursor: auto;\n}\n\n#store[_ngcontent-%COMP%]   #check-in-button[_ngcontent-%COMP%] {\n    background: rgba(104, 187, 207, 0.1);\n    border-radius: 8px;\n    padding: 10px 15px 10px;\n    color: #68BBCF;\n    margin-right: 15px;\n    border: none;\n    font-weight: 600;\n    width: 100%;\n    font-size: 15px;\n    margin-top: 20px;\n    cursor: pointer;\n}\n\n#store[_ngcontent-%COMP%]   #check-in-button[_ngcontent-%COMP%]:hover {\n    background: rgba(104, 187, 207, 0.3);\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9zdG9yZS9zdG9yZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksV0FBVztJQUNYLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLG9CQUFvQjtJQUNwQixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSSx5QkFBeUI7SUFDekIsc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksV0FBVztJQUNYLFlBQVk7SUFDWiwrQkFBK0I7SUFDL0Isa0JBQWtCO0lBQ2xCLGFBQWE7QUFDakI7O0FBRUE7SUFDSSx5QkFBeUI7QUFDN0I7O0FBRUE7SUFDSSxpQkFBaUI7QUFDckI7O0FBRUE7SUFDSSxtQkFBbUI7SUFDbkIsZUFBZTtBQUNuQjs7QUFFQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGtCQUFrQjtJQUNsQixpQkFBaUI7SUFDakIsZUFBZTtJQUNmLGlCQUFpQjtJQUNqQixhQUFhO0lBQ2IsY0FBYztBQUNsQjs7QUFFQTtJQUNJLGtCQUFrQjtJQUNsQixpQkFBaUI7SUFDakIsZUFBZTtJQUNmLGlCQUFpQjtJQUNqQixhQUFhO0lBQ2IsY0FBYztJQUNkLGtCQUFrQjtBQUN0Qjs7QUFFQTtJQUNJLG9DQUFvQztJQUNwQyxrQkFBa0I7SUFDbEIsdUJBQXVCO0lBQ3ZCLGNBQWM7SUFDZCxrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksb0NBQW9DO0lBQ3BDLGtCQUFrQjtJQUNsQix1QkFBdUI7SUFDdkIsY0FBYztJQUNkLGtCQUFrQjtJQUNsQixZQUFZO0lBQ1osZ0JBQWdCO0lBQ2hCLFdBQVc7SUFDWCxlQUFlO0lBQ2YsZ0JBQWdCO0lBQ2hCLGVBQWU7QUFDbkI7O0FBRUE7SUFDSSxvQ0FBb0M7QUFDeEMiLCJmaWxlIjoic3JjL2FwcC9jb21wb25lbnRzL3N0b3JlL3N0b3JlLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIjc3RvcmUgLmhlYWRpbmctdGV4dCBoMSB7XG4gICAgY2xlYXI6IGJvdGg7XG4gICAgdGV4dC10cmFuc2Zvcm06IHVwcGVyY2FzZTtcbn1cblxuI3N0b3JlIC5oZWFkaW5nLXRleHQge1xuICAgIHBhZGRpbmctYm90dG9tOiAyMHB4O1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbn1cblxuI3N0b3JlIC5iYWNrLWxpbmsge1xuICAgIHRleHQtdHJhbnNmb3JtOiB1cHBlcmNhc2U7XG4gICAgZmxvYXQ6IGxlZnQgIWltcG9ydGFudDtcbn1cblxuI3N0b3JlIC5zdGF0LWJhciB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgaGVpZ2h0OiA4N3B4O1xuICAgIGJhY2tncm91bmQ6IHJnYmEoMCwgMCwgMCwgMC4wMyk7XG4gICAgYm9yZGVyLXJhZGl1czogOHB4O1xuICAgIHBhZGRpbmc6IDMzcHg7XG59XG5cbiNzdG9yZSBoMiB7XG4gICAgdGV4dC10cmFuc2Zvcm06IHVwcGVyY2FzZTtcbn1cblxuI3N0b3JlIC5zdWJ0ZXh0IHtcbiAgICBsaW5lLWhlaWdodDogNDFweDtcbn1cblxuI3N0b3JlIC5tYXJrZXJzICosICNzdG9yZSAuc3RhdC1lbGVtICosICNzdG9yZSAuc3RhdC1iYXIgKiB7XG4gICAgd2hpdGUtc3BhY2U6IG5vd3JhcDtcbiAgICBkaXNwbGF5OiBpbmxpbmU7XG59XG5cbiNzdG9yZSAuc3RhdC1lbGVtIHtcbiAgICBmbG9hdDogbGVmdDtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIHdpZHRoOiAzMy4zJTtcbn1cblxuI3N0b3JlIC5zaG9wc2FmZS1zY29yZSB7XG4gICAgZm9udC1zdHlsZTogbm9ybWFsO1xuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xuICAgIGZvbnQtc2l6ZTogMTVweDtcbiAgICBsaW5lLWhlaWdodDogMzBweDtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGNvbG9yOiAjRkY4NzU2O1xufVxuXG4jc3RvcmUgLnJhdGluZyB7XG4gICAgZm9udC1zdHlsZTogbm9ybWFsO1xuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xuICAgIGZvbnQtc2l6ZTogMTVweDtcbiAgICBsaW5lLWhlaWdodDogMzBweDtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGNvbG9yOiAjRkY4NzU2O1xuICAgIHBhZGRpbmctbGVmdDogMTBweDtcbn1cblxuI3N0b3JlIC5zdGF0LW9iaiwgI3N0b3JlIC5tYXBzLWJ1dHRvbiB7XG4gICAgYmFja2dyb3VuZDogcmdiYSgxMDQsIDE4NywgMjA3LCAwLjEpO1xuICAgIGJvcmRlci1yYWRpdXM6IDhweDtcbiAgICBwYWRkaW5nOiAxMHB4IDE1cHggMTBweDtcbiAgICBjb2xvcjogIzY4QkJDRjtcbiAgICBtYXJnaW4tcmlnaHQ6IDE1cHg7XG59XG5cbiNzdG9yZSAuc3RhdC1vYmoge1xuICAgIGN1cnNvcjogYXV0bztcbn1cblxuI3N0b3JlICNjaGVjay1pbi1idXR0b24ge1xuICAgIGJhY2tncm91bmQ6IHJnYmEoMTA0LCAxODcsIDIwNywgMC4xKTtcbiAgICBib3JkZXItcmFkaXVzOiA4cHg7XG4gICAgcGFkZGluZzogMTBweCAxNXB4IDEwcHg7XG4gICAgY29sb3I6ICM2OEJCQ0Y7XG4gICAgbWFyZ2luLXJpZ2h0OiAxNXB4O1xuICAgIGJvcmRlcjogbm9uZTtcbiAgICBmb250LXdlaWdodDogNjAwO1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGZvbnQtc2l6ZTogMTVweDtcbiAgICBtYXJnaW4tdG9wOiAyMHB4O1xuICAgIGN1cnNvcjogcG9pbnRlcjtcbn1cblxuI3N0b3JlICNjaGVjay1pbi1idXR0b246aG92ZXIge1xuICAgIGJhY2tncm91bmQ6IHJnYmEoMTA0LCAxODcsIDIwNywgMC4zKTtcbn0iXX0= */"] });

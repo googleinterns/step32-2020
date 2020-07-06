@@ -7,20 +7,18 @@ export interface ResultInterface {
 }
 
 export interface StoreInterface {
-  // store variables
   id: string;
   name: string;
   address: string;
+  open: boolean;
+  latitude: number;
+  longitude: number;
   score: number;
-  reviewCount: number;
-  status: boolean;
-  latLng: [number, number];
-
-  // check-in statistics
   busy: number;
   line: number;
   hygiene: number;
   masks: number;
+  reviewCount: number;
 }
 
 export interface CountyStatsInterface {
