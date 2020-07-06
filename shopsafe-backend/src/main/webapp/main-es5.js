@@ -1698,11 +1698,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           // this.getResult();
           this.apiService.getNearbyStores(this.location).subscribe(function (data) {
             return _this.result = {
-              nearbyStores: data.nearbyStores,
+              stores: data.stores,
               countyStats: data.countyStats
             };
           });
-          this.initResult();
         }
       }, {
         key: "getResult",
@@ -1712,7 +1711,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           console.log('results api call');
           this.apiService.getNearbyStores(this.location).subscribe(function (data) {
             return _this2.result = {
-              nearbyStores: data.nearbyStores,
+              stores: data.stores,
               countyStats: data.countyStats
             };
           });
@@ -1727,7 +1726,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "initResult",
         value: function initResult() {
-          this.stores = this.result.nearbyStores; // Round proportion to 2 decimal places
+          this.stores = this.result.stores; // Round proportion to 2 decimal places
 
           this.proportion = Math.round(this.result.countyStats[0].cases / this.result.countyStats[0].population * 100) / 100;
         } // dummy method
@@ -1925,7 +1924,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.stores);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.result.stores);
         }
       },
       directives: [_angular_common__WEBPACK_IMPORTED_MODULE_5__["NgForOf"], _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterLinkWithHref"]],

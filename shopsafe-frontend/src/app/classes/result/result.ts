@@ -5,7 +5,7 @@ import { ResultInterface } from 'src/app/interfaces/interface';
  * Result that is rendered in the template search result form
  */
 export class Result implements ResultInterface {
-  nearbyStores: Store[];
+  stores: Store[];
   countyStats: CountyStats[];
 
   // Allows for constructing of obj by declaring all class variables

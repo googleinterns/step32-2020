@@ -2,7 +2,7 @@ import { Store } from '../classes/store/store';
 import { CountyStats } from '../classes/county-stats/county-stats';
 
 export interface ResultInterface {
-  nearbyStores: Store[];
+  stores: Store[];
   countyStats: CountyStats[];
 }
 

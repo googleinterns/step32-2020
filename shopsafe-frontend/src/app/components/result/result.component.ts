@@ -31,17 +31,16 @@ export class ResultComponent implements OnInit {
     // this.getResult();
     this.apiService.getNearbyStores(this.location)
       .subscribe(data => this.result = {
-        nearbyStores: (data as any).nearbyStores,
+        stores: (data as any).stores,
         countyStats: (data as any).countyStats
       });
-    this.initResult();
   }
 
   getResult(): void {
     console.log('results api call');
     this.apiService.getNearbyStores(this.location)
       .subscribe(data => this.result = {
-        nearbyStores: (data as any).nearbyStores,
+        stores: (data as any).stores,
         countyStats: (data as any).countyStats
       });
 
@@ -54,7 +53,7 @@ export class ResultComponent implements OnInit {
   }
 
   initResult(): void {
-    this.stores = this.result.nearbyStores;
+    this.stores = this.result.stores;
     // Round proportion to 2 decimal places
     this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
   }
