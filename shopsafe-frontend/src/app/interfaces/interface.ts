@@ -3,7 +3,7 @@ import { CountyStats } from '../classes/county-stats/county-stats';
 
 export interface ResultInterface {
   nearbyStores: Store[];
-  countyStats: CountyStats;
+  countyStats: CountyStats[];
 }
 
 export interface StoreInterface {

@@ -63,10 +63,7 @@ export class ApiService {
         map((res: any) => {
           console.log(res);
           return <ResultInterface> {
-            nearbyStores: res.stores.map((stores: any[]) => stores.map((store: any) => 
-              new Store(store)
-            )),
-            countyStats: new CountyStats(res.countyStats)
+            
           }
         }),
         tap(_ => console.log("API: fetch nearby stores for location " + location)),

@@ -6,7 +6,7 @@ import { ResultInterface } from 'src/app/interfaces/interface';
  */
 export class Result implements ResultInterface {
   nearbyStores: Store[];
-  countyStats: CountyStats;
+  countyStats: CountyStats[];
 
   // Allows for constructing of obj by declaring all class variables
   // TODO: update tests to meet new constructor
