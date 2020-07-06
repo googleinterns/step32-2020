@@ -25,9 +25,13 @@ public final class Store {
     private final String name;
     private final String address;
     private final Boolean open;
-    private final LatLng location;
+    private final double latitude;
+    private final double longitude;
     private final double score;
-    private final StoreStats stats;
+    private final double busy;
+    private final double line;
+    private final double hygiene;
+    private final double masks;
     private final int reviewCount;
 
     public Store(StoreNoScore storeNoScore, double score, StoreStats stats, int reviewCount) {
@@ -35,9 +39,13 @@ public final class Store {
         this.name = storeNoScore.getName();
         this.address = storeNoScore.getAddress();
         this.open = storeNoScore.getOpen();
-        this.location = storeNoScore.getLocation();
+        this.latitude = storeNoScore.getLocation().getLatitude();
+        this.longitude = storeNoScore.getLocation().getLongitude();
         this.score = score;
-        this.stats = stats;
+        this.busy = stats.getBusy();
+        this.line = stats.getLine();
+        this.hygiene = stats.getHygiene();
+        this.masks = stats.getMasks();
         this.reviewCount = reviewCount;
     }
 
@@ -57,16 +65,8 @@ public final class Store {
         return open;
     }
 
-    public LatLng getLocation() {
-        return location;
-    }
-
     public double getScore() {
         return score;
-    }
-
-    public StoreStats getStats(){
-        return stats;
     }
 
     public int getReviewCount() {
