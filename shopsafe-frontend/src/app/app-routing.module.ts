@@ -13,7 +13,7 @@ const routes: Routes = [
     component: LandingComponent 
   },
   {
-    path: 'result', 
+    path: 'result/:location', 
     component: ResultComponent, 
   },
   { 
