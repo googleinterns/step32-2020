@@ -15,30 +15,24 @@
 package com.google.sps.data;
 
 import com.google.sps.data.LatLng;
-import com.google.sps.data.StoreNoScore;
-import com.google.sps.data.StoreStats;
 
-/** Class contains all the information for a store. */
+/** Class contains all the information for a store without the scores. */
 public final class Store {
 
     private final String id;
     private final String name;
     private final String address;
     private final Boolean open;
-    private final LatLng location;
-    private final double score;
-    private final StoreStats stats;
-    private final int reviewCount;
+    private final double latitude;
+    private final double longitude;
 
-    public Store(StoreNoScore storeNoScore, double score, StoreStats stats, int reviewCount) {
-        this.id = storeNoScore.getId();
-        this.name = storeNoScore.getName();
-        this.address = storeNoScore.getAddress();
-        this.open = storeNoScore.getOpen();
-        this.location = storeNoScore.getLocation();
-        this.score = score;
-        this.stats = stats;
-        this.reviewCount = reviewCount;
+    public Store(String id, String name, String address, Boolean open, LatLng location) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.open = open;
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
     }
 
     public String getName() {
@@ -57,19 +51,11 @@ public final class Store {
         return open;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public double getScore() {
-        return score;
-    }
-
-    public StoreStats getStats(){
-        return stats;
-    }
-
-    public int getReviewCount() {
-        return reviewCount;
+    public double getLongitude() {
+        return longitude;
     }
 }
