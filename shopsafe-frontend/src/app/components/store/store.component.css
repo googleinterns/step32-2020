@@ -67,6 +67,10 @@
     margin-right: 15px;
 }
 
+#store .maps-button:hover {
+  background: rgba(104, 187, 207, 0.3);
+}
+
 #store .stat-obj {
     cursor: auto;
 }

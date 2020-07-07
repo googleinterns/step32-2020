@@ -33,10 +33,22 @@ export class StoreComponent implements OnInit {
   getStore(): void {
     const id = this.route.snapshot.paramMap.get('id').toString();
     this.apiService.getStoreById(id)
-      .subscribe((res: Store) => {
-        this.store = res;
-      })
+      .subscribe(
+        (res: Store) => {
+          this.store = res
+        },
+        err => {
+          console.log(err);
+        },
+        () => {
+          this.getLatLng();
+        }
+      );
+  }
+
+  getLatLng(): void {
     this.latLng = this.store.latitude + "," + this.store.longitude;
+    console.log("CLIENT: latLng is " + this.latLng);
   }
   
   /**
