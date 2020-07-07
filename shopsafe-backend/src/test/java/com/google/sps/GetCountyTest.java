@@ -15,6 +15,7 @@
 package com.google.sps;
 
 import com.google.sps.data.LatLng;
+import com.google.sps.data.Store;
 import com.google.sps.data.County;
 
 import org.junit.Assert;
@@ -32,8 +33,8 @@ public final class GetCountyTest {
      */
     @Test
     public void checkValidLocation() {
-        LatLng location = new LatLng(40.803639, -77.862574);
-        String actual = County.GetCounty(location).getCountyName();
+        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(40.803639, -77.862574));
+        String actual = County.GetCounty(store).getCountyName();
         String expected = "Centre";
         Assert.assertEquals(expected, actual);
     }
@@ -43,8 +44,8 @@ public final class GetCountyTest {
      */
     @Test
     public void checkLocationOutsideUS() {
-        LatLng location = new LatLng(43.650300, -79.383785);
-        String actual = County.GetCounty(location).getCountyName();
+        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(43.650300, -79.383785));
+        String actual = County.GetCounty(store).getCountyName();
         String expected = "";
         Assert.assertEquals(expected, actual);
     }
@@ -54,8 +55,8 @@ public final class GetCountyTest {
      */
     @Test
     public void checkInvalidLocation() {
-        LatLng location = new LatLng(1000.0, 1000.0);
-        String actual = County.GetCounty(location).getCountyName();
+        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(1000.0, 1000.0));
+        String actual = County.GetCounty(store).getCountyName();
         String expected = "";
         Assert.assertEquals(expected, actual);
     }
