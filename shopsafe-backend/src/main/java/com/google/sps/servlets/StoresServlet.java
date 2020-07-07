@@ -21,7 +21,6 @@ import com.google.sps.data.LatLng;
 import com.google.sps.data.Result;
 import com.google.sps.data.Store;
 import com.google.sps.data.StoreStats;
-import com.google.sps.data.ShopSafeScoring;
 
 import com.google.gson.Gson;
 
@@ -133,46 +132,21 @@ public class StoresServlet extends HttpServlet {
             // If county not in hashmap, add to hashmap and counties list.
             if (!countyScores.containsKey(county.getCountyFips())) {
 
-<<<<<<< HEAD
                 // Get Covid stats based on county.
-                CountyStats countyStats = new CountyStats(county);
-                counties.add(countyStats);
-
-                // Calculate score for county.
-                double countyScore = ShopSafeScoring.countyScore(countyStats);
-=======
-                // Todo: Get Covid stats based on county.
                 CountyStats countyStat = new CountyStats(county);
                 countyStats.add(countyStat);
 
-                // TODO: Calculate score for county.
-                long countyCases = countyStat.getCases();
-                long countyDeaths = countyStat.getDeaths();
-                long countyPopulation = countyStat.getPopulation();
-                double countyScore = ShopSafeScoring.countyScore(countyCases, countyDeaths, countyPopulation);
->>>>>>> gabe/modify-class-structure
-                countyScores.put(county.getCountyFips(), countyScore);
+                // Calculate and store the score for county.
+                countyScores.put(county.getCountyFips(), countyStat.getCountyScore());
             }
 
             // Todo: Get reviews for a store.
             CheckInStats checkInStats = new CheckInStats(store.getId());
 
-            // TODO: Get calculate score of each store.
-<<<<<<< HEAD
-            double storeScore = ShopSafeScoring.storeScore(storeStats) * .5 + .5 * countyScores.get(county.getCountyFips());
-=======
-            Double busy = checkInStats.getBusy();
-            Double line = checkInStats.getLine();
-            Double hygiene = checkInStats.getHygiene();
-            Double masks = checkInStats.getMasks();
-
-            double storeScore = ShopSafeScoring.storeScore(busy, line, hygiene, masks);
->>>>>>> gabe/modify-class-structure
-
             // Add score and review stats to the store.
             storeStats.add(new StoreStats(
                 store,
-                storeScore,
+                countyScores.get(county.getCountyFips()),
                 checkInStats));
         }
 

@@ -14,13 +14,13 @@
 
 package com.google.sps.data;
 
-import com.google.sps.data.LatLng;
 import com.google.sps.data.Store;
 import com.google.sps.data.CheckInStats;
 
 /** Class contains all the information for a store. */
 public final class StoreStats {
 
+    // Store stat properties.
     private final String id;
     private final String name;
     private final String address;
@@ -34,6 +34,10 @@ public final class StoreStats {
     private final double masks;
     private final long checkInCount;
 
+    // Static final weights for calculating score.
+    static private final double COUNTY_WEIGHT = 0.5;
+    static private final double CHECK_IN_WEIGHT = 0.5;
+
     public StoreStats(Store store, double countyScore, CheckInStats stats) {
         this.id = store.getId();
         this.name = store.getName();
@@ -41,7 +45,7 @@ public final class StoreStats {
         this.open = store.getOpen();
         this.latitude = store.getLatitude();
         this.longitude = store.getLongitude();
-        this.score = countyScore;
+        this.score = countyScore * COUNTY_WEIGHT + stats.getCheckInScore() * CHECK_IN_WEIGHT;
         this.busy = stats.getBusy();
         this.line = stats.getLine();
         this.hygiene = stats.getHygiene();

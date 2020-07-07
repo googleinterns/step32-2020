@@ -14,13 +14,10 @@
 
 package com.google.sps.data;
 
-import com.google.sps.data.StoreStats;
-import com.google.sps.data.CountyStats;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/** Class containing a list of the comments, the total number of comments, and user info. */
+/** Class containing all the stores and county statistics. */
 public final class Result {
 
     private final List<StoreStats> stores;

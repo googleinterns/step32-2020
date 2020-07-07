@@ -14,7 +14,6 @@
 
 package com.google.sps.data;
 
-
 import java.util.ArrayList;
 
 import com.google.sps.data.StoreDatastoreHandler;
@@ -23,11 +22,18 @@ import com.google.appengine.api.datastore.Entity;
 /** Class contains all the averaged check in stats for a store. */
 public final class CheckInStats {
 
+    // Check in stat properties.
     private double busy = 0.0;
     private double line = 0.0;
     private double hygiene = 0.0;
     private double masks = 0.0;
     private long checkInCount = 0;
+
+    // Static final weights for calculating score.
+    static private final double BUSY_WEIGHT = 0.25;
+    static private final double LINE_WEIGHT = 0.25;
+    static private final double HYGIENE_WEIGHT = 0.25;
+    static private final double MASK_WEIGHT = 0.25; 
 
     public CheckInStats(String storeId) {
     
@@ -52,9 +58,12 @@ public final class CheckInStats {
             masks = masks / (1.0 * checkInCount);
         }
 
-        // Todo: Create a default score
+        // Todo: Create a better default score.
         else {
-
+            busy = 5.0;
+            line = 5.0;
+            hygiene = 5.0;
+            masks = 5.0;
         }
     }
 
@@ -76,5 +85,9 @@ public final class CheckInStats {
 
     public long getCheckInCount() {
         return checkInCount;
+    }
+
+    public double getCheckInScore() {
+        return BUSY_WEIGHT * busy + LINE_WEIGHT * line + HYGIENE_WEIGHT * hygiene + MASK_WEIGHT * masks;
     }
 }

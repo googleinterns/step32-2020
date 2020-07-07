@@ -122,16 +122,13 @@ public class StoreServlet extends HttpServlet {
         // Get Covid stats based on county.
         CountyStats countyStats = new CountyStats(county);
 
-        // Get score based on county stats.
-        double countyScore = 3.2;
-
         // Get reviews for a store.
         CheckInStats checkInStats = new CheckInStats(id);
 
         // Add score and review stats to the store.
         StoreStats storeStats = new StoreStats(
             store,
-            countyScore,
+            countyStats.getCountyScore(),
             checkInStats);
 
         // Return score and stats for one store.

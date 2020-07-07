@@ -14,13 +14,11 @@
 
 package com.google.sps.data;
 
-import com.google.sps.data.County;
 import com.google.sps.QueryNYT;
 
 /** Class contains the name, state, population and covid cases and deaths of a county. */
 public final class CountyStats {
 
-    // County properties
     private final String countyName;
     private final String stateName;
     private final long cases;
@@ -31,12 +29,12 @@ public final class CountyStats {
         this.countyName = county.getCountyName();
         this.stateName = county.getStateName();
 
-        //Query NYT dataset for covid cases and deaths
-        QueryNYT queryResults = QueryNYT.exampleQuery(countyName, stateName);
+        // Query NYT dataset for covid cases and deaths.
+        QueryNYT queryResults = QueryNYT.exampleQuery(stateName, countyName);
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
 
-        //TODO: need to get actuall population of count
+        // TODO: need to get actual population of count
         this.population = 8080;
     }
 
@@ -58,5 +56,15 @@ public final class CountyStats {
     
     public long getPopulation() {
         return population;
+    }
+
+    public double getCountyScore() {
+        long populationUS = 331002651;
+        long casesUS = 2930000;
+        double percentageUS = casesUS / populationUS;
+        double percentageCounty = cases / population;
+
+        // TODO: Create a better scoring system for counties.
+        return (percentageCounty - percentageUS) * 5000 + 5;
     }
 }
