@@ -155,23 +155,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function getStoreById(id) {
           var url = API_URL + '/store/${id}';
           return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
-            return res;
-          }), // map((res: any) => {
-          //   return <StoreInterface> {
-          //     id: res.id,
-          //     name: res.name,
-          //     address: res.address,
-          //     status: res.open,
-          //     score: res.score,
-          //     reviewCount: res.reviewCount,
-          //     latLng: [res.location.latitude, res.location.longitude],
-          //     busy: res.stats.busy,
-          //     line: res.stats.line,
-          //     hygiene: res.stats.hygiene,
-          //     masks: res.stats.masks
-          //   }
-          // }),
-          Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
+            return res.store;
+          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
             return console.log('AP: fetched store id=${id}');
           }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (error) {
             return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error);

@@ -101,23 +101,7 @@ class ApiService {
         const url = API_URL + '/store/${id}';
         return this.http
             .get(url)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(res => res), 
-        // map((res: any) => {
-        //   return <StoreInterface> {
-        //     id: res.id,
-        //     name: res.name,
-        //     address: res.address,
-        //     status: res.open,
-        //     score: res.score,
-        //     reviewCount: res.reviewCount,
-        //     latLng: [res.location.latitude, res.location.longitude],
-        //     busy: res.stats.busy,
-        //     line: res.stats.line,
-        //     hygiene: res.stats.hygiene,
-        //     masks: res.stats.masks
-        //   }
-        // }),
-        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log('AP: fetched store id=${id}')), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => res.store), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(_ => console.log('AP: fetched store id=${id}')), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(error => Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error)));
     }
 }
 ApiService.ɵfac = function ApiService_Factory(t) { return new (t || ApiService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };

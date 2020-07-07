@@ -82,22 +82,7 @@ export class ApiService {
     return this.http
       .get<StoreInterface>(url)
       .pipe(
-        map(res => res as StoreInterface),
-        // map((res: any) => {
-        //   return <StoreInterface> {
-        //     id: res.id,
-        //     name: res.name,
-        //     address: res.address,
-        //     status: res.open,
-        //     score: res.score,
-        //     reviewCount: res.reviewCount,
-        //     latLng: [res.location.latitude, res.location.longitude],
-        //     busy: res.stats.busy,
-        //     line: res.stats.line,
-        //     hygiene: res.stats.hygiene,
-        //     masks: res.stats.masks
-        //   }
-        // }),
+        map((res: any) => res.store as StoreInterface),
         tap(_ => console.log('AP: fetched store id=${id}')),
         catchError(error => throwError(error.message || error))
       )
