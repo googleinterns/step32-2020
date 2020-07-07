@@ -17,6 +17,7 @@ package com.google.sps.data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Date;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -69,6 +70,8 @@ public class StoreDatastoreHandler {
              */
             ratingEntity.setProperty(ratingField, Double.parseDouble(ratingValue[0]));
         });
+        Date date = new Date();
+        ratingEntity.setProperty("Date", date);
         return ratingEntity;
     }
 
