@@ -14,6 +14,7 @@ import { DOCUMENT } from '@angular/common';
 export class StoreComponent implements OnInit {
   @Input() store: Store;
   latLng: string;
+  isLoaded: boolean;
 
   constructor(
     public matDialog: MatDialog,
@@ -27,6 +28,8 @@ export class StoreComponent implements OnInit {
    * Runs when component is loaded
    */
   ngOnInit(): void {
+    // Defaults to API not called yet
+    this.isLoaded = false;
     this.getStore();
   }
 
@@ -41,12 +44,16 @@ export class StoreComponent implements OnInit {
           console.log(err);
         },
         () => {
-          this.getLatLng();
+          this.initTemplate();
         }
       );
   }
 
-  getLatLng(): void {
+  initTemplate(): void {
+    // Sets loaded state to true
+    this.isLoaded = true;
+    console.log("CLIENT: API call finished");
+    // Gets properly formatted latlng
     this.latLng = this.store.latitude + "," + this.store.longitude;
     console.log("CLIENT: latLng is " + this.latLng);
   }
@@ -65,7 +72,7 @@ export class StoreComponent implements OnInit {
 
   redirectToMap() {
     const url = 'https://www.google.com/maps/search/?api=1&query=' + this.latLng;
-    this.document.location.href = url;
+    window.open(url, "_blank");
   }
 
   goBack() {

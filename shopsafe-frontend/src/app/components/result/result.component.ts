@@ -20,6 +20,7 @@ export class ResultComponent implements OnInit {
   @Input() result: Result;
   location: string;
   proportion: number;
+  isLoaded: boolean;
 
   constructor(
     private apiService: ApiService,
@@ -27,6 +28,8 @@ export class ResultComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Defaults to API not called yet
+    this.isLoaded = false;
     this.location = this.route.snapshot.paramMap.get('location').toString();
     this.getResult();
   }
@@ -40,17 +43,20 @@ export class ResultComponent implements OnInit {
           countyStats: (data as any).countyStats
         },
         err => {
-          console.log(err)
+          console.log(err) // TODO: add page rendering error
         },
         // To run getProportion function after API call
         () => {
-          this.getProportion()
+          this.initTemplate()
         }
       );
     // this.getProportion();
   }
 
-  getProportion(): void {
+  initTemplate(): void {
+    // Sets loaded state to true
+    this.isLoaded = true;
+    console.log("CLIENT: API call finished");
     // Round proportion to 2 decimal places
     this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
     console.log("CLIENT: calculated proportion as " + this.proportion);
