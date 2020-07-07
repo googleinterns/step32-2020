@@ -15,10 +15,8 @@
 package com.google.sps.data;
 
 import com.google.sps.data.LatLng;
-import com.google.sps.data.StoreNoScore;
-import com.google.sps.data.StoreStats;
 
-/** Class contains all the information for a store. */
+/** Class contains all the information for a store without the scores. */
 public final class Store {
 
     private final String id;
@@ -27,26 +25,14 @@ public final class Store {
     private final Boolean open;
     private final double latitude;
     private final double longitude;
-    private final double score;
-    private final double busy;
-    private final double line;
-    private final double hygiene;
-    private final double masks;
-    private final int reviewCount;
 
-    public Store(StoreNoScore storeNoScore, double score, StoreStats stats, int reviewCount) {
-        this.id = storeNoScore.getId();
-        this.name = storeNoScore.getName();
-        this.address = storeNoScore.getAddress();
-        this.open = storeNoScore.getOpen();
-        this.latitude = storeNoScore.getLocation().getLatitude();
-        this.longitude = storeNoScore.getLocation().getLongitude();
-        this.score = score;
-        this.busy = stats.getBusy();
-        this.line = stats.getLine();
-        this.hygiene = stats.getHygiene();
-        this.masks = stats.getMasks();
-        this.reviewCount = reviewCount;
+    public Store(String id, String name, String address, Boolean open, LatLng location) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.open = open;
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
     }
 
     public String getName() {
@@ -65,11 +51,11 @@ public final class Store {
         return open;
     }
 
-    public double getScore() {
-        return score;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public int getReviewCount() {
-        return reviewCount;
+    public double getLongitude() {
+        return longitude;
     }
 }

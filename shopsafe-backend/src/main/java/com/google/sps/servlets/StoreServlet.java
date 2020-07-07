@@ -14,12 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
 import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
 import com.google.sps.data.Result;
 import com.google.sps.data.Store;
-import com.google.sps.data.StoreNoScore;
 import com.google.sps.data.StoreStats;
 
 import com.google.gson.Gson;
@@ -80,8 +80,8 @@ public class StoreServlet extends HttpServlet {
         // Todo: Get address from response
         String id = "ChIJbb7uBJ0ixokRyAM8CKkgxfs";
 
-        // Get store based on id in form of StoreNoScore class.
-        StoreNoScore storeNoScore;
+        // Get store based on id in form of the Store class.
+        Store store;
         try {
 
             // Read response of call to FCC API given lat and lng.
@@ -100,7 +100,7 @@ public class StoreServlet extends HttpServlet {
             JSONObject result = new JSONObject(new String(json)).getJSONObject("result");
             JSONObject storeLocation = result.getJSONObject("geometry").getJSONObject("location");
             
-            storeNoScore = new StoreNoScore(
+            store = new Store(
                 id,
                 result.getString("name"),
                 result.getString("vicinity"),
@@ -117,31 +117,23 @@ public class StoreServlet extends HttpServlet {
         }
         
         // Get county based on location of the store
-        County county = County.GetCounty(storeNoScore.getLocation());
+        County county = County.GetCounty(store);
 
         // Get Covid stats based on county.
         CountyStats countyStats = new CountyStats(county);
 
-        // Get score based on county stats.
-        double countyScore = 3.2;
-
         // Get reviews for a store.
-        StoreStats storeStats = new StoreStats(id);
-        int storeReviewCount = 12;
-
-        // Todo: Get real score of each store.
-        double storeScore = countyScore;
+        CheckInStats checkInStats = new CheckInStats(id);
 
         // Add score and review stats to the store.
-        Store store = new Store(
-            storeNoScore,
-            storeScore,
-            storeStats,
-            storeReviewCount);
+        StoreStats storeStats = new StoreStats(
+            store,
+            countyStats.getCountyScore(),
+            checkInStats);
 
         // Return score and stats for one store.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(store));
+        response.getWriter().println(gson.toJson(storeStats));
     }
 }
