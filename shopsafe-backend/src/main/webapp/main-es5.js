@@ -130,11 +130,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           // const url = API_URL + '/stores/${location}';
           // Uncomment above when location url is fetched
           var url = API_URL + '/stores';
-          return this.http.get(url).pipe( // map(res => res as ResultInterface),
-          Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
-            console.log(res);
-            return {};
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
+          return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
+            return res;
+          }), // map((res: any) => {
+          //   console.log(res);
+          //   return <ResultInterface> {
+          //   }
+          // }),
+          Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
             return console.log("API: fetch nearby stores for location " + location);
           }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (error) {
             return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error);
@@ -152,20 +155,23 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function getStoreById(id) {
           var url = API_URL + '/store/${id}';
           return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
-            return {
-              id: res.id,
-              name: res.name,
-              address: res.address,
-              status: res.open,
-              score: res.score,
-              reviewCount: res.reviewCount,
-              latLng: [res.location.latitude, res.location.longitude],
-              busy: res.stats.busy,
-              line: res.stats.line,
-              hygiene: res.stats.hygiene,
-              masks: res.stats.masks
-            };
-          }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
+            return res;
+          }), // map((res: any) => {
+          //   return <StoreInterface> {
+          //     id: res.id,
+          //     name: res.name,
+          //     address: res.address,
+          //     status: res.open,
+          //     score: res.score,
+          //     reviewCount: res.reviewCount,
+          //     latLng: [res.location.latitude, res.location.longitude],
+          //     busy: res.stats.busy,
+          //     line: res.stats.line,
+          //     hygiene: res.stats.hygiene,
+          //     masks: res.stats.masks
+          //   }
+          // }),
+          Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) {
             return console.log('AP: fetched store id=${id}');
           }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (error) {
             return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || error);
@@ -594,28 +600,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       return Store;
     });
 
-    var Store = // constructor(store: any) {
-    //   this.id = store.id;
-    //   this.name = store.name;
-    //   this.address = store.address;
-    //   this.status = store.open;
-    //   this.score = store.score;
-    //   this.reviewCount = store.reviewCount;
-    //   this.latLng = [store.location.latitude, store.location.longitude];
-    //   this.busy = store.stats.busy;
-    //   this.line = store.stats.line;
-    //   this.hygiene = store.stats.hygiene;
-    //   this.masks = store.stats.masks;
-    // }
-    function Store() {
+    var Store = function Store() {
       var values = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       _classCallCheck(this, Store);
 
-      // store variables
-      this.id = '';
-      this.name = '';
-      this.address = '';
       Object.assign(this, values);
     };
     /***/
@@ -1349,7 +1338,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function getNearbyStores() {
           this.router.navigate(['/result']);
           console.log("redirecting to results");
-          this.resultComponent.getResult(this.location);
+          this.resultComponent.callResult(this.location);
         }
       }]);
 
@@ -1703,30 +1692,45 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _createClass(ResultComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
-          this.init();
+          var _this = this;
+
+          // this.init();
+          // this.getResult();
+          this.apiService.getNearbyStores(this.location).subscribe(function (data) {
+            return _this.result = {
+              stores: data.stores,
+              countyStats: data.countyStats
+            };
+          });
         }
       }, {
         key: "getResult",
-        value: function getResult(location) {
-          var _this = this;
+        value: function getResult() {
+          var _this2 = this;
 
           console.log('results api call');
-          this.location = location;
-          this.apiService.getNearbyStores(location).subscribe(function (data) {
-            return _this.result = {
-              nearbyStores: data.nearbyStores,
+          this.apiService.getNearbyStores(this.location).subscribe(function (data) {
+            return _this2.result = {
+              stores: data.stores,
               countyStats: data.countyStats
             };
           });
           this.initResult();
         }
       }, {
+        key: "callResult",
+        value: function callResult(location) {
+          console.log("called on results page at " + location);
+          this.location = location;
+        }
+      }, {
         key: "initResult",
         value: function initResult() {
-          this.stores = this.result.nearbyStores; // Round proportion to 2 decimal places
+          this.stores = this.result.stores; // Round proportion to 2 decimal places
 
           this.proportion = Math.round(this.result.countyStats[0].cases / this.result.countyStats[0].population * 100) / 100;
         } // dummy method
+        // FIXME: out of date
 
       }, {
         key: "init",
@@ -1920,7 +1924,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.stores);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.result.stores);
         }
       },
       directives: [_angular_common__WEBPACK_IMPORTED_MODULE_5__["NgForOf"], _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterLinkWithHref"]],
@@ -2047,28 +2051,31 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "ngOnInit",
         value: function ngOnInit() {
           this.getStore(); // this.initStore();
-        }
+        } // FIXME: update
+
       }, {
         key: "getStore",
         value: function getStore() {
-          var _this2 = this;
+          var _this3 = this;
 
           var id = this.route.snapshot.paramMap.get('id').toString();
-          this.apiService.getStoreById(id).subscribe(function (data) {
-            return _this2.store = {
-              id: data.id,
-              name: data.name,
-              address: data.address,
-              score: data.score,
-              reviewCount: data.reviewCount,
-              status: data.status,
-              latLng: data.latLng,
-              busy: data.busy,
-              line: data.line,
-              hygiene: data.hygiene,
-              masks: data.masks
-            };
+          this.apiService.getStoreById(id) // .subscribe(data => this.store = {
+          //   id: (data as any).id,
+          //   name: (data as any).name,
+          //   address: (data as any).address,
+          //   score: (data as any).score,
+          //   reviewCount: (data as any).reviewCount,
+          //   open: (data as any).open,
+          //   latLng: (data as any).latLng,
+          //   busy: (data as any).busy,
+          //   line: (data as any).line,
+          //   hygiene: (data as any).hygiene,
+          //   masks: (data as any).masks
+          // });
+          .subscribe(function (res) {
+            _this3.store = res;
           });
+          this.latLng = this.store.latitude + "," + this.store.longitude;
         }
       }, {
         key: "initStore",
@@ -2080,13 +2087,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             score: 10,
             reviewCount: 10,
             status: true,
-            latLng: [0, 0],
+            longitude: 0,
+            latitude: 0,
             busy: 1,
             line: 1,
             hygiene: 1,
             masks: 1
           });
-          this.latLng = this.store.latLng[0] + "," + this.store.latLng[1];
+          this.latLng = this.store.latitude + "," + this.store.longitude;
         }
         /**
          * Opens check in modal dialog using check in modal component
@@ -2277,11 +2285,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](4);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction1"](7, _c0, ctx.store.status ? "#7AC665" : "#FF5151"));
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction1"](7, _c0, ctx.store.open ? "#7AC665" : "#FF5151"));
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.store.status ? "OPEN" : "CLOSED");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](ctx.store.open ? "OPEN" : "CLOSED");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
 

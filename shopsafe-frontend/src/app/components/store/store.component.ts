@@ -30,22 +30,27 @@ export class StoreComponent implements OnInit {
     // this.initStore();
   }
 
+  // FIXME: update
   getStore(): void {
     const id = this.route.snapshot.paramMap.get('id').toString();
     this.apiService.getStoreById(id)
-      .subscribe(data => this.store = {
-        id: (data as any).id,
-        name: (data as any).name,
-        address: (data as any).address,
-        score: (data as any).score,
-        reviewCount: (data as any).reviewCount,
-        status: (data as any).status,
-        latLng: (data as any).latLng,
-        busy: (data as any).busy,
-        line: (data as any).line,
-        hygiene: (data as any).hygiene,
-        masks: (data as any).masks
-      });
+      // .subscribe(data => this.store = {
+      //   id: (data as any).id,
+      //   name: (data as any).name,
+      //   address: (data as any).address,
+      //   score: (data as any).score,
+      //   reviewCount: (data as any).reviewCount,
+      //   open: (data as any).open,
+      //   latLng: (data as any).latLng,
+      //   busy: (data as any).busy,
+      //   line: (data as any).line,
+      //   hygiene: (data as any).hygiene,
+      //   masks: (data as any).masks
+      // });
+      .subscribe((res: Store) => {
+        this.store = res;
+      })
+    this.latLng = this.store.latitude + "," + this.store.longitude;
   }
 
   initStore(): void {
@@ -56,13 +61,14 @@ export class StoreComponent implements OnInit {
       score: 10,
       reviewCount: 10,
       status: true,
-      latLng: [0, 0],
+      longitude: 0,
+      latitude: 0,
       busy: 1,
       line: 1,
       hygiene: 1,
       masks: 1
     });
-    this.latLng = this.store.latLng[0] + "," + this.store.latLng[1];
+    this.latLng = this.store.latitude + "," + this.store.longitude;
   }
 
   /**

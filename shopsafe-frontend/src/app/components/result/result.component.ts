@@ -28,27 +28,38 @@ export class ResultComponent implements OnInit {
 
   ngOnInit(): void {
     // this.init();
+    // this.getResult();
+    this.apiService.getNearbyStores(this.location)
+      .subscribe(data => this.result = {
+        stores: (data as any).stores,
+        countyStats: (data as any).countyStats
+      });
   }
 
-  getResult(location: string): void {
+  getResult(): void {
     console.log('results api call');
-    this.location = location;
-    this.apiService.getNearbyStores(location)
+    this.apiService.getNearbyStores(this.location)
       .subscribe(data => this.result = {
-        nearbyStores: (data as any).nearbyStores,
+        stores: (data as any).stores,
         countyStats: (data as any).countyStats
       });
 
     this.initResult();
   }
 
+  callResult(location: string): void {
+    console.log("called on results page at " + location);
+    this.location = location;
+  }
+
   initResult(): void {
-    this.stores = this.result.nearbyStores;
+    this.stores = this.result.stores;
     // Round proportion to 2 decimal places
     this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
   }
 
   // dummy method
+  // FIXME: out of date
   init(): void {
     var tempStores = [];
     tempStores.push(new Store({
