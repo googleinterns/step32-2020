@@ -61,10 +61,10 @@ public final class CountyStats {
     public double getCountyScore() {
         long populationUS = 331002651;
         long casesUS = 2930000;
-        double percentageUS = casesUS / populationUS;
-        double percentageCounty = cases / population;
+        double percentageUS = (double) casesUS / (double) populationUS;
+        double percentageCounty = (double) cases / (double) population;
 
         // TODO: Create a better scoring system for counties.
-        return (percentageCounty - percentageUS) * 5000 + 5;
+        return (percentageCounty - percentageUS) * 5 + 5;
     }
 }
