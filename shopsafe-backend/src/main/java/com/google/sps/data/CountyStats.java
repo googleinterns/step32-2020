@@ -106,7 +106,6 @@ public final class CountyStats {
             return 0;
         }
     }
-    
 
     /*
      * Helper Function to format URL call for population API
