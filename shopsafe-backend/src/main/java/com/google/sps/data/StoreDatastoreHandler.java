@@ -132,7 +132,7 @@ public class StoreDatastoreHandler {
                 .getProperty("ratings");
             return previousRatingIds;
         } catch(Exception EntityNotFoundException) {
-            System.out.println("DataStore: id <" + this.key.getId() + "> not found!");
+            System.out.println("DataStore: Store <" + this.key.getName() + "> not found!");
             return new ArrayList();
         }
     }
