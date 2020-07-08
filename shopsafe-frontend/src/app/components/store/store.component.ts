@@ -14,6 +14,7 @@ import { DOCUMENT } from '@angular/common';
 export class StoreComponent implements OnInit {
   @Input() store: Store;
   latLng: string;
+  isLoaded: boolean;
 
   constructor(
     public matDialog: MatDialog,
@@ -22,55 +23,41 @@ export class StoreComponent implements OnInit {
     private router: Router,
     @Inject(DOCUMENT) private document: Document,
     ) { }
+
   /**
    * Runs when component is loaded
    */
   ngOnInit(): void {
+    // Defaults to API not called yet
+    this.isLoaded = false;
     this.getStore();
-    // this.initStore();
   }
 
-  // FIXME: update
   getStore(): void {
     const id = this.route.snapshot.paramMap.get('id').toString();
     this.apiService.getStoreById(id)
-      // .subscribe(data => this.store = {
-      //   id: (data as any).id,
-      //   name: (data as any).name,
-      //   address: (data as any).address,
-      //   score: (data as any).score,
-      //   reviewCount: (data as any).reviewCount,
-      //   open: (data as any).open,
-      //   latLng: (data as any).latLng,
-      //   busy: (data as any).busy,
-      //   line: (data as any).line,
-      //   hygiene: (data as any).hygiene,
-      //   masks: (data as any).masks
-      // });
-      .subscribe((res: Store) => {
-        this.store = res;
-      })
-    this.latLng = this.store.latitude + "," + this.store.longitude;
+      .subscribe(
+        (res: Store) => {
+          this.store = res
+        },
+        err => {
+          console.log(err);
+        },
+        () => {
+          this.initTemplate();
+        }
+      );
   }
 
-  initStore(): void {
-    this.store = new Store({
-      id: '2347',
-      name: 'test',
-      address: '1234 Test St.',
-      score: 10,
-      reviewCount: 10,
-      status: true,
-      longitude: 0,
-      latitude: 0,
-      busy: 1,
-      line: 1,
-      hygiene: 1,
-      masks: 1
-    });
+  initTemplate(): void {
+    // Sets loaded state to true
+    this.isLoaded = true;
+    console.log("CLIENT: API call finished");
+    // Gets properly formatted latlng
     this.latLng = this.store.latitude + "," + this.store.longitude;
+    console.log("CLIENT: latLng is " + this.latLng);
   }
-
+  
   /**
    * Opens check in modal dialog using check in modal component
    * @returns opens new check in modal on screen
@@ -85,7 +72,7 @@ export class StoreComponent implements OnInit {
 
   redirectToMap() {
     const url = 'https://www.google.com/maps/search/?api=1&query=' + this.latLng;
-    this.document.location.href = url;
+    window.open(url, "_blank");
   }
 
   goBack() {

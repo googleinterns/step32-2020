@@ -32,8 +32,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: grayscale;
   -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;  
-  box-sizing: border-box;   
+  -moz-box-sizing: border-box;   
   font-family: "Avenir Next", sans-serif !important;
   scroll-behavior: smooth;
   box-sizing: border-box;
@@ -53,8 +52,8 @@ mat-icon {
 
 .segment-text {
   padding-top: 130px;
-  margin-left: 30%;
-  margin-right: 30%;
+  margin-left: 20% !important;
+  margin-right: 20% !important;
   padding-bottom: 130px;
 }
 

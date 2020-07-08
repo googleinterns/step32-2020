@@ -23,9 +23,8 @@ export class LandingComponent implements OnInit {
   }
 
   getNearbyStores(): void {
-    this.router.navigate(['/result']);
-    console.log("redirecting to results");
-    this.resultComponent.callResult(this.location);
+    this.router.navigate(['/result', this.location]);
+    console.log("CLIENT: redirecting to results");
   }
 
 }

@@ -42,7 +42,7 @@ export class ApiService {
     return this.http
       .post(API_URL + '/checkin', params, this.httpOptions)
       .pipe(
-        tap(_ => console.log("added new checkin")),
+        tap(_ => console.log("API: check in from " + storeId)),
         catchError(error => throwError(error.message || error))
       );
   }
@@ -51,6 +51,7 @@ export class ApiService {
    * Gets all nearby stores from backend via GET request
    * @param location inputted by user
    * @returns result as observable
+   * TODO: update to custom url in production/demo to save money
    */
   public getNearbyStores(location: string): Observable<ResultInterface> {
     // const url = API_URL + '/stores/${location}';
@@ -76,29 +77,16 @@ export class ApiService {
    * interface typing
    * @param id ID of the store to fetch store from
    * @returns store of given ID as observable
+   * TODO: update to custom url in production/demo to save money
    */
   public getStoreById(id: string) : Observable<StoreInterface> {
-    const url = API_URL + '/store/${id}';
+    // const url = API_URL + '/store/${id}';
+    const url = API_URL + '/store';
     return this.http
       .get<StoreInterface>(url)
       .pipe(
-        map(res => res as StoreInterface),
-        // map((res: any) => {
-        //   return <StoreInterface> {
-        //     id: res.id,
-        //     name: res.name,
-        //     address: res.address,
-        //     status: res.open,
-        //     score: res.score,
-        //     reviewCount: res.reviewCount,
-        //     latLng: [res.location.latitude, res.location.longitude],
-        //     busy: res.stats.busy,
-        //     line: res.stats.line,
-        //     hygiene: res.stats.hygiene,
-        //     masks: res.stats.masks
-        //   }
-        // }),
-        tap(_ => console.log('AP: fetched store id=${id}')),
+        map((res: any) => res as StoreInterface),
+        tap(_ => console.log('API: fetched store id ' + id)),
         catchError(error => throwError(error.message || error))
       )
   }
