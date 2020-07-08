@@ -62,7 +62,6 @@ public class StoresServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         // Gets API key for places from shopsafe-backend.
         try {
             File myObj = new File("../../key.txt");
