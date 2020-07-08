@@ -5,7 +5,7 @@ A web application for informed and safe shopping during COVID-19.
 ```
 // to run frontend
 cd shopsafe-frontend
-ng build
+ng build --delete-output-path=false
 
 // to run backend
 cd shopsafe-backend
