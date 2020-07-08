@@ -79,7 +79,7 @@ public class StoresServlet extends HttpServlet {
         }
 
         // Todo: Get address from response
-        String address = "33+Market+Square,+Manheim,+PA";
+        String address = request.getParameter("location");
         LatLng location;
 
         // Get LatLng location based on address
@@ -106,7 +106,7 @@ public class StoresServlet extends HttpServlet {
         catch (Exception e) {
             e.printStackTrace();
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get location information.");
+            response.getWriter().println("Could not get places around the address: " + address);
             return;
         }
 

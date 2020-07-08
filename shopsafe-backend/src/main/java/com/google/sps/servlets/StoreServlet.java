@@ -77,8 +77,8 @@ public class StoreServlet extends HttpServlet {
             return;
         }
 
-        // Todo: Get address from response
-        String id = "ChIJbb7uBJ0ixokRyAM8CKkgxfs";
+        // Get id from
+        String id = request.getParameter("id");
 
         // Get store based on id in form of the Store class.
         Store store;
@@ -112,7 +112,7 @@ public class StoreServlet extends HttpServlet {
         catch (Exception e) {
             e.printStackTrace();
             response.setContentType("text/html;");
-            response.getWriter().println("Failed to get store information.");
+            response.getWriter().println("Failed to get store information for the id: " + id);
             return;
         }
         
