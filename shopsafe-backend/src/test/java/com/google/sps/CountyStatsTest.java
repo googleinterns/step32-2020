@@ -47,11 +47,12 @@ public final class CountyStatsTest {
      */
     @Test
     public void simpleCase() {
-        County county = new County("New York City", "New York", "36061");
+        County county = new County("Lancaster", "PA", "42071");
         CountyStats countyStats = new CountyStats(county);
 
-        Assert.assertTrue(countyStats.getCases() >= 221800);
-        Assert.assertTrue(countyStats.getDeaths() >= 22600);
-        Assert.assertTrue(countyStats.getPopulation() >= 1628000);   
+        Assert.assertTrue(countyStats.getCases() > 0);
+        Assert.assertTrue(countyStats.getDeaths() > 0);
+        Assert.assertTrue(countyStats.getActiveCases() > 0);   
+        Assert.assertTrue(countyStats.getPopulation() > 0);   
     }
 }

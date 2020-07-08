@@ -14,6 +14,8 @@
 
 package com.google.sps.data;
 
+import com.google.sps.QueryCovidStats;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,8 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.sps.QueryNYT;
-
 /** Class contains the name, state, population and covid cases and deaths of a county. */
 public final class CountyStats {
 
@@ -34,16 +34,18 @@ public final class CountyStats {
     private final String stateName;
     private final long cases;
     private final long deaths;
+    private final long activeCases;
     private final long population;
 
     public CountyStats(County county) {
         this.countyName = county.getCountyName();
         this.stateName = county.getStateName();
 
-        // Query NYT dataset for covid cases and deaths.
-        QueryNYT queryResults = QueryNYT.exampleQuery(stateName, countyName);
+        // Make query for active covid cases and deaths.
+        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
+        this.activeCases = queryResults.getActiveCases();
 
         // Find the population of county using Census API
         this.population = getPopulation(county);
@@ -64,6 +66,10 @@ public final class CountyStats {
     public long getDeaths() {
         return deaths;
     }
+
+    public long getActiveCases() {
+        return activeCases;
+    }
     
     public long getPopulation() {
         return population;
@@ -71,12 +77,12 @@ public final class CountyStats {
 
     public double getCountyScore() {
         long populationUS = 331002651;
-        long casesUS = 2930000;
+        long casesUS = 1996000;
         double percentageUS = (double) casesUS / (double) populationUS;
-        double percentageCounty = (double) cases / (double) population;
+        double percentageCounty = (double) activeCases / (double) population;
 
         // TODO: Create a better scoring system for counties.
-        return (percentageCounty - percentageUS) * 5 + 5;
+        return (percentageUS - percentageCounty) * 5 + 5;
     }
 
     /*

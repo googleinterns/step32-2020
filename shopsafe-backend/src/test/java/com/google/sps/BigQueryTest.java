@@ -30,7 +30,7 @@ public final class BigQueryTest {
      */
     @Test
     public void simpleCaseTest() {
-        Assert.assertTrue(QueryNYT.exampleQuery("new York", "new york city").equals(
-                QueryNYT.exampleQuery("New York", "NEW YORK CITY")));
+        Assert.assertTrue(QueryCovidStats.getCovidStatsFips("42071").equals(
+            QueryCovidStats.getCovidStatsFips("42071")));
     }
 }
