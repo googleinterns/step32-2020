@@ -21,6 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Services
 import { ApiService } from './api/api.service';
@@ -45,7 +46,8 @@ import { ApiService } from './api/api.service';
     MatIconModule,
     MatTooltipModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

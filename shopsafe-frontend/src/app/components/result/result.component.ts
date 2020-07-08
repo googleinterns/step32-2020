@@ -1,11 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../api/api.service';
-import { Store } from '../../classes/store/store';
-import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
 import { Result } from '../../classes/result/result';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CountyStats } from 'src/app/classes/county-stats/county-stats';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-result',
@@ -13,11 +9,8 @@ import { CountyStats } from 'src/app/classes/county-stats/county-stats';
   styleUrls: ['./result.component.css']
 })
 
-@Injectable({
-  providedIn: 'root'
-})
 export class ResultComponent implements OnInit {
-  @Input() result: Result;
+  result: Result;
   location: string;
   proportion: number;
   isLoaded: boolean;
