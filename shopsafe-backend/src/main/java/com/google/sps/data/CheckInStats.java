@@ -47,7 +47,7 @@ public final class CheckInStats {
             busy += (double) ratingEntity.getProperty("busy");
             line += (double) ratingEntity.getProperty("line");
             hygiene += (double) ratingEntity.getProperty("hygiene");
-            masks += (double) ratingEntity.getProperty("masks");
+            masks += (double) ratingEntity.getProperty("mask");
         }
         
         // Average scores if there is available data.
