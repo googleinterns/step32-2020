@@ -30,6 +30,10 @@ export class ResultComponent implements OnInit {
     this.getResult();
   }
 
+  /**
+   * Calls API to get result and subscribes local variables using data returned
+   * in the Observable from the HTTP response.
+   */
   getResult(): void {
     console.log('CLIENT: results api call at ' + this.location);
     this.apiService.getNearbyStores(this.location)
@@ -40,7 +44,7 @@ export class ResultComponent implements OnInit {
         },
         err => {
           console.log(err),
-          this.httpError = true;
+          this.httpError = true
         },
         // To run getProportion function after API call
         () => {
@@ -49,12 +53,18 @@ export class ResultComponent implements OnInit {
       );
   }
 
+  /**
+   * Initializes component by using data returned from API call.
+   * Sets isLoaded boolean to true, as the function can only be called when there
+   * is a successful response.
+   * Calculates the proportion of cases for the given population.
+   */
   initTemplate(): void {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
     // Round proportion to 2 decimal places
-    this.proportion = Math.round((this.result.countyStats[0].cases / this.result.countyStats[0].population) * 100) / 100;
+    this.proportion = this.result.countyStats[0].cases / this.result.countyStats[0].population;
     console.log("CLIENT: calculated proportion as " + this.proportion);
   }
 }
