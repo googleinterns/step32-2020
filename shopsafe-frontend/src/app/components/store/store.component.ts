@@ -15,6 +15,7 @@ export class StoreComponent implements OnInit {
   latLng: string;
   isLoaded: boolean;
   storeId: string;
+  httpError: boolean;
 
   constructor(
     public matDialog: MatDialog,
@@ -29,6 +30,8 @@ export class StoreComponent implements OnInit {
   ngOnInit(): void {
     // Defaults to API not called yet
     this.isLoaded = false;
+    // Defaults to no HTTP error
+    this.httpError = false;
     this.getStore();
   }
 
@@ -41,7 +44,8 @@ export class StoreComponent implements OnInit {
           this.store = res
         },
         err => {
-          console.log(err);
+          console.log(err),
+          this.httpError = true;
         },
         () => {
           this.initTemplate();
