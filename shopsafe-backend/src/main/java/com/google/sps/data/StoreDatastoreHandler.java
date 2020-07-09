@@ -15,7 +15,7 @@
 package com.google.sps.data;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Date;
 
@@ -48,116 +48,52 @@ public class StoreDatastoreHandler {
      * Wrapper that handles cases where store is in datastore or not
      */
     public void placeStore(Map<String, String[]> ratingsMap) {
+        //Create Rating entity, set store as parent
+        Entity ratingEntity = createRatingsEntity(ratingsMap);
+        datastore.put(ratingEntity);
         try {
             //Found store in datastore
             Entity existingStoreEntity = datastore.get(key);
-            this.updateStore(existingStoreEntity, ratingsMap); 
         } catch (Exception EntityNotFoundException) {
-            //Store not in datastore, so create entry
-            this.newStore(ratingsMap);
+            //Store not in datastore
+            Entity storeEntity = new Entity("Store", id);
+            datastore.put(storeEntity);
         }
     }
 
     /*
      * Creates Rating Entity, does not put in datastore
      */
-    public static Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
-        Entity ratingEntity = new Entity("Rating");
+    private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
+        //Set store as parent entity
+        Entity ratingEntity = new Entity("Rating", this.key);
+
+        //Insert ratings
         ratingsMap.forEach((String ratingField, String[] ratingValue) -> {
-            
             /* http request getParamMap method formats in array instead of
              * single value.
              */
             ratingEntity.setProperty(ratingField, Double.parseDouble(ratingValue[0]));
         });
+
+        //Add date when created
         Date date = new Date();
         ratingEntity.setProperty("Date", date);
         return ratingEntity;
     }
 
-    /*
-     * Places new store along with rating
-     */
-    private void newStore(Map<String, String[]> ratingsMap) {
-
-        //Create new Store and Rating Entities
-        Entity storeEntity = new Entity("Store", id);
-        Entity ratingEntity = createRatingsEntity(ratingsMap);
-        datastore.put(ratingEntity);
-
-        //Embed Rating into store by storing an array of Rating Ids in 
-        //Store entry
-        Long ratingEntityIdName = ratingEntity.getKey().getId();
-        ArrayList<Long> storeRatingIds = new ArrayList();
-        storeRatingIds.add(ratingEntityIdName);
-        storeEntity.setProperty("ratings", storeRatingIds);
-
-        //Place store entity into datastore
-        datastore.put(storeEntity);
-    }
 
     /*
-     * Updates existing store with new rating
+     * Returns the children Rating Entities associated with the Store,
+     * sorted by date.
      */
-    private void updateStore(Entity storeEntity, Map<String, String[]> ratingsMap) {
-        //Create new Rating Entity
-        Entity ratingEntity = createRatingsEntity(ratingsMap);
-        datastore.put(ratingEntity);
-        
-        //Retreive exisiting list of Rating Ids already withing store
-        //and add new rating
-        @SuppressWarnings("unchecked")
-        ArrayList<Long> previousRatingIds = (ArrayList<Long>) storeEntity
-            .getProperty("ratings");
-        Long ratingEntityIdName = ratingEntity.getKey().getId();
-        previousRatingIds.add(ratingEntityIdName);
-        storeEntity.setProperty("ratings", previousRatingIds);
-
-        datastore.put(storeEntity);
+    public List<Entity> getRatings() {
+        Query query = new Query("Rating", this.key)
+            .setAncestor(this.key)
+            .addSort("Date", Query.SortDirection.ASCENDING);
+        return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
     }
 
-    /*
-     * Returns the Rating Entitys embedded in the Store entry in datastore
-     */
-    public ArrayList<Entity> getRatings() {
-        return this.compileRatings(this.getRatingIds());
-    }
-
-    /*
-     * The ratings associated with a store are stored in datastore as an array of longs,
-     * this function retrieves that array. On error returns an empty array.
-     */
-    private ArrayList<Long> getRatingIds() {
-        try {
-            Entity storeEntity = datastore.get(this.key);
-            @SuppressWarnings("unchecked")
-            ArrayList<Long> previousRatingIds = (ArrayList<Long>) storeEntity
-                .getProperty("ratings");
-            return previousRatingIds;
-        } catch(Exception EntityNotFoundException) {
-            System.out.println("DataStore: Store <" + this.key.getName() + "> not found!");
-            return new ArrayList();
-        }
-    }
-
-    /*
-     * Given a list of ids referencing Rating entries in datastore, this function retrieves
-     * the Rating entities associated with the ids, on error returns an empty array.
-     */
-    private ArrayList<Entity> compileRatings(ArrayList<Long> ratingIds) {
-        try {
-            ArrayList<Entity> entityList = new ArrayList();
-            for (Long id: ratingIds) {
-                Key ratingKey = new Builder("Rating", id).getKey();
-                Entity ratingEntity = datastore.get(ratingKey);
-                entityList.add(ratingEntity);
-            }
-            return entityList;
-        } catch(Exception EntityNotFoundException) {
-            System.out.println("Rating entity not found: " + ratingIds);
-            return new ArrayList();
-        }
-    }
 
     /* Tools For Debugging and Development */
 
@@ -165,9 +101,9 @@ public class StoreDatastoreHandler {
      * Deletes store and its ratings from Datastore
      */
     public void deleteStoreAndRatings() {
-        ArrayList<Long> ratingIds = this.getRatingIds();
-        for (long id: ratingIds) {
-            Key ratingKey =  new Builder("Rating", id).getKey();
+        List<Entity> ratingEntities = this.getRatings();
+        for (Entity ratingEntity: ratingEntities) {
+            Key ratingKey =  ratingEntity.getKey();
             datastore.delete(ratingKey);
         }
         datastore.delete(this.key);

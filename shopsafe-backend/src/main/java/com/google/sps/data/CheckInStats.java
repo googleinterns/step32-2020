@@ -14,7 +14,7 @@
 
 package com.google.sps.data;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.sps.data.StoreDatastoreHandler;
 import com.google.appengine.api.datastore.Entity;
@@ -39,7 +39,7 @@ public final class CheckInStats {
     
         //Get datastore ratings of a store based on id.
         StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
-        ArrayList<Entity> ratingEntities = dataStoreService.getRatings();
+        List<Entity> ratingEntities = dataStoreService.getRatings();
         checkInCount = ratingEntities.size();
 
         // Sum the values for each category.
