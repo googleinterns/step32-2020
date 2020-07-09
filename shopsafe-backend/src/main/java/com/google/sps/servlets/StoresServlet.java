@@ -61,6 +61,7 @@ public class StoresServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
         // Gets API key for places from shopsafe-backend.
         try {
             File myObj = new File("../../key.txt");
@@ -78,11 +79,31 @@ public class StoresServlet extends HttpServlet {
             return;
         }
 
-        // Todo: Get address from response
-        String address = request.getParameter("location");
+        // Get a string array for all the words in the request and get its length.
+        String[] addressArray = request.getParameter("location").trim().split("\\s+");
+        int addressWordCount = addressArray.length;
+        
+        // If the word count is 0, set status to bad reuqest and send error response. 
+        if (addressWordCount == 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to obtain address from the request.");
+        }
+
+        // Add all words to the string builder with '+' in between each word.
+        StringBuilder addressStringBuilder = new StringBuilder();
+        addressStringBuilder.append(addressArray[0]);
+        int index = 1;
+        while (index < addressWordCount) {
+            addressStringBuilder.append("+" + addressArray[index]);
+            index += 1;
+        }
+
+        // Define the address and initialize the location.
+        String address = new String(addressStringBuilder);
         LatLng location;
 
-        // Get LatLng location based on address
+        // Get LatLng location based on address.
         try {
 
             // Read response of call to FCC API given lat and lng.
@@ -163,7 +184,7 @@ public class StoresServlet extends HttpServlet {
                 checkInStats));
         }
 
-        // If there are no valid stores found 
+        // If there are no valid stores found, set status to bad reuqest and send error response.
         if (storeStats.size() == 0) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
