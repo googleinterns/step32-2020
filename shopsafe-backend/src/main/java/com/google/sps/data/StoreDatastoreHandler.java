@@ -35,28 +35,37 @@ import com.google.appengine.api.datastore.KeyFactory.Builder;
  */
 public class StoreDatastoreHandler {
     
-    private String id;
-    private Key key;
+    private String storeId;
+    private String userId;
+    private Key storeKey;
     private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    public StoreDatastoreHandler(String id) {
-        this.id = id;
-        this.key = new Builder("Store", id).getKey();
+    //Not given a user
+    public StoreDatastoreHandler(String storeId) {
+        this.storeId = storeId; 
+        this.userId = "Anon"; //TODO: Determine best practice for setting default user id
+        this.storeKey = new Builder("Store", storeId).getKey();
+    }
+
+    //Given a user
+    public StoreDatastoreHandler(String storeId, String userId) {
+        this.storeId = storeId;
+        this.userId = userId;
+        this.storeKey = new Builder("Store", storeId).getKey();
     }
 
     /*
      * Wrapper that handles cases where store is in datastore or not
      */
     public void placeStore(Map<String, String[]> ratingsMap) {
-        //Create Rating entity, set store as parent
         Entity ratingEntity = createRatingsEntity(ratingsMap);
         datastore.put(ratingEntity);
         try {
             //Found store in datastore
-            Entity existingStoreEntity = datastore.get(key);
+            Entity existingStoreEntity = datastore.get(storeKey);
         } catch (Exception EntityNotFoundException) {
             //Store not in datastore
-            Entity storeEntity = new Entity("Store", id);
+            Entity storeEntity = new Entity("Store", storeId);
             datastore.put(storeEntity);
         }
     }
@@ -66,7 +75,7 @@ public class StoreDatastoreHandler {
      */
     private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
         //Set store as parent entity
-        Entity ratingEntity = new Entity("Rating", this.key);
+        Entity ratingEntity = new Entity("Rating", storeKey);
 
         //Insert ratings
         ratingsMap.forEach((String ratingField, String[] ratingValue) -> {
@@ -79,6 +88,9 @@ public class StoreDatastoreHandler {
         //Add date when created
         Date date = new Date();
         ratingEntity.setProperty("Date", date);
+
+        //Add user id
+        ratingEntity.setProperty("User", userId);
         return ratingEntity;
     }
 
@@ -88,8 +100,8 @@ public class StoreDatastoreHandler {
      * sorted by date.
      */
     public List<Entity> getRatings() {
-        Query query = new Query("Rating", this.key)
-            .setAncestor(this.key)
+        Query query = new Query("Rating", storeKey)
+            .setAncestor(storeKey)
             .addSort("Date", Query.SortDirection.ASCENDING);
         return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
     }
@@ -106,7 +118,7 @@ public class StoreDatastoreHandler {
             Key ratingKey =  ratingEntity.getKey();
             datastore.delete(ratingKey);
         }
-        datastore.delete(this.key);
+        datastore.delete(storeKey);
     }
 
     /*
