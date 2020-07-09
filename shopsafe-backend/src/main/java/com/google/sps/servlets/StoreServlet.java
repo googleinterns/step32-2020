@@ -18,7 +18,7 @@ import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
 import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
-import com.google.sps.data.Result;
+import com.google.sps.data.StoreResult;
 import com.google.sps.data.Store;
 import com.google.sps.data.StoreStats;
 
@@ -152,6 +152,6 @@ public class StoreServlet extends HttpServlet {
         // Return score and stats for one store.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(storeStats));
+        response.getWriter().println(gson.toJson(new StoreResult(storeStats, countyStats)));
     }
 }
