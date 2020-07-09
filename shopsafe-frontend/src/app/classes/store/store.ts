@@ -13,7 +13,7 @@ export class Store implements StoreInterface {
   line: number;
   hygiene: number;
   masks: number;
-  reviewCount: number;
+  checkInCount: number;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);
