@@ -26,6 +26,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Services
 import { ApiService } from './api/api.service';
 
+// Pipes
+import { RoundPipe } from './pipes/round.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +39,7 @@ import { ApiService } from './api/api.service';
     AboutComponent,
     FooterComponent,
     CheckInModalComponent,
+    RoundPipe,
   ],
   imports: [
     BrowserModule,

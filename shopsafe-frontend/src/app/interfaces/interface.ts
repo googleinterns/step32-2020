@@ -18,7 +18,7 @@ export interface StoreInterface {
   line: number;
   hygiene: number;
   masks: number;
-  reviewCount: number;
+  checkInCount: number;
 }
 
 export interface CountyStatsInterface {

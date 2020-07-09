@@ -43,7 +43,6 @@ export class ResultComponent implements OnInit {
           this.initTemplate()
         }
       );
-    // this.getProportion();
   }
 
   initTemplate(): void {
