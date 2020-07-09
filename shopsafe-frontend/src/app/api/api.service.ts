@@ -78,7 +78,7 @@ export class ApiService {
       .pipe(
         map((res: any) => res as StoreInterface),
         tap(_ => console.log('API: fetched store id ' + id)),
-        catchError(error => throwError(error.message || error))
+        catchError(error => throwError((error.status + " " + error.statusText) || error))
       )
   }
 }
