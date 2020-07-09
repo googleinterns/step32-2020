@@ -53,7 +53,7 @@ export class ApiService {
    * @returns result as observable
    */
   public getNearbyStores(location: string): Observable<ResultInterface> {
-    const url = API_URL + '/stores?' + location;
+    const url = API_URL + '/stores?location=' + location;
     // const url = API_URL + '/stores';
     return this.http
       .get<ResultInterface>(url)
@@ -71,7 +71,7 @@ export class ApiService {
    * @returns store of given ID as observable
    */
   public getStoreById(id: string) : Observable<StoreInterface> {
-    const url = API_URL + '/store?' + id;
+    const url = API_URL + '/store?id=' + id;
     // const url = API_URL + '/store';
     return this.http
       .get<StoreInterface>(url)
