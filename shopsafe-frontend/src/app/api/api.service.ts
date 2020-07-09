@@ -60,7 +60,7 @@ export class ApiService {
       .pipe(
         map((res: any) => res as ResultInterface),
         tap(_ => console.log("API: fetch nearby stores for location " + location)),
-        catchError(error => throwError(error.message || error))
+        catchError(error => throwError((error.status + " " + error.statusText) || error))
       );
   }
 
