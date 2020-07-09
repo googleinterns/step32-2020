@@ -79,8 +79,19 @@ public class StoresServlet extends HttpServlet {
             return;
         }
 
+        // Get the address input from the param.
+        String address = request.getParameter("location"); 
+        
+        // If the word count is 0, set status to bad reuqest and send error response. 
+        if (address == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get the location parameter from the request.");
+            return;
+        }
+
         // Get a string array for all the words in the request and get its length.
-        String[] addressArray = request.getParameter("location").trim().split("\\s+");
+        String[] addressArray = address.trim().split("\\s+");
         int addressWordCount = addressArray.length;
         
         // If the word count is 0, set status to bad reuqest and send error response. 
@@ -88,6 +99,7 @@ public class StoresServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Failed to obtain address from the request.");
+            return;
         }
 
         // Add all words to the string builder with '+' in between each word.
@@ -100,7 +112,7 @@ public class StoresServlet extends HttpServlet {
         }
 
         // Define the address and initialize the location.
-        String address = new String(addressStringBuilder);
+        address = new String(addressStringBuilder);
         LatLng location;
 
         // Get LatLng location based on address.
@@ -189,6 +201,7 @@ public class StoresServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Could not find any valid stores near the address: " + address);
+            return;
         }
 
         // Todo: Return stores with scores and county info as json as result.
