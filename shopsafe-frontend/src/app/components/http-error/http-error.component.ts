@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-http-error',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./http-error.component.css']
 })
 export class HttpErrorComponent implements OnInit {
+
+  @Input() httpErrorMessage: string;
 
   constructor() { }
 
