@@ -14,6 +14,7 @@ export class ResultComponent implements OnInit {
   location: string;
   proportion: number;
   isLoaded: boolean;
+  httpError: boolean;
 
   constructor(
     private apiService: ApiService,
@@ -23,6 +24,7 @@ export class ResultComponent implements OnInit {
   ngOnInit(): void {
     // Defaults to API not called yet
     this.isLoaded = false;
+    this.httpError = false;
     this.location = this.route.snapshot.paramMap.get('location').toString();
     this.getResult();
   }
@@ -36,7 +38,8 @@ export class ResultComponent implements OnInit {
           countyStats: (data as any).countyStats
         },
         err => {
-          console.log(err) // TODO: add page rendering error
+          console.log(err),
+          this.httpError = true;
         },
         // To run getProportion function after API call
         () => {
