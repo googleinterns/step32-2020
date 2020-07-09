@@ -73,6 +73,7 @@ public class StoresServlet extends HttpServlet {
         // If error, print error, and return.
         catch (FileNotFoundException e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Could not get api key.");
             return;
@@ -105,8 +106,9 @@ public class StoresServlet extends HttpServlet {
         // If error, print error, and return.
         catch (Exception e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get places around the address: " + address);
+            response.getWriter().println("Could not get places for the address: " + address);
             return;
         }
 
@@ -164,6 +166,7 @@ public class StoresServlet extends HttpServlet {
 
         // If there are no valid stores found 
         if (storeStats.size() == 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Could not find any valid stores near the address: " + address);
         }

@@ -72,6 +72,7 @@ public class StoreServlet extends HttpServlet {
         // If error, print error, and return.
         catch (FileNotFoundException e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Could not get api key.");
             return;
@@ -111,6 +112,7 @@ public class StoreServlet extends HttpServlet {
         // If error, print error, and return error message.
         catch (Exception e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Failed to get store information for the id: " + id);
             return;
@@ -121,6 +123,7 @@ public class StoreServlet extends HttpServlet {
 
         // If the county was not found, return error message.
         if (county.getCountyName() == "") {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Failed to get county information for store id: " + id);
             return;
@@ -131,6 +134,7 @@ public class StoreServlet extends HttpServlet {
 
         // If the county stats were not obtained, return error message.
         if (countyStats.getPopulation() == 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Failed to get county stats for FIPS: " + county.getCountyFips());
             return;
