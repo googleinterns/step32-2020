@@ -21,40 +21,22 @@ import com.google.sps.data.StoreDatastoreHandler;
 import com.google.appengine.api.datastore.Entity;
 
 /** Class wrapper for holding Rating*/
-public final class Rating {
+public final class DataPoint {
 
     // Check in stat properties.
-    private double busy = 0.0;
-    private double line = 0.0;
-    private double hygiene = 0.0;
-    private double masks = 0.0;
-    private Date dateCreated;
+    private double rating = 0.0;
+    private Date date;
 
-    public Rating(double busy, double line, double hygiene, double masks, Date dateCreated) {
-        this.busy = busy;
-        this.line = line;
-        this.hygiene = hygiene;
-        this.masks = masks;
-        this.dateCreated = this.dateCreated;
+    public DataPoint(double rating, Date date) {
+        this.rating = rating;
+        this.date = date;
     }
 
-    public double getBusy() {
-        return busy;
+    public double getRating() {
+        return rating;
     }
 
-    public double getLine() {
-        return line;
+    public Date getDate() {
+        return date;
     }
-
-    public double getHygiene() {
-        return hygiene;
-    }
-
-    public double getMasks() {
-        return masks;
-    }
-
-    // static public Rating extractDsRating (Entity ratingEntity) {
-
-    // }
 }

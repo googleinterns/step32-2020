@@ -15,7 +15,11 @@
 package com.google.sps.data;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Date;
 
+import com.google.sps.data.DataPoint;
 import com.google.sps.data.StoreDatastoreHandler;
 import com.google.appengine.api.datastore.Entity;
 
@@ -28,6 +32,8 @@ public final class CheckInStats {
     private double hygiene = 0.0;
     private double masks = 0.0;
     private long checkInCount = 0;
+    
+    private List<Entity> ratingEntities;
 
     // Static final weights for calculating score.
     static private final double BUSY_WEIGHT = 0.25;
@@ -39,7 +45,7 @@ public final class CheckInStats {
     
         //Get datastore ratings of a store based on id.
         StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
-        List<Entity> ratingEntities = dataStoreService.getRatings();
+        this.ratingEntities = dataStoreService.getRatings();
         checkInCount = ratingEntities.size();
 
         // Sum the values for each category.
@@ -85,6 +91,95 @@ public final class CheckInStats {
 
     public long getCheckInCount() {
         return checkInCount;
+    }
+
+    public HashMap<String, ArrayList<DataPoint>> compileRatingDays (String Property) {
+        double maskSum = 0.0;
+        double hygieneSum = 0.0;
+        double lineSum = 0.0;
+        double busySum = 0.0;
+
+        HashMap<String, ArrayList<DataPoint>> returnMap = new HashMap();
+        returnMap.put("mask", new ArrayList());
+        returnMap.put("hygiene", new ArrayList());
+        returnMap.put("line", new ArrayList());
+        returnMap.put("busy", new ArrayList());
+
+
+        boolean endDay;
+        int ratingNum = 0;
+        
+        for(; ratingNum < checkInCount - 1; ratingNum++) {
+            
+            //Current rating entity
+            Entity ratingEntity = ratingEntities.get(ratingNum);
+
+            //Add to cumulative sum
+            busySum += (double) ratingEntity.getProperty("busy");
+            lineSum += (double) ratingEntity.getProperty("line");
+            hygieneSum += (double) ratingEntity.getProperty("hygiene");
+            maskSum += (double) ratingEntity.getProperty("mask");
+
+            Entity nextEntity = ratingEntities.get(ratingNum + 1);
+            Date currentDate = (Date) ratingEntity.getProperty("Date");
+            Date nextDate = (Date) nextEntity.getProperty("Date");
+
+            //Check if next entitiy is apart of the same day
+            int r1day = currentDate.getDay();
+            int r2day= nextDate.getDay();
+            endDay = !(r1day == r2day);
+            
+            if (endDay) {
+                //get accumulated ratings
+                ArrayList<DataPoint> maskRatings = returnMap.get("mask");
+                ArrayList<DataPoint> hygieneRatings = returnMap.get("hygiene");
+                ArrayList<DataPoint> lineRatings = returnMap.get("line");
+                ArrayList<DataPoint> busyRatings = returnMap.get("busy");
+
+                //add average
+                maskRatings.add(new DataPoint(maskSum/(ratingNum + 1.0), currentDate));
+                hygieneRatings.add(new DataPoint(hygieneSum/(ratingNum + 1.0), currentDate));
+                lineRatings.add(new DataPoint(lineSum/(ratingNum + 1.0), currentDate));
+                busyRatings.add(new DataPoint(busySum/(ratingNum + 1.0), currentDate));
+
+                //update stored array
+                returnMap.replace("mask", maskRatings);
+                returnMap.replace("hygiene", hygieneRatings);
+                returnMap.replace("line", lineRatings);
+                returnMap.replace("busy", busyRatings);
+            }
+        }
+        if (checkInCount != 0) {
+
+            Entity ratingEntity = ratingEntities.get(ratingNum);
+
+            //Add to cumulative sum
+            busySum += (double) ratingEntity.getProperty("busy");
+            lineSum += (double) ratingEntity.getProperty("line");
+            hygieneSum += (double) ratingEntity.getProperty("hygiene");
+            maskSum += (double) ratingEntity.getProperty("mask");
+
+            //get accumulated ratings
+            ArrayList<DataPoint> maskRatings = returnMap.get("mask");
+            ArrayList<DataPoint> hygieneRatings = returnMap.get("hygiene");
+            ArrayList<DataPoint> lineRatings = returnMap.get("line");
+            ArrayList<DataPoint> busyRatings = returnMap.get("busy");
+
+            Date currentDate = (Date) ratingEntity.getProperty("Date");
+
+            maskRatings.add(new DataPoint(maskSum/(ratingNum + 1.0), currentDate));
+            hygieneRatings.add(new DataPoint(hygieneSum/(ratingNum + 1.0), currentDate));
+            lineRatings.add(new DataPoint(lineSum/(ratingNum + 1.0), currentDate));
+            busyRatings.add(new DataPoint(busySum/(ratingNum + 1.0), currentDate));
+
+            //update stored array
+            returnMap.replace("mask", maskRatings);
+            returnMap.replace("hygiene", hygieneRatings);
+            returnMap.replace("line", lineRatings);
+            returnMap.replace("busy", busyRatings);
+        }
+        
+        return returnMap;
     }
 
     public double getCheckInScore() {
