@@ -108,7 +108,7 @@ public class StoreServlet extends HttpServlet {
                 new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")));
         }
 
-        // If error, print error, and return empty county object
+        // If error, print error, and return error message.
         catch (Exception e) {
             e.printStackTrace();
             response.setContentType("text/html;");
@@ -119,8 +119,22 @@ public class StoreServlet extends HttpServlet {
         // Get county based on location of the store
         County county = County.GetCounty(store);
 
+        // If the county was not found, return error message.
+        if (county.getCountyName() == "") {
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get county information for store id: " + id);
+            return;
+        }
+
         // Get Covid stats based on county.
         CountyStats countyStats = new CountyStats(county);
+
+        // If the county stats were not obtained, return error message.
+        if (countyStats.getPopulation() == 0) {
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get county stats for FIPS: " + county.getCountyFips());
+            return;
+        }
 
         // Get reviews for a store.
         CheckInStats checkInStats = new CheckInStats(id);

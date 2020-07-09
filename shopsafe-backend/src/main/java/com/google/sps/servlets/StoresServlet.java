@@ -129,15 +129,27 @@ public class StoresServlet extends HttpServlet {
             // Get county based on location of the store
             County county = County.GetCounty(store);
 
+            // If the county was not found, log error message and don't add the store.
+            if (county.getCountyName() == "") {
+                System.out.println("Failed to get county information for store id: " + store.getId());
+                continue;
+            }
+
             // If county not in hashmap, add to hashmap and counties list.
             if (!countyScores.containsKey(county.getCountyFips())) {
 
                 // Get Covid stats based on county.
                 CountyStats countyStat = new CountyStats(county);
-                countyStats.add(countyStat);
+                
+                // If the county stats were not obtained, log error message and don't add the store.
+                if (countyStat.getPopulation() == 0) {
+                    System.out.println("Failed to get county stats for FIPS: " + county.getCountyFips());
+                    continue;
+                }
 
-                // Calculate and store the score for county.
+                // Calculate and store the score for county and add the county stats to the list.
                 countyScores.put(county.getCountyFips(), countyStat.getCountyScore());
+                countyStats.add(countyStat);
             }
 
             // Todo: Get reviews for a store.
@@ -148,6 +160,12 @@ public class StoresServlet extends HttpServlet {
                 store,
                 countyScores.get(county.getCountyFips()),
                 checkInStats));
+        }
+
+        // If there are no valid stores found 
+        if (storeStats.size() == 0) {
+            response.setContentType("text/html;");
+            response.getWriter().println("Could not find any valid stores near the address: " + address);
         }
 
         // Todo: Return stores with scores and county info as json as result.
