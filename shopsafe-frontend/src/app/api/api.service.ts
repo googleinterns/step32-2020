@@ -40,7 +40,7 @@ export class ApiService {
               .set('hygiene', hygiene.toString())
               .set('mask', mask.toString());
     return this.http
-      .post(API_URL + '/checkin', params, this.httpOptions)
+      .post(API_URL + '/checkin?' + params.toString(),{}, this.httpOptions)
       .pipe(
         tap(_ => console.log("API: check in from " + storeId)),
         catchError(error => throwError(error.message || error))
@@ -61,12 +61,6 @@ export class ApiService {
       .get<ResultInterface>(url)
       .pipe(
         map((res: any) => res as ResultInterface),
-        // map((res: any) => {
-        //   console.log(res);
-        //   return <ResultInterface> {
-            
-        //   }
-        // }),
         tap(_ => console.log("API: fetch nearby stores for location " + location)),
         catchError(error => throwError(error.message || error))
       );

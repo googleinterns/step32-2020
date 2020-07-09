@@ -95,3 +95,10 @@ a:hover {
 .left-text {
   float: left;
 }
+
+.loading-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import java.io.IOException;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import com.google.sps.data.StoreDatastoreHandler;
 
@@ -47,14 +48,15 @@ public class CheckInServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
 
-        //Using places API ID of a store determin
-        String placesID = request.getParameter("StoreId");
+        //Use Places API ID to update Datastore
+        String placesID = request.getParameter("storeId");
         StoreDatastoreHandler store = new StoreDatastoreHandler(placesID);
-        
-        Map<String, String[]> ratingsMap =  request.getParameterMap();
-        //leave just the ratings
-        ratingsMap.remove("StoreId");
 
+        //Create mutable hashmap from params to values and remove id
+        HashMap<String, String[]> ratingsMap =  new HashMap(request.getParameterMap());
+        ratingsMap.remove("storeId");
+
+        //Update Datastore
         store.placeStore(ratingsMap);
 
     }
