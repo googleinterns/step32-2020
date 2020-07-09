@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from 'src/app/classes/store/store';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-store', 
@@ -15,13 +14,13 @@ export class StoreComponent implements OnInit {
   @Input() store: Store;
   latLng: string;
   isLoaded: boolean;
+  storeId: string;
 
   constructor(
     public matDialog: MatDialog,
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private router: Router,
-    @Inject(DOCUMENT) private document: Document,
+    // private checkInModalComponent: CheckInModalComponent,
     ) { }
 
   /**
@@ -35,6 +34,7 @@ export class StoreComponent implements OnInit {
 
   getStore(): void {
     const id = this.route.snapshot.paramMap.get('id').toString();
+    this.storeId = id;
     this.apiService.getStoreById(id)
       .subscribe(
         (res: Store) => {
@@ -53,9 +53,6 @@ export class StoreComponent implements OnInit {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
-    // Gets properly formatted latlng
-    this.latLng = this.store.latitude + "," + this.store.longitude;
-    console.log("CLIENT: latLng is " + this.latLng);
   }
   
   /**
@@ -67,11 +64,12 @@ export class StoreComponent implements OnInit {
     dialogConfig.id = "check-in-modal";
     dialogConfig.height = "510px";
     dialogConfig.width = "460px";
+    CheckInModalComponent.setId(this.storeId);
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
   }
 
   redirectToMap() {
-    const url = 'https://www.google.com/maps/search/?api=1&query=' + this.latLng;
+    const url = 'https://www.google.com/maps/place/?q=place_id:' + this.storeId;
     window.open(url, "_blank");
   }
 

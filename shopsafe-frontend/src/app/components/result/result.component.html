@@ -47,3 +47,9 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="!isLoaded" class="loading-screen" color="grey">
+  <mat-spinner></mat-spinner>
+  <br/>
+  <p>Fetching Results...</p>
+</div>

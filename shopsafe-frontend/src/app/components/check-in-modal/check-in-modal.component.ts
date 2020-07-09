@@ -1,28 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Injectable } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-check-in-modal',
   templateUrl: './check-in-modal.component.html',
   styleUrls: ['./check-in-modal.component.css']
 })
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+
 export class CheckInModalComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
     private dialogRef: MatDialogRef<CheckInModalComponent>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    
   ) { }
 
   ngOnInit(): void {
   }
 
+  static storeId: string;
   busy = '';
   line = '';
   hygiene = '';
   mask = '';
+
+  public static setId(id: string) {
+    this.storeId = id;
+    console.log("CLIENT: store id is " + this.storeId);
+  }
 
   /**
    * Sends check-in user data to API
@@ -33,9 +45,9 @@ export class CheckInModalComponent implements OnInit {
    * @param mask user input mask score
    */
   checkIn(): void {
-    console.log("check-in api call");
-    const id = this.route.snapshot.paramMap.get('id').toString();
-    this.apiService.createCheckIn(id, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask));
+    console.log("CLIENT: check-in api call");
+    this.apiService.createCheckIn(CheckInModalComponent.storeId, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask))
+      .subscribe();
     this.dialogRef.close();
   }
 
