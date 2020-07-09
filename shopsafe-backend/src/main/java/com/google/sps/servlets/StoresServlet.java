@@ -61,6 +61,7 @@ public class StoresServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
         // Gets API key for places from shopsafe-backend.
         try {
             File myObj = new File("../../key.txt");
@@ -72,16 +73,49 @@ public class StoresServlet extends HttpServlet {
         // If error, print error, and return.
         catch (FileNotFoundException e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
             response.getWriter().println("Could not get api key.");
             return;
         }
 
-        // Todo: Get address from response
-        String address = "33+Market+Square,+Manheim,+PA";
+        // Get the address input from the param.
+        String address = request.getParameter("location"); 
+        
+        // If the word count is 0, set status to bad reuqest and send error response. 
+        if (address == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get the location parameter from the request.");
+            return;
+        }
+
+        // Get a string array for all the words in the request and get its length.
+        String[] addressArray = address.trim().split("\\s+");
+        int addressWordCount = addressArray.length;
+        
+        // If the word count is 0, set status to bad reuqest and send error response. 
+        if (addressWordCount == 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to obtain address from the request.");
+            return;
+        }
+
+        // Add all words to the string builder with '+' in between each word.
+        StringBuilder addressStringBuilder = new StringBuilder();
+        addressStringBuilder.append(addressArray[0]);
+        int index = 1;
+        while (index < addressWordCount) {
+            addressStringBuilder.append("+" + addressArray[index]);
+            index += 1;
+        }
+
+        // Define the address and initialize the location.
+        address = new String(addressStringBuilder);
         LatLng location;
 
-        // Get LatLng location based on address
+        // Get LatLng location based on address.
         try {
 
             // Read response of call to FCC API given lat and lng.
@@ -104,8 +138,9 @@ public class StoresServlet extends HttpServlet {
         // If error, print error, and return.
         catch (Exception e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get location information.");
+            response.getWriter().println("Could not get places for the address: " + address);
             return;
         }
 
@@ -128,15 +163,27 @@ public class StoresServlet extends HttpServlet {
             // Get county based on location of the store
             County county = County.GetCounty(store);
 
+            // If the county was not found, log error message and don't add the store.
+            if (county.getCountyName() == "") {
+                System.out.println("Failed to get county information for store id: " + store.getId());
+                continue;
+            }
+
             // If county not in hashmap, add to hashmap and counties list.
             if (!countyScores.containsKey(county.getCountyFips())) {
 
                 // Get Covid stats based on county.
                 CountyStats countyStat = new CountyStats(county);
-                countyStats.add(countyStat);
+                
+                // If the county stats were not obtained, log error message and don't add the store.
+                if (countyStat.getPopulation() == 0) {
+                    System.out.println("Failed to get county stats for FIPS: " + county.getCountyFips());
+                    continue;
+                }
 
-                // Calculate and store the score for county.
+                // Calculate and store the score for county and add the county stats to the list.
                 countyScores.put(county.getCountyFips(), countyStat.getCountyScore());
+                countyStats.add(countyStat);
             }
 
             // Todo: Get reviews for a store.
@@ -147,6 +194,14 @@ public class StoresServlet extends HttpServlet {
                 store,
                 countyScores.get(county.getCountyFips()),
                 checkInStats));
+        }
+
+        // If there are no valid stores found, set status to bad reuqest and send error response.
+        if (storeStats.size() == 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Could not find any valid stores near the address: " + address);
+            return;
         }
 
         // Todo: Return stores with scores and county info as json as result.
