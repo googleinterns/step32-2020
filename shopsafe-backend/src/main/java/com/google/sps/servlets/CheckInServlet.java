@@ -37,7 +37,8 @@ public class CheckInServlet extends HttpServlet {
 
     /*
      * Request:
-     *    StoreId - valid Places API ID
+     *    storeId - valid Places API ID
+     *    userId
      *    RatingField1 - RatingValue1
      *    RatingField2 - RatingValue2
      *    .....
@@ -48,13 +49,20 @@ public class CheckInServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
 
-        //Use Places API ID to update Datastore
         String placesID = request.getParameter("storeId");
+        if (placesID == null) {
+            response.sendError(400, "Provided no store ID");
+        }
+
+        //null case handled in StoreDatastoreHandler
+        String userID = request.getParameter("userId");
+
         StoreDatastoreHandler store = new StoreDatastoreHandler(placesID);
 
-        //Create mutable hashmap from params to values and remove id
+        //Create mutable hashmap from params to values and only keep ratings
         HashMap<String, String[]> ratingsMap =  new HashMap(request.getParameterMap());
         ratingsMap.remove("storeId");
+        ratingsMap.remove("userId");
 
         //Update Datastore
         store.placeStore(ratingsMap);

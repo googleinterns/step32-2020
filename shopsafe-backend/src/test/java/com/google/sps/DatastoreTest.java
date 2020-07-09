@@ -14,8 +14,9 @@
 
 package com.google.sps;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 import org.junit.Assert;
@@ -60,8 +61,8 @@ public final class DatastoreTest {
         StoreDatastoreHandler store = new StoreDatastoreHandler(sampleplacesID);
 
         //Retrieve rating through StoreDatastoreHandler Object
-        ArrayList<Entity> storeRatings = store.getRatings();
-        ArrayList<Entity> expectedRatings = new ArrayList ();
+        List<Entity> storeRatings = store.getRatings();
+        List<Entity> expectedRatings = new ArrayList ();
     
         Assert.assertEquals(expectedRatings, storeRatings);
     }
@@ -80,7 +81,7 @@ public final class DatastoreTest {
         store.placeStore(sampleHttpRequestParam);
 
         //Retrieve rating through StoreDatastoreHandler Object
-        ArrayList<Entity> storeRatings = store.getRatings();
+        List<Entity> storeRatings = store.getRatings();
         Entity insertedRating = storeRatings.get(0);
 
         Double expectedRating = 9.0;
@@ -111,7 +112,7 @@ public final class DatastoreTest {
         storeSometimeLater.placeStore(sampleHttpRequestParam2);
 
         //Retrieve second ratings
-        ArrayList<Entity> storeRatings = storeSometimeLater.getRatings();
+        List<Entity> storeRatings = storeSometimeLater.getRatings();
         Entity insertedRating2 = storeRatings.get(1);
 
         Double expectedRating = 5.0;
