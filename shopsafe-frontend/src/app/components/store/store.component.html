@@ -13,7 +13,7 @@
             <div class="stat-bar">
                 <div class="stat-elem">
                     <a class="stat-obj">CHECKED IN</a>
-                    <p>{{ store.reviewCount }}</p>
+                    <p>{{ store.checkInCount }}</p>
                 </div>
                 <div class="stat-elem" style="text-align: center;">
                     <a class="stat-obj">STATUS</a>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="stat-elem" style="text-align: right; margin-top: -5px">
                     <a class="stat-obj">SHOPSAFE SCORE</a>
-                    <p class="shopsafe-score">{{ store.score }}/10</p>
+                    <p class="shopsafe-score">{{ store.score | round }}/10</p>
                 </div>
             </div>
         </div>
