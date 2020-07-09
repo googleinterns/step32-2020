@@ -54,9 +54,8 @@ export class ApiService {
    * TODO: update to custom url in production/demo to save money
    */
   public getNearbyStores(location: string): Observable<ResultInterface> {
-    // const url = API_URL + '/stores/${location}';
-    // Uncomment above when location url is fetched
-    const url = API_URL + '/stores';
+    const url = API_URL + '/stores/${location}';
+    // const url = API_URL + '/stores';
     return this.http
       .get<ResultInterface>(url)
       .pipe(
@@ -74,8 +73,8 @@ export class ApiService {
    * TODO: update to custom url in production/demo to save money
    */
   public getStoreById(id: string) : Observable<StoreInterface> {
-    // const url = API_URL + '/store/${id}';
-    const url = API_URL + '/store';
+    const url = API_URL + '/store/${id}';
+    // const url = API_URL + '/store';
     return this.http
       .get<StoreInterface>(url)
       .pipe(
