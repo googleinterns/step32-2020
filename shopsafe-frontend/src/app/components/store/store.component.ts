@@ -15,6 +15,7 @@ export class StoreComponent implements OnInit {
   latLng: string;
   isLoaded: boolean;
   storeId: string;
+  httpError: boolean;
 
   constructor(
     public matDialog: MatDialog,
@@ -29,9 +30,15 @@ export class StoreComponent implements OnInit {
   ngOnInit(): void {
     // Defaults to API not called yet
     this.isLoaded = false;
+    // Defaults to no HTTP error
+    this.httpError = false;
     this.getStore();
   }
 
+  /**
+   * Calls API to get store and subscribes local variables using data returned in the 
+   * Observable from the HTTP response.
+   */
   getStore(): void {
     const id = this.route.snapshot.paramMap.get('id').toString();
     this.storeId = id;
@@ -41,7 +48,8 @@ export class StoreComponent implements OnInit {
           this.store = res
         },
         err => {
-          console.log(err);
+          console.log(err),
+          this.httpError = true
         },
         () => {
           this.initTemplate();
@@ -49,6 +57,11 @@ export class StoreComponent implements OnInit {
       );
   }
 
+  /**
+   * Initializes component by using data returned from API call.
+   * Sets isLoaded boolean to true, as the function can only be called when there
+   * is a successful response.
+   */
   initTemplate(): void {
     // Sets loaded state to true
     this.isLoaded = true;
@@ -56,8 +69,8 @@ export class StoreComponent implements OnInit {
   }
   
   /**
-   * Opens check in modal dialog using check in modal component
-   * @returns opens new check in modal on screen
+   * Opens check in modal dialog using check in modal component.
+   * Opens new check in modal on screen.
    */
   openModal() {
     const dialogConfig = new MatDialogConfig();
@@ -68,11 +81,17 @@ export class StoreComponent implements OnInit {
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
   }
 
+  /**
+   * Opens Google Maps link using Places ID of the store.
+   */
   redirectToMap() {
     const url = 'https://www.google.com/maps/place/?q=place_id:' + this.storeId;
     window.open(url, "_blank");
   }
 
+  /**
+   * Redirects to result page (previous page).
+   */
   goBack() {
     window.history.back();
   }
