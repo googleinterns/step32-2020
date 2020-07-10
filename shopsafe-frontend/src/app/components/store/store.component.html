@@ -1,4 +1,4 @@
-<div *ngIf="isLoaded" id="store" class="segment">
+<div *ngIf="isLoaded && !httpError" id="store" class="segment">
     <div class="segment-text">
         <div class="heading-text">
             <a class="back-link" (click)="goBack()"><i class="fas fa-long-arrow-alt-left"></i> &nbsp; Back to Results</a>
@@ -32,8 +32,10 @@
     </div>
 </div>
 
-<div *ngIf="!isLoaded" class="loading-screen" color="grey">
+<div *ngIf="!isLoaded && !httpError" class="loading-screen" color="grey">
   <mat-spinner></mat-spinner>
   <br/>
   <p>Loading Store...</p>
 </div>
+
+<app-http-error *ngIf="httpError" [httpErrorMessage]='httpErrorMessage'></app-http-error>

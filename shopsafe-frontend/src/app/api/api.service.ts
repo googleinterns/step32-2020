@@ -51,17 +51,16 @@ export class ApiService {
    * Gets all nearby stores from backend via GET request
    * @param location inputted by user
    * @returns result as observable
-   * TODO: update to custom url in production/demo to save money
    */
   public getNearbyStores(location: string): Observable<ResultInterface> {
-    const url = API_URL + '/stores/${location}';
+    const url = API_URL + '/stores?location=' + location;
     // const url = API_URL + '/stores';
     return this.http
       .get<ResultInterface>(url)
       .pipe(
         map((res: any) => res as ResultInterface),
         tap(_ => console.log("API: fetch nearby stores for location " + location)),
-        catchError(error => throwError(error.message || error))
+        catchError(error => throwError((error.status + " " + error.statusText) || error))
       );
   }
 
@@ -70,17 +69,16 @@ export class ApiService {
    * interface typing
    * @param id ID of the store to fetch store from
    * @returns store of given ID as observable
-   * TODO: update to custom url in production/demo to save money
    */
   public getStoreById(id: string) : Observable<StoreInterface> {
-    const url = API_URL + '/store/${id}';
+    const url = API_URL + '/store?id=' + id;
     // const url = API_URL + '/store';
     return this.http
       .get<StoreInterface>(url)
       .pipe(
         map((res: any) => res as StoreInterface),
         tap(_ => console.log('API: fetched store id ' + id)),
-        catchError(error => throwError(error.message || error))
+        catchError(error => throwError((error.status + " " + error.statusText) || error))
       )
   }
 }

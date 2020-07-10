@@ -1,4 +1,4 @@
-<div *ngIf="isLoaded" id="result" class="segment">
+<div *ngIf="isLoaded && !httpError" id="result" class="segment">
     <div class="segment-text">
         <div class="heading-text">
             <h1>{{ location }}</h1>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="stat-elem" style="text-align: right; margin-top: -5px">
                     <a class="stat-obj">PROPORTION</a>
-                    <p class="shopsafe-score">{{ proportion }}</p>
+                    <p class="shopsafe-score">{{ proportion | round }}</p>
                 </div>
             </div>
         </div>
@@ -48,8 +48,10 @@
     </div>
 </div>
 
-<div *ngIf="!isLoaded" class="loading-screen" color="grey">
+<div *ngIf="!isLoaded && !httpError" class="loading-screen" color="grey">
   <mat-spinner></mat-spinner>
   <br/>
   <p>Fetching Results...</p>
 </div>
+
+<app-http-error *ngIf="httpError" [httpErrorMessage]='httpErrorMessage'></app-http-error>

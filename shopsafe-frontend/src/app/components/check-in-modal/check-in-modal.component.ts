@@ -31,6 +31,10 @@ export class CheckInModalComponent implements OnInit {
   hygiene = '';
   mask = '';
 
+  /**
+   * Sets ID variable of check in modal based on store id.
+   * @param id of the current store
+   */
   public static setId(id: string) {
     this.storeId = id;
     console.log("CLIENT: store id is " + this.storeId);

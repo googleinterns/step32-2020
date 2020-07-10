@@ -28,6 +28,7 @@ import { ApiService } from './api/api.service';
 
 // Pipes
 import { RoundPipe } from './pipes/round.pipe';
+import { HttpErrorComponent } from './components/http-error/http-error.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { RoundPipe } from './pipes/round.pipe';
     FooterComponent,
     CheckInModalComponent,
     RoundPipe,
+    HttpErrorComponent,
   ],
   imports: [
     BrowserModule,

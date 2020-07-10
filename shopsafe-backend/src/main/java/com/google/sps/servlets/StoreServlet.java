@@ -18,7 +18,7 @@ import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
 import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
-import com.google.sps.data.Result;
+import com.google.sps.data.StoreResult;
 import com.google.sps.data.Store;
 import com.google.sps.data.StoreStats;
 
@@ -54,6 +54,7 @@ public class StoreServlet extends HttpServlet {
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
     public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry";
     private String PLACE_KEY;
+    private String PLACE_KEY_LOCATION = "../../key.txt";
 
     /**
      * For a get request, return all nearby stores.
@@ -63,23 +64,31 @@ public class StoreServlet extends HttpServlet {
 
         // Gets API key for places from shopsafe-backend.
         try {
-            File myObj = new File("../../key.txt");
+            File myObj = new File(PLACE_KEY_LOCATION);
             Scanner myReader = new Scanner(myObj);
             PLACE_KEY = "&key=" + myReader.nextLine();
             myReader.close();
         }
         
-        // If error, print error, and return.
+        // If error, print error, set status to bad reuqest and send error response.
         catch (FileNotFoundException e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get api key.");
+            response.getWriter().println("Failed to get api key.");
             return;
         }
 
-        // Get id from
+        // Get id from request.
         String id = request.getParameter("id");
+
+        // If the id is null, set status to bad reuqest and send error response. 
+        if (id == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get the id parameter from the request.");
+            return;
+        }
 
         // Get store based on id in form of the Store class.
         Store store;
@@ -109,7 +118,7 @@ public class StoreServlet extends HttpServlet {
                 new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")));
         }
 
-        // If error, print error, and return error message.
+        // If error, print error, and set status to bad reuqest and send error response.
         catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -118,10 +127,10 @@ public class StoreServlet extends HttpServlet {
             return;
         }
         
-        // Get county based on location of the store
+        // Get county based on location of the store.
         County county = County.GetCounty(store);
 
-        // If the county was not found, return error message.
+        // If the county was not found, set status to bad reuqest and send error response.
         if (county.getCountyName() == "") {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
@@ -149,9 +158,9 @@ public class StoreServlet extends HttpServlet {
             countyStats.getCountyScore(),
             checkInStats);
 
-        // Return score and stats for one store.
+        // Return store with stats and the county information.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(storeStats));
+        response.getWriter().println(gson.toJson(new StoreResult(storeStats, countyStats)));
     }
 }
