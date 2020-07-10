@@ -55,6 +55,7 @@ public class StoresServlet extends HttpServlet {
     public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
     public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private String PLACE_KEY;
+    private String PLACE_KEY_LOCATION = "../../key.txt";
 
     /**
      * For a get request, return all nearby stores.
@@ -64,18 +65,18 @@ public class StoresServlet extends HttpServlet {
         
         // Gets API key for places from shopsafe-backend.
         try {
-            File myObj = new File("../../key.txt");
+            File myObj = new File(PLACE_KEY_LOCATION);
             Scanner myReader = new Scanner(myObj);
             PLACE_KEY = "&key=" + myReader.nextLine();
             myReader.close();
         }
         
-        // If error, print error, and return.
+        // If error, print error, and set status to bad reuqest and send error response.
         catch (FileNotFoundException e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get api key.");
+            response.getWriter().println("Failed to get api key.");
             return;
         }
 
@@ -140,7 +141,7 @@ public class StoresServlet extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get places for the address: " + address);
+            response.getWriter().println("Failed to find any stores near the address: " + address);
             return;
         }
 
@@ -200,7 +201,7 @@ public class StoresServlet extends HttpServlet {
         if (storeStats.size() == 0) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not find any valid stores near the address: " + address);
+            response.getWriter().println("Failed to find any valid stores near the address: " + address);
             return;
         }
 
@@ -217,7 +218,6 @@ public class StoresServlet extends HttpServlet {
 
         // List of stores that will be returned, it will be empty if there is an exception.
         List<Store> stores = new ArrayList<>();
-        
         try {
 
             // Read response of call to FCC API given lat and lng.
