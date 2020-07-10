@@ -19,6 +19,7 @@ export class StoreComponent implements OnInit {
   storeId: string;
   httpError: boolean;
   httpErrorMessage: string;
+  proportion: number;
 
   constructor(
     public matDialog: MatDialog,
@@ -71,6 +72,9 @@ export class StoreComponent implements OnInit {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
+    // Round proportion to 2 decimal places
+    this.proportion = this.countyStats.cases / this.countyStats.population * 100;
+    console.log("CLIENT: calculated percentage as " + this.proportion);
   }
   
   /**
