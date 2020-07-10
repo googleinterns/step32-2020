@@ -6,6 +6,11 @@ export interface ResultInterface {
   countyStats: CountyStats[];
 }
 
+export interface StoreResultInterface {
+  store: Store[];
+  countyStats: CountyStats[];
+}
+
 export interface StoreInterface {
   id: string;
   name: string;
@@ -26,5 +31,6 @@ export interface CountyStatsInterface {
   stateName: string;
   cases: number;
   deaths: number;
+  activeCases: number;
   population: number;
 }

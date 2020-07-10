@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { StoreInterface, ResultInterface, CountyStatsInterface } from '../interfaces/interface';
+import { StoreInterface, ResultInterface, StoreResultInterface } from '../interfaces/interface';
 import { Result } from '../classes/result/result';
 import { Store } from '../classes/store/store';
 import { CountyStats } from '../classes/county-stats/county-stats';
@@ -74,9 +74,9 @@ export class ApiService {
     const url = API_URL + '/store?id=' + id;
     // const url = API_URL + '/store';
     return this.http
-      .get<StoreInterface>(url)
+      .get<StoreResultInterface>(url)
       .pipe(
-        map((res: any) => res as StoreInterface),
+        map((res: any) => res as StoreResultInterface),
         tap(_ => console.log('API: fetched store id ' + id)),
         catchError(error => throwError((error.status + " " + error.statusText) || error))
       )
