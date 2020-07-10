@@ -93,7 +93,7 @@ public final class CheckInStats {
         return checkInCount;
     }
 
-    public HashMap<String, ArrayList<DataPoint>> compileRatingDays (String Property) {
+    public HashMap<String, ArrayList<DataPoint>> compileRatingDays () {
         double maskSum = 0.0;
         double hygieneSum = 0.0;
         double lineSum = 0.0;
@@ -129,6 +129,7 @@ public final class CheckInStats {
             int r2day= nextDate.getDay();
             endDay = !(r1day == r2day);
             
+
             if (endDay) {
                 //get accumulated ratings
                 ArrayList<DataPoint> maskRatings = returnMap.get("mask");
@@ -142,13 +143,9 @@ public final class CheckInStats {
                 lineRatings.add(new DataPoint(lineSum/(ratingNum + 1.0), currentDate));
                 busyRatings.add(new DataPoint(busySum/(ratingNum + 1.0), currentDate));
 
-                //update stored array
-                returnMap.replace("mask", maskRatings);
-                returnMap.replace("hygiene", hygieneRatings);
-                returnMap.replace("line", lineRatings);
-                returnMap.replace("busy", busyRatings);
             }
         }
+        //Check final rating
         if (checkInCount != 0) {
 
             Entity ratingEntity = ratingEntities.get(ratingNum);
@@ -171,12 +168,6 @@ public final class CheckInStats {
             hygieneRatings.add(new DataPoint(hygieneSum/(ratingNum + 1.0), currentDate));
             lineRatings.add(new DataPoint(lineSum/(ratingNum + 1.0), currentDate));
             busyRatings.add(new DataPoint(busySum/(ratingNum + 1.0), currentDate));
-
-            //update stored array
-            returnMap.replace("mask", maskRatings);
-            returnMap.replace("hygiene", hygieneRatings);
-            returnMap.replace("line", lineRatings);
-            returnMap.replace("busy", busyRatings);
         }
         
         return returnMap;
