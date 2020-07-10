@@ -4,6 +4,7 @@ import { CheckInModalComponent } from '../check-in-modal/check-in-modal.componen
 import { ApiService } from '../../api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from 'src/app/classes/store/store';
+import { CountyStats } from 'src/app/classes/county-stats/county-stats';
 
 @Component({
   selector: 'app-store', 
@@ -11,7 +12,8 @@ import { Store } from 'src/app/classes/store/store';
   styleUrls: ['./store.component.css']
 })
 export class StoreComponent implements OnInit {
-  @Input() store: Store;
+  store: Store;
+  countyStats: CountyStats;
   latLng: string;
   isLoaded: boolean;
   storeId: string;
@@ -45,8 +47,9 @@ export class StoreComponent implements OnInit {
     this.storeId = id;
     this.apiService.getStoreById(id)
       .subscribe(
-        (res: Store) => {
-          this.store = res
+        (res: any) => {
+          this.store = res.store
+          this.countyStats = res.countyStats
         },
         err => {
           console.log(err),
@@ -57,17 +60,6 @@ export class StoreComponent implements OnInit {
           this.initTemplate();
         }
       );
-  }
-
-  handleError(err): void {
-    switch (err) {
-      case 400:
-        this.httpErrorMessage = 'Could not find results for your location.';
-      case 404:
-        this.httpErrorMessage = 'Page not found.';
-      case 500:
-        this.httpErrorMessage = 'Internal server error.';
-    }
   }
 
   /**

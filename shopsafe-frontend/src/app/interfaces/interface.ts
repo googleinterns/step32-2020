@@ -6,6 +6,11 @@ export interface ResultInterface {
   countyStats: CountyStats[];
 }
 
+export interface StoreResultInterface {
+  store: Store[];
+  countyStats: CountyStats[];
+}
+
 export interface StoreInterface {
   id: string;
   name: string;
