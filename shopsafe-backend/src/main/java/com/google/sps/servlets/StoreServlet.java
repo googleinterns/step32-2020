@@ -75,7 +75,7 @@ public class StoreServlet extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Could not get api key.");
+            response.getWriter().println("Failed to get api key.");
             return;
         }
 
@@ -86,7 +86,7 @@ public class StoreServlet extends HttpServlet {
         if (id == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/html;");
-            response.getWriter().println("Failed to get the location parameter from the request.");
+            response.getWriter().println("Failed to get the id parameter from the request.");
             return;
         }
 
