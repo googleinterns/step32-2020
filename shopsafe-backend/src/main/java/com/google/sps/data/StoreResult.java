@@ -29,10 +29,10 @@ public final class StoreResult {
     private final ArrayList<DataPoint> busyData;
     private final ArrayList<DataPoint> lineData;
     private final ArrayList<DataPoint> hygieneData;
-    private final ArrayList<DataPoint> casesData;
+
 
     public StoreResult(StoreStats store, CountyStats countyStats, 
-        HashMap<String, ArrayList<DataPoint>> compiledRatings, ArrayList<DataPoint> covidData) {
+        HashMap<String, ArrayList<DataPoint>> compiledRatings) {
         this.store = store;
         this.countyStats = countyStats;
         
@@ -41,7 +41,5 @@ public final class StoreResult {
         this.busyData = compiledRatings.get("busy");
         this.lineData = compiledRatings.get("line");
         this.hygieneData = compiledRatings.get("hygiene");
-
-        this.casesData = covidData;
     }
 }
