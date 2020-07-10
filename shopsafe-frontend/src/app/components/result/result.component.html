@@ -7,23 +7,6 @@
         <div class="chart">
             <!-- TODO: integrate charts api -->
         </div>
-        <div class="stat-bar-wrapper">
-            <h2>Statistics for {{ result.countyStats[0].countyName }} County</h2>
-            <div class="stat-bar">
-                <div class="stat-elem">
-                    <a class="stat-obj">TOTAL CASES</a>
-                    <p>{{ result.countyStats[0].cases }}</p>
-                </div>
-                <div class="stat-elem" style="text-align: center;">
-                    <a class="stat-obj">TOTAL DEATHS</a>
-                    <p>{{ result.countyStats[0].deaths }}</p>
-                </div>
-                <div class="stat-elem" style="text-align: right; margin-top: -5px">
-                    <a class="stat-obj">PERCENT AFFECTED</a>
-                    <p class="shopsafe-score">{{ proportion | round }}%</p>
-                </div>
-            </div>
-        </div>
         <div class="stores-list-heading">
             <h2 class="left-text">Local Grocery Stores</h2>
             <p class="right-text subtext">Click on a store to view store statistics</p>

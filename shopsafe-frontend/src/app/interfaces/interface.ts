@@ -9,6 +9,18 @@ export interface ResultInterface {
 export interface StoreResultInterface {
   store: Store[];
   countyStats: CountyStats[];
+  ratingData: RatingDataInterface;
+  covidData: DataPointInterface[];
+}
+
+export interface DataPointInterface {
+  value: number;
+  Date: string; // update based on what is returned
+}
+
+export interface RatingDataInterface {
+  category: string;
+  data: DataPointInterface[]; // FIXME: change to datapoint class
 }
 
 export interface StoreInterface {
