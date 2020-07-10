@@ -5,6 +5,7 @@ export class CountyStats implements CountyStatsInterface {
   stateName: string = '';
   cases: number;
   deaths: number;
+  activeCases: number;
   population: number;
 
   // constructor(countyStats: any) {

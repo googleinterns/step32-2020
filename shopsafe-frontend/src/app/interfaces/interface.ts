@@ -31,5 +31,6 @@ export interface CountyStatsInterface {
   stateName: string;
   cases: number;
   deaths: number;
+  activeCases: number;
   population: number;
 }
