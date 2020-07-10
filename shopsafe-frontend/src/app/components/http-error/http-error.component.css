@@ -2,3 +2,8 @@
     font-size: 18px;
     line-height: 36px;
 }
+
+#http-error .error-wrapper {
+  padding: 15px 30px 15px;
+  background: rgba(0, 0, 0, 0.03);
+}

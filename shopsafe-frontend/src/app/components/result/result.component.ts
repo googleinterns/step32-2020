@@ -15,6 +15,7 @@ export class ResultComponent implements OnInit {
   proportion: number;
   isLoaded: boolean;
   httpError: boolean;
+  httpErrorMessage: string;
 
   constructor(
     private apiService: ApiService,
@@ -44,7 +45,8 @@ export class ResultComponent implements OnInit {
         },
         err => {
           console.log(err),
-          this.httpError = true
+          this.httpError = true,
+          this.httpErrorMessage = err
         },
         // To run getProportion function after API call
         () => {

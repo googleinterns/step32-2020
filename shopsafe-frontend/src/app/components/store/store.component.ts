@@ -16,6 +16,7 @@ export class StoreComponent implements OnInit {
   isLoaded: boolean;
   storeId: string;
   httpError: boolean;
+  httpErrorMessage: string;
 
   constructor(
     public matDialog: MatDialog,
@@ -49,12 +50,24 @@ export class StoreComponent implements OnInit {
         },
         err => {
           console.log(err),
-          this.httpError = true
+          this.httpError = true,
+          this.httpErrorMessage = err
         },
         () => {
           this.initTemplate();
         }
       );
+  }
+
+  handleError(err): void {
+    switch (err) {
+      case 400:
+        this.httpErrorMessage = 'Could not find results for your location.';
+      case 404:
+        this.httpErrorMessage = 'Page not found.';
+      case 500:
+        this.httpErrorMessage = 'Internal server error.';
+    }
   }
 
   /**

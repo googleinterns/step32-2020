@@ -38,4 +38,4 @@
   <p>Loading Store...</p>
 </div>
 
-<app-http-error *ngIf="httpError"></app-http-error>
+<app-http-error *ngIf="httpError" [httpErrorMessage]='httpErrorMessage'></app-http-error>
