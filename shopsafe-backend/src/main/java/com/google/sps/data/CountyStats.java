@@ -15,6 +15,7 @@
 package com.google.sps.data;
 
 import com.google.sps.QueryCovidStats;
+import com.google.sps.data.DataPoint;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +39,7 @@ public final class CountyStats {
     private final long deaths;
     private final long activeCases;
     private final long population;
+    private final ArrayList<DataPoint> covidData;
 
     public CountyStats(County county) {
         this.countyName = county.getCountyName();
@@ -46,6 +50,8 @@ public final class CountyStats {
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
         this.activeCases = queryResults.getActiveCases();
+
+        this.covidData = queryResults.getCovidData();
 
         // Find the population of county using Census API
         this.population = getPopulation(county);
@@ -73,6 +79,10 @@ public final class CountyStats {
     
     public long getPopulation() {
         return population;
+    }
+
+    public ArrayList<DataPoint> getCovidData() {
+        return covidData;
     }
 
     public double getCountyScore() {

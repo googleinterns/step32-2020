@@ -14,6 +14,8 @@
 
 package com.google.sps;
 
+import com.google.sps.data.DataPoint;
+
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
 import com.google.cloud.bigquery.FieldValueList;
@@ -22,8 +24,13 @@ import com.google.cloud.bigquery.JobId;
 import com.google.cloud.bigquery.JobInfo;
 import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.TableResult;
+
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.UUID;
 import java.lang.Long;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 /*
@@ -35,12 +42,15 @@ public class QueryCovidStats {
     private long deaths;
     private long activeCases;
     private boolean failedQuery;
+    private ArrayList<DataPoint> covidData; 
 
-    private QueryCovidStats(long cases, long deaths, long activeCases, boolean failedQuery) {
+    private QueryCovidStats(long cases, long deaths, long activeCases,
+        boolean failedQuery, ArrayList<DataPoint> covidData) {
         this.cases = cases;
         this.deaths = deaths;
         this.activeCases = activeCases;
         this.failedQuery = failedQuery;
+        this.covidData = covidData;
     }
 
     public long getCases() {
@@ -57,6 +67,10 @@ public class QueryCovidStats {
 
     public boolean failedQuery() {
         return failedQuery;
+    }
+
+    public ArrayList<DataPoint> getCovidData () {
+        return covidData; 
     }
 
     @Override
@@ -95,7 +109,7 @@ public class QueryCovidStats {
         QueryJobConfiguration queryConfigNYT = QueryJobConfiguration.newBuilder(
             "SELECT confirmed_cases, deaths, date FROM `bigquery-public-data.covid19_nyt.us_counties` WHERE county_fips_code = '" +
             fips +
-            "' ORDER BY date DESC LIMIT 1"
+            "' ORDER BY date DESC LIMIT 7"
             ).setUseLegacySql(false).build();
 
         // Create unique job id and job for call to NYT.
@@ -107,6 +121,7 @@ public class QueryCovidStats {
         long deaths = -1;
         long recovered = -1;
         String date = "";
+        ArrayList<DataPoint> covidData = new ArrayList(); 
 
         try {
 
@@ -122,22 +137,36 @@ public class QueryCovidStats {
 
             // Get most recent case and death values, there should only be one result.
             for (FieldValueList row : queryJobNYT.getQueryResults().iterateAll()) {
-                cases = row.get("confirmed_cases").getLongValue();
-                deaths = row.get("deaths").getLongValue();
-                date = row.get("date").getStringValue();
+                
+                //assign most recent case but insert previous data
+                if (cases == -1) {
+                    cases = row.get("confirmed_cases").getLongValue();
+                    deaths = row.get("deaths").getLongValue();
+                    date = row.get("date").getStringValue();
+                }
+                double casesNum = row.get("confirmed_cases").getDoubleValue();
+                String dateString = row.get("date").getStringValue();
+                Date dateObj = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                //Insert at beginning so order increases by date
+                DataPoint data = new DataPoint(casesNum, dateObj);
+                covidData.add(0, data);
             }
         } 
         
         // Set failedQuery to true and log error if query fails.
         catch (InterruptedException exception) {
             System.out.println("Error: Big Query Failure!");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryCovidStats(0, 0, 0, true, covidData);
+        }
+        catch (ParseException e) {
+            System.out.println("Unable to parse date");
+            return new QueryCovidStats(0, 0, 0, true, covidData);
         }
 
         // If there are null values, set failedQuery to true and log error.
         if (cases == -1 || deaths == -1 || date == "") {
             System.out.println("Error: Failed to obtain values");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryCovidStats(0, 0, 0, true, covidData);
         }
 
         // Prepare SQL query for getting projected recovered cases Forecasts.
@@ -173,16 +202,16 @@ public class QueryCovidStats {
         // Set failedQuery to true and log error if query fails.
         catch (InterruptedException exception) {
             System.out.println("Error: Big Query Failure!");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryCovidStats(0, 0, 0, true, covidData);
         }
 
         // If recovered is -1, set failedQuery to true and log error.
         if (recovered == -1) {
             System.out.println("Error: Failed to obtain values");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryCovidStats(0, 0, 0, true, covidData);
         }
 
         // Return Query Covid-19 stats for a county.
-        return new QueryCovidStats(cases, deaths, cases - (deaths + recovered), false);
+        return new QueryCovidStats(cases, deaths, cases - (deaths + recovered), false, covidData);
     }
 }

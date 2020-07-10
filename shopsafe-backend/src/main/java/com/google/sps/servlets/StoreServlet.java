@@ -161,6 +161,6 @@ public class StoreServlet extends HttpServlet {
         // Return store with stats and the county information.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new StoreResult(storeStats, countyStats)));
+        response.getWriter().println(gson.toJson(new StoreResult(storeStats, countyStats, checkInStats.compileRatingDays(), countyStats.getCovidData())));
     }
 }

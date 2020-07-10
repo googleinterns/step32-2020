@@ -191,10 +191,10 @@ public final class DatastoreTest {
         Assert.assertEquals(compiledRatings.get("busy").size(), 1);
 
         //compiled rating should be average of two reviews
-        Assert.assertEquals((int) compiledRatings.get("mask").get(0).getRating(), 4);
-        Assert.assertEquals((int) compiledRatings.get("hygiene").get(0).getRating(), 8);
-        Assert.assertEquals((int) compiledRatings.get("line").get(0).getRating(), 7);
-        Assert.assertEquals((int) compiledRatings.get("busy").get(0).getRating(), 7);
+        Assert.assertEquals((int) compiledRatings.get("mask").get(0).getValue(), 4);
+        Assert.assertEquals((int) compiledRatings.get("hygiene").get(0).getValue(), 8);
+        Assert.assertEquals((int) compiledRatings.get("line").get(0).getValue(), 7);
+        Assert.assertEquals((int) compiledRatings.get("busy").get(0).getValue(), 7);
     }
 
 }

@@ -20,20 +20,19 @@ import java.util.Date;
 import com.google.sps.data.StoreDatastoreHandler;
 import com.google.appengine.api.datastore.Entity;
 
-/** Class wrapper for holding Rating*/
+/* For Data*/
 public final class DataPoint {
 
-    // Check in stat properties.
-    private double rating = 0.0;
+    private double value = 0.0;
     private Date date;
 
-    public DataPoint(double rating, Date date) {
-        this.rating = rating;
+    public DataPoint(double value, Date date) {
+        this.value = value;
         this.date = date;
     }
 
-    public double getRating() {
-        return rating;
+    public double getValue() {
+        return value;
     }
 
     public Date getDate() {
