@@ -15,16 +15,31 @@
 package com.google.sps.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import com.google.sps.data.DataPoint;
 
 /** Class containing the stats for a store and its county statistics. */
 public final class StoreResult {
 
     private final StoreStats store;
     private final CountyStats countyStats;
+    private final ArrayList<DataPoint> maskData;
+    private final ArrayList<DataPoint> busyData;
+    private final ArrayList<DataPoint> lineData;
+    private final ArrayList<DataPoint> hygieneData;
 
-    public StoreResult(StoreStats store, CountyStats countyStats) {
+
+    public StoreResult(StoreStats store, CountyStats countyStats, 
+        HashMap<String, ArrayList<DataPoint>> compiledRatings) {
         this.store = store;
         this.countyStats = countyStats;
+        
+        //Populate variables from compiled data
+        this.maskData = compiledRatings.get("mask");
+        this.busyData = compiledRatings.get("busy");
+        this.lineData = compiledRatings.get("line");
+        this.hygieneData = compiledRatings.get("hygiene");
     }
 }

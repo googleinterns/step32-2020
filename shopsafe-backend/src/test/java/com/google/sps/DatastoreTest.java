@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.gson.Gson;
+
+
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,7 +35,10 @@ import org.junit.Test;
 
 
 import com.google.sps.data.StoreDatastoreHandler;
+import com.google.sps.data.CheckInStats;
+import com.google.sps.data.DataPoint;
 import com.google.appengine.api.datastore.Entity;
+
 
 @RunWith(JUnit4.class)
 public final class DatastoreTest {
@@ -145,6 +151,50 @@ public final class DatastoreTest {
         storeSometimeLater.deleteStoreAndRatings();
 
         Assert.assertEquals(new ArrayList(), store.getRatings());
+    }
+
+    /*
+     * Simple test for compiling ratings overtime
+     */
+    @Test
+    public void compileRatingsForDataVisualization() {
+        String sampleplacesID = "sample1";
+        HashMap<String, String[]> sampleHttpRequestParam = new HashMap();
+        sampleHttpRequestParam.put("busy", new String[] {"9.0"});
+        sampleHttpRequestParam.put("line", new String[] {"6.0"});
+        sampleHttpRequestParam.put("hygiene", new String[] {"6.0"});
+        sampleHttpRequestParam.put("mask", new String[] {"7.0"});
+
+        //Insert store and Rating into DataStore
+        StoreDatastoreHandler store = new StoreDatastoreHandler(sampleplacesID);
+        store.placeStore(sampleHttpRequestParam);
+
+        //Place another rating in store following flow of servlet
+        StoreDatastoreHandler storeSometimeLater = new StoreDatastoreHandler(sampleplacesID);
+        HashMap<String, String[]> sampleHttpRequestParam2 = new HashMap();
+        sampleHttpRequestParam2.put("busy", new String[] {"5.0"});
+        sampleHttpRequestParam2.put("line", new String[] {"8.0"});
+        sampleHttpRequestParam2.put("hygiene", new String[] {"10.0"});
+        sampleHttpRequestParam2.put("mask", new String[] {"1.0"});
+
+        storeSometimeLater.placeStore(sampleHttpRequestParam2);
+
+        //Populate CheckinStats Class
+        CheckInStats storeStats = new CheckInStats(sampleplacesID);
+
+        HashMap<String, ArrayList<DataPoint>> compiledRatings = storeStats.compileRatingDays();
+
+        //Both reviews are on the same day so there should only be one rating
+        Assert.assertEquals(compiledRatings.get("mask").size(), 1);
+        Assert.assertEquals(compiledRatings.get("hygiene").size(), 1);
+        Assert.assertEquals(compiledRatings.get("line").size(), 1);
+        Assert.assertEquals(compiledRatings.get("busy").size(), 1);
+
+        //compiled rating should be average of two reviews
+        Assert.assertEquals((int) compiledRatings.get("mask").get(0).getValue(), 4);
+        Assert.assertEquals((int) compiledRatings.get("hygiene").get(0).getValue(), 8);
+        Assert.assertEquals((int) compiledRatings.get("line").get(0).getValue(), 7);
+        Assert.assertEquals((int) compiledRatings.get("busy").get(0).getValue(), 7);
     }
 
 }
