@@ -66,7 +66,7 @@ export class ResultComponent implements OnInit {
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
     // Round proportion to 2 decimal places
-    this.proportion = this.result.countyStats[0].cases / this.result.countyStats[0].population;
+    this.proportion = this.result.countyStats[0].cases / this.result.countyStats[0].population * 100;
     console.log("CLIENT: calculated proportion as " + this.proportion);
   }
 }
