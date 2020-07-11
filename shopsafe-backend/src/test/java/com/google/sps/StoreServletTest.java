@@ -63,28 +63,26 @@ public class StoreServletTest {
     helper.tearDown();
     }
 
-
     /*
      * Check if correct error message is sent for null case.
      */
     @Test
     public void checkNullId() throws IOException, ServletException {
 
-        //Initialize variables
+        //Initialize request, response, and servlet.
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class); 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    
         StoreServlet storeServlet = new StoreServlet();
         storeServlet.init();
 
+        // Mock call for id.
         when(request.getParameter("id")).thenReturn(null);
         
+        // Read response and save to result.
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         when(response.getWriter()).thenReturn(printWriter);
-
         storeServlet.doGet(request, response);
-
         String result = stringWriter.getBuffer().toString().trim();
         printWriter.flush();
 
@@ -97,21 +95,20 @@ public class StoreServletTest {
     @Test
     public void checkEmptyId() throws IOException, ServletException {
 
-        //Initialize variables
+        //Initialize request, response, and servlet.
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class); 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    
         StoreServlet storeServlet = new StoreServlet();
         storeServlet.init();
 
+        // Mock call for id.
         when(request.getParameter("id")).thenReturn("");
         
+        // Read response and save to result.
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         when(response.getWriter()).thenReturn(printWriter);
-
         storeServlet.doGet(request, response);
-
         String result = stringWriter.getBuffer().toString().trim();
         printWriter.flush();
 
@@ -124,21 +121,20 @@ public class StoreServletTest {
     @Test
     public void checkInvalidId() throws IOException, ServletException {
 
-        //Initialize variables
+        //Initialize request, response, and servlet.
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class); 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    
         StoreServlet storeServlet = new StoreServlet();
         storeServlet.init();
 
+        // Mock call for id.
         when(request.getParameter("id")).thenReturn("12");
         
+        // Read response and save to result.
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         when(response.getWriter()).thenReturn(printWriter);
-
         storeServlet.doGet(request, response);
-
         String result = stringWriter.getBuffer().toString().trim();
         printWriter.flush();
 
@@ -151,22 +147,20 @@ public class StoreServletTest {
     @Test
     public void checkValidId() throws IOException, ServletException {
 
-        //Initialize variables
+        //Initialize request, response, and servlet.
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class); 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    
         StoreServlet storeServlet = new StoreServlet();
         storeServlet.init();
 
-        String id = "ChIJbb7uBJ0ixokRyAM8CKkgxfs";
-        when(request.getParameter("id")).thenReturn(id);
+        // Mock call for id.
+        when(request.getParameter("id")).thenReturn("ChIJbb7uBJ0ixokRyAM8CKkgxfs");
         
+        // Read response and save to result.
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         when(response.getWriter()).thenReturn(printWriter);
-
         storeServlet.doGet(request, response);
-
         String result = stringWriter.getBuffer().toString().trim();
         printWriter.flush();
 
