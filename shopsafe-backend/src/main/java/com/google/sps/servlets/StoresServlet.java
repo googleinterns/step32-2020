@@ -90,18 +90,18 @@ public class StoresServlet extends HttpServlet {
             response.getWriter().println("Failed to get the location parameter from the request.");
             return;
         }
+ 
+        // If the word count is 0, set status to bad reuqest and send error response. 
+        if (address.trim().isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get location, an address must be submitted.");
+            return;
+        }
 
         // Get a string array for all the words in the request and get its length.
         String[] addressArray = address.trim().split("\\s+");
         int addressWordCount = addressArray.length;
-        
-        // If the word count is 0, set status to bad reuqest and send error response. 
-        if (addressWordCount == 0) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.setContentType("text/html;");
-            response.getWriter().println("Failed to obtain address from the request.");
-            return;
-        }
 
         // Add all words to the string builder with '+' in between each word.
         StringBuilder addressStringBuilder = new StringBuilder();
