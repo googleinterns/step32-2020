@@ -144,4 +144,53 @@ public class StoreServletTest {
 
         Assert.assertEquals(result, "Failed to get store information for the id: 12");
     }
+
+    /*
+     * Check the formatting for a correct id.
+     */
+    @Test
+    public void checkValidId() throws IOException, ServletException {
+
+        //Initialize variables
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class); 
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+    
+        StoreServlet storeServlet = new StoreServlet();
+        storeServlet.init();
+
+        String id = "ChIJbb7uBJ0ixokRyAM8CKkgxfs";
+        when(request.getParameter("id")).thenReturn(id);
+        
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        when(response.getWriter()).thenReturn(printWriter);
+
+        storeServlet.doGet(request, response);
+
+        String result = stringWriter.getBuffer().toString().trim();
+        printWriter.flush();
+
+        // Test json result to see if certain properties exist.
+        try {
+            JSONObject resultJson = new JSONObject(result);
+            
+            JSONObject store = resultJson.getJSONObject("store");
+            String storeId = store.getString("id");
+            
+            JSONObject countyStats = resultJson.getJSONObject("countyStats");
+            JSONArray countyData = countyStats.getJSONArray("covidData");
+
+            JSONArray maskData = resultJson.getJSONArray("maskData");
+        }
+
+        // If error, print error, assert False, and return.
+        catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertTrue(false);
+            return;
+        }
+
+        // If all the fields exist, return true.
+        Assert.assertTrue(true);
+    }
 }
