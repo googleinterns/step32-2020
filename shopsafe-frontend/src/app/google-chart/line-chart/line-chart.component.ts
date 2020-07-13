@@ -1,5 +1,6 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { GoogleChartService } from  '../service/google-chart.service';
+import { DataPoint } from '../../classes/data-point/data-point';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class LineChartComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private drawChart() {
+  private drawChart(dataPoints: DataPoint[]) {
     // let data = this.gLib.visualization.arrayToDataTable([
     //   ['Year', 'Sales', 'Expenses'],
     //   ['2004',  1000,      400],
@@ -30,6 +31,9 @@ export class LineChartComponent implements OnInit {
     //   ['2006',  660,       1120],
     //   ['2007',  1030,      540]
     // ]);
+
+    // New data should be 'date' 'busy' 'line' 'hygiene' 'mask'
+    // TODO: custom colorization
 
     let data = new this.gLib.visualization.DataTable();
 

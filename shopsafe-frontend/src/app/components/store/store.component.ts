@@ -60,7 +60,7 @@ export class StoreComponent implements OnInit {
           this.covidData = res.covidData,
           this.maskData = res.maskData,
           this.lineData = res.lineData,
-          this.hygieneData = res.hygieneData,
+          this.hygieneData = res.hygieneData
         },
         err => {
           console.log(err),

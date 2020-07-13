@@ -19,7 +19,7 @@ export interface StoreResultInterface {
 
 export interface DataPointInterface {
   value: number;
-  Date: string; // update based on what is returned
+  date: string; // update based on what is returned
 }
 
 export interface StoreInterface {
