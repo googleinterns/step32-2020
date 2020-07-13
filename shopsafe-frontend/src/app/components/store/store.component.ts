@@ -1,16 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from 'src/app/classes/store/store';
 import { CountyStats } from 'src/app/classes/county-stats/county-stats';
+import { DataPoint } from '../../classes/data-point/data-point';
 
 @Component({
   selector: 'app-store', 
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.css']
 })
+
+@Injectable({
+  providedIn: 'root',
+})
+
 export class StoreComponent implements OnInit {
   store: Store;
   countyStats: CountyStats;
@@ -19,12 +25,17 @@ export class StoreComponent implements OnInit {
   storeId: string;
   httpError: boolean;
   httpErrorMessage: string;
+  proportion: number;
+  covidData: DataPoint[];
+  maskData: DataPoint[];
+  busyData: DataPoint[];
+  lineData: DataPoint[];
+  hygieneData: DataPoint[];
 
   constructor(
     public matDialog: MatDialog,
     private apiService: ApiService,
-    private route: ActivatedRoute,
-    // private checkInModalComponent: CheckInModalComponent,
+    private route: ActivatedRoute
     ) { }
 
   /**
@@ -48,8 +59,12 @@ export class StoreComponent implements OnInit {
     this.apiService.getStoreById(id)
       .subscribe(
         (res: any) => {
-          this.store = res.store
-          this.countyStats = res.countyStats
+          this.store = res.store,
+          this.countyStats = res.countyStats,
+          this.covidData = res.covidData,
+          this.maskData = res.maskData,
+          this.lineData = res.lineData,
+          this.hygieneData = res.hygieneData
         },
         err => {
           console.log(err),
@@ -71,6 +86,10 @@ export class StoreComponent implements OnInit {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
+
+    // Round proportion to 2 decimal places
+    this.proportion = this.countyStats.cases / this.countyStats.population * 100;
+    console.log("CLIENT: calculated percentage as " + this.proportion);
   }
   
   /**

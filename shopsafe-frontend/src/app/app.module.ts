@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule }   from '@angular/forms';
-
+import { GoogleChartModule } from './google-chart/google-chart.module';
 import { AppComponent } from './components/app.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { ResultComponent } from './components/result/result.component';
@@ -53,7 +53,8 @@ import { HttpErrorComponent } from './components/http-error/http-error.component
     MatTooltipModule,
     HttpClientModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    GoogleChartModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
