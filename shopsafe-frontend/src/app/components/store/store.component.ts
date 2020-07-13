@@ -5,6 +5,7 @@ import { ApiService } from '../../api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from 'src/app/classes/store/store';
 import { CountyStats } from 'src/app/classes/county-stats/county-stats';
+import { DataPoint } from '../../classes/data-point/data-point';
 
 @Component({
   selector: 'app-store', 
@@ -20,6 +21,11 @@ export class StoreComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
   proportion: number;
+  covidData: DataPoint[];
+  maskData: DataPoint[];
+  busyData: DataPoint[];
+  lineData: DataPoint[];
+  hygieneData: DataPoint[];
 
   constructor(
     public matDialog: MatDialog,
@@ -49,8 +55,12 @@ export class StoreComponent implements OnInit {
     this.apiService.getStoreById(id)
       .subscribe(
         (res: any) => {
-          this.store = res.store
-          this.countyStats = res.countyStats
+          this.store = res.store,
+          this.countyStats = res.countyStats,
+          this.covidData = res.covidData,
+          this.maskData = res.maskData,
+          this.lineData = res.lineData,
+          this.hygieneData = res.hygieneData,
         },
         err => {
           console.log(err),

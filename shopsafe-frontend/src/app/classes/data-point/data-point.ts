@@ -1,6 +1,6 @@
 import { DataPointInterface } from '../../interfaces/interface';
 
-export class DataPoint {
+export class DataPoint implements DataPointInterface {
   value: number;
   Date: string;
 
