@@ -25,6 +25,7 @@ export class LineChartComponent implements OnInit {
     this.busy = this.storeComponent.busyData;
     this.line = this.storeComponent.lineData;
     this.hygiene = this.storeComponent.hygieneData;
+    
     this.gLib = this.gChartService.getGoogle();
     this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
@@ -53,7 +54,7 @@ export class LineChartComponent implements OnInit {
     data.addColumn('number', 'Hygiene');
 
     for (let i in this.mask) {
-      data.addRow([this.mask[i].date, this.mask[i], this.busy[i], this.line[i], this.hygiene[i]]);
+      data.addRow([this.mask[i].date, this.mask[i].value, this.busy[i].value, this.line[i].value, this.hygiene[i].value]);
     }
 
     const options = {
