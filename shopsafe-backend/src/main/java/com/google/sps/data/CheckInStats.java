@@ -93,6 +93,10 @@ public final class CheckInStats {
         return checkInCount;
     }
 
+    /*
+     * Using the list of Rating Entities, incrementally average the ratings for each category
+     * over a daily basis.
+     */
     public HashMap<String, ArrayList<DataPoint>> compileRatingDays () {
         double maskSum = 0.0;
         double hygieneSum = 0.0;
@@ -114,7 +118,7 @@ public final class CheckInStats {
             //Current rating entity
             Entity ratingEntity = ratingEntities.get(ratingNum);
 
-            //Add to cumulative sum
+            //Add to cumulative sums
             busySum += (double) ratingEntity.getProperty("busy");
             lineSum += (double) ratingEntity.getProperty("line");
             hygieneSum += (double) ratingEntity.getProperty("hygiene");
@@ -150,7 +154,7 @@ public final class CheckInStats {
 
             Entity ratingEntity = ratingEntities.get(ratingNum);
 
-            //Add to cumulative sum
+            //Add to cumulative sums+
             busySum += (double) ratingEntity.getProperty("busy");
             lineSum += (double) ratingEntity.getProperty("line");
             hygieneSum += (double) ratingEntity.getProperty("hygiene");
