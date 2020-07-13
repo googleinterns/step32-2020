@@ -26,8 +26,8 @@
             </div>
         </div>
         <button id='check-in-button' (click)="openModal()">CHECK IN AT THIS STORE</button>
-        <div class="chart">
-            <!-- TODO: integrate charts api -->
+        <div id="line-chart" class="chart">
+          <app-line-chart></app-line-chart>
         </div>
         <div class="stat-bar-wrapper">
             <h2>Statistics for {{ countyStats.countyName }} County</h2>
