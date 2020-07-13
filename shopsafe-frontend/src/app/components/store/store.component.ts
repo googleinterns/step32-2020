@@ -26,6 +26,7 @@ export class StoreComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
   proportion: number;
+
   covidData: DataPoint[];
   maskData: DataPoint[];
   busyData: DataPoint[];
@@ -61,7 +62,7 @@ export class StoreComponent implements OnInit {
         (res: any) => {
           this.store = res.store,
           this.countyStats = res.countyStats,
-          this.covidData = res.covidData,
+          this.covidData = this.countyStats.covidData,
           this.maskData = res.maskData,
           this.busyData = res.busyData,
           this.lineData = res.lineData,
@@ -91,8 +92,6 @@ export class StoreComponent implements OnInit {
     // Round proportion to 2 decimal places
     this.proportion = this.countyStats.cases / this.countyStats.population * 100;
     console.log("CLIENT: calculated percentage as " + this.proportion);
-
-    console.log(this.maskData);
   }
   
   /**
