@@ -10,7 +10,6 @@ export interface ResultInterface {
 export interface StoreResultInterface {
   store: Store[];
   countyStats: CountyStats[];
-  covidData: DataPoint[];
   maskData: DataPoint[];
   busyData: DataPoint[];
   lineData: DataPoint[];
@@ -44,4 +43,5 @@ export interface CountyStatsInterface {
   deaths: number;
   activeCases: number;
   population: number;
+  covidData: DataPoint[];
 }
