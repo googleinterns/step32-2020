@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
@@ -12,6 +12,11 @@ import { DataPoint } from '../../classes/data-point/data-point';
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.css']
 })
+
+@Injectable({
+  providedIn: 'root',
+})
+
 export class StoreComponent implements OnInit {
   store: Store;
   countyStats: CountyStats;
@@ -30,8 +35,7 @@ export class StoreComponent implements OnInit {
   constructor(
     public matDialog: MatDialog,
     private apiService: ApiService,
-    private route: ActivatedRoute,
-    // private checkInModalComponent: CheckInModalComponent,
+    private route: ActivatedRoute
     ) { }
 
   /**
@@ -82,6 +86,7 @@ export class StoreComponent implements OnInit {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
+
     // Round proportion to 2 decimal places
     this.proportion = this.countyStats.cases / this.countyStats.population * 100;
     console.log("CLIENT: calculated percentage as " + this.proportion);
