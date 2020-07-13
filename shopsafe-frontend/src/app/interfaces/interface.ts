@@ -1,5 +1,6 @@
 import { Store } from '../classes/store/store';
 import { CountyStats } from '../classes/county-stats/county-stats';
+import { DataPoint } from '../classes/data-point/data-point';
 
 export interface ResultInterface {
   stores: Store[];
@@ -9,6 +10,16 @@ export interface ResultInterface {
 export interface StoreResultInterface {
   store: Store[];
   countyStats: CountyStats[];
+  covidData: DataPoint[];
+  maskData: DataPoint[];
+  busyData: DataPoint[];
+  lineData: DataPoint[];
+  hygieneData: DataPoint[];
+}
+
+export interface DataPointInterface {
+  value: number;
+  date: string; // update based on what is returned
 }
 
 export interface StoreInterface {

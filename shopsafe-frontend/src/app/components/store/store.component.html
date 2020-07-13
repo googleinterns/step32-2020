@@ -26,8 +26,25 @@
             </div>
         </div>
         <button id='check-in-button' (click)="openModal()">CHECK IN AT THIS STORE</button>
-        <div class="chart">
-            <!-- TODO: integrate charts api -->
+        <div id="line-chart" class="chart">
+          <app-line-chart></app-line-chart>
+        </div>
+        <div class="stat-bar-wrapper">
+            <h2>Statistics for {{ countyStats.countyName }} County</h2>
+            <div class="stat-bar">
+                <div class="stat-elem">
+                    <a class="stat-obj">TOTAL CASES</a>
+                    <p>{{ countyStats.cases }}</p>
+                </div>
+                <div class="stat-elem" style="text-align: center;">
+                    <a class="stat-obj">TOTAL DEATHS</a>
+                    <p>{{ countyStats.deaths }}</p>
+                </div>
+                <div class="stat-elem" style="text-align: right; margin-top: -5px">
+                    <a class="stat-obj">PERCENT AFFECTED</a>
+                    <p class="shopsafe-score">{{ proportion | round }}%</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

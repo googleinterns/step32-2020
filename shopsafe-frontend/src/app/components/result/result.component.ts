@@ -12,7 +12,6 @@ import { ActivatedRoute } from '@angular/router';
 export class ResultComponent implements OnInit {
   result: Result;
   location: string;
-  proportion: number;
   isLoaded: boolean;
   httpError: boolean;
   httpErrorMessage: string;
@@ -48,7 +47,6 @@ export class ResultComponent implements OnInit {
           this.httpError = true,
           this.httpErrorMessage = err
         },
-        // To run getProportion function after API call
         () => {
           this.initTemplate()
         }
@@ -59,14 +57,10 @@ export class ResultComponent implements OnInit {
    * Initializes component by using data returned from API call.
    * Sets isLoaded boolean to true, as the function can only be called when there
    * is a successful response.
-   * Calculates the proportion of cases for the given population.
    */
   initTemplate(): void {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
-    // Round proportion to 2 decimal places
-    this.proportion = this.result.countyStats[0].cases / this.result.countyStats[0].population * 100;
-    console.log("CLIENT: calculated proportion as " + this.proportion);
   }
 }

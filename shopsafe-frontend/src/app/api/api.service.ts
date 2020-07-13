@@ -70,7 +70,7 @@ export class ApiService {
    * @param id ID of the store to fetch store from
    * @returns store of given ID as observable
    */
-  public getStoreById(id: string) : Observable<StoreInterface> {
+  public getStoreById(id: string) : Observable<StoreResultInterface> {
     const url = API_URL + '/store?id=' + id;
     // const url = API_URL + '/store';
     return this.http
