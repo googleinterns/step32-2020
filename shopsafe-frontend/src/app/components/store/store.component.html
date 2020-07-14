@@ -26,7 +26,7 @@
             </div>
         </div>
         <button id='check-in-button' (click)="openModal()">CHECK IN AT THIS STORE</button>
-        <br/>
+        <br/><br/>
         <div class="stat-bar-wrapper">
           <h2>Check-In Statistics for {{ store.name }}</h2>
           <p>
@@ -34,40 +34,40 @@
             hover over each of the most current values of the statistics below.
           </p>
           <div class="stat-bar-secondary">
-            <div class="stat-elem-quarter">
+            <div class="stat-elem-quarter" style="text-align: left">
                 <a class="stat-obj"
                 matTooltip="How strict is the store with masks? Are the customers and workers 
                             wearing masks properly? 1 indicates no to little mask policy 
                             and presence (bad), and 10 indicates excellent mask usage (good)">
                   MASK
                 </a>
-                <p>{{ store.masks }}/10</p>
+                <p><b>{{ store.masks }}</b>/10</p>
             </div>
-            <div class="stat-elem-quarter">
+            <div class="stat-elem-quarter" style="text-align: center;">
                 <a class="stat-obj"
                 matTooltip="How crowded is it inside the store? Essentially, is there 
                             enough space to social distance, maintain 6 feet? 1 indicates 
                               ery busy (bad), and 10 indicates not busy at all (good)">
                   BUSY
                 </a>
-                <p>{{ store.busy }}/10</p>
+                <p><b>{{ store.busy }}</b>/10</p>
             </div>
-            <div class="stat-elem-quarter" style="text-align: right">
+            <div class="stat-elem-quarter" style="text-align: center;">
                 <a class="stat-obj"
                 matTooltip="How long is the line to get into the store from the outside?
                             1 indicates very long (bad), and 10 indicates not long at all (good)">
                   LINE
                 </a>
-                <p>{{ store.line }}/10</p>
+                <p><b>{{ store.line }}</b>/10</p>
             </div>
-            <div class="stat-elem-quarter" style="text-align: right">
+            <div class="stat-elem-quarter" style="text-align: right;">
                 <a class="stat-obj"
                 matTooltip="How clean is the store overall? Are the shared carts, 
                             baskets, and surfaces sanitized? 1 indicates poor hygiene 
                             (bad), and 10 indicates good hygiene (good)">
                   HYGIENE
                 </a>
-                <p>{{ store.hygiene }}/10</p>
+                <p><b>{{ store.hygiene }}</b>/10</p>
             </div>
           </div>
         </div>
