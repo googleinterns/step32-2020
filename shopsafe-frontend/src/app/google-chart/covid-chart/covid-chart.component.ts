@@ -27,7 +27,6 @@ export class CovidChartComponent implements OnInit {
   }
 
   // TODO: custom colorization with options
-  // FIXME: hide timestamp
   private drawChart() {
 
     let data = new this.gLib.visualization.DataTable();
