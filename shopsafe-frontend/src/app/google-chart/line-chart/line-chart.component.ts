@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { GoogleChartService } from  '../service/google-chart.service';
 import { DataPoint } from '../../classes/data-point/data-point';
-import { StoreComponent } from '../../components/store/store.component';
 
 @Component({
   selector: 'app-line-chart',
@@ -18,14 +17,8 @@ export class LineChartComponent implements OnInit {
 
   constructor(
     private gChartService: GoogleChartService,
-    private storeComponent: StoreComponent
     )
   {
-    // this.mask = this.storeComponent.maskData;
-    // this.busy = this.storeComponent.busyData;
-    // this.line = this.storeComponent.lineData;
-    // this.hygiene = this.storeComponent.hygieneData;
-    
     this.gLib = this.gChartService.getGoogle();
     this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
