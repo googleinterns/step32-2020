@@ -26,6 +26,7 @@ export class StoreComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
   proportion: number;
+
   covidData: DataPoint[];
   maskData: DataPoint[];
   busyData: DataPoint[];
@@ -61,8 +62,9 @@ export class StoreComponent implements OnInit {
         (res: any) => {
           this.store = res.store,
           this.countyStats = res.countyStats,
-          this.covidData = res.covidData,
+          this.covidData = this.countyStats.covidData,
           this.maskData = res.maskData,
+          this.busyData = res.busyData,
           this.lineData = res.lineData,
           this.hygieneData = res.hygieneData
         },

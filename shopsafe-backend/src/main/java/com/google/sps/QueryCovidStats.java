@@ -80,13 +80,13 @@ public class QueryCovidStats {
             return true; 
         } 
   
-        /* Check if o is an instance of QueryNYT or not 
+        /* Check if o is an instance of QueryUSA or not 
           "null instanceof [type]" also returns false */
         if (!(o instanceof QueryCovidStats)) { 
             return false; 
         } 
           
-        // typecast o to QueryNYT so that we can compare data members  
+        // Typecast o to QueryUSA so that we can compare data members  
         QueryCovidStats other = (QueryCovidStats) o; 
 
         return (this.cases == other.cases &&
@@ -105,16 +105,16 @@ public class QueryCovidStats {
         BigQuery bigquery = BigQueryOptions
             .newBuilder().setProjectId("shopsafe-step-2020").build().getService();
 
-        // Prepare SQL query for getting cases and deaths from NYT.
-        QueryJobConfiguration queryConfigNYT = QueryJobConfiguration.newBuilder(
-            "SELECT confirmed_cases, deaths, date FROM `bigquery-public-data.covid19_nyt.us_counties` WHERE county_fips_code = '" +
+        // Prepare SQL query for getting cases and deaths from C.
+        QueryJobConfiguration queryConfigUSA = QueryJobConfiguration.newBuilder(
+            "SELECT confirmed_cases, deaths, date FROM `bigquery-public-data.covid19_usafacts.summary` WHERE county_fips_code = '" +
             fips +
             "' ORDER BY date DESC LIMIT 7"
             ).setUseLegacySql(false).build();
 
-        // Create unique job id and job for call to NYT.
-        JobId jobIdNYT = JobId.of(UUID.randomUUID().toString());
-        Job queryJobNYT = bigquery.create(JobInfo.newBuilder(queryConfigNYT).setJobId(jobIdNYT).build());
+        // Create unique job id and job for call to USA.
+        JobId jobIdUSA = JobId.of(UUID.randomUUID().toString());
+        Job queryJobUSA = bigquery.create(JobInfo.newBuilder(queryConfigUSA).setJobId(jobIdUSA).build());
         
         // Store the stats
         long cases = -1;
@@ -125,18 +125,18 @@ public class QueryCovidStats {
 
         try {
 
-            // Query NYT.
-            queryJobNYT = queryJobNYT.waitFor();
+            // Query USA.
+            queryJobUSA = queryJobUSA.waitFor();
 
             // Check for and throw errors.
-            if (queryJobNYT == null) {
+            if (queryJobUSA == null) {
                 throw new RuntimeException("Job no longer exists.");
-            } else if (queryJobNYT.getStatus().getError() != null) {
-                throw new RuntimeException(queryJobNYT.getStatus().getError().toString());
+            } else if (queryJobUSA.getStatus().getError() != null) {
+                throw new RuntimeException(queryJobUSA.getStatus().getError().toString());
             }
 
             // Get most recent case and death values, there should only be one result.
-            for (FieldValueList row : queryJobNYT.getQueryResults().iterateAll()) {
+            for (FieldValueList row : queryJobUSA.getQueryResults().iterateAll()) {
                 
                 //assign most recent case but insert previous data
                 if (cases == -1) {
