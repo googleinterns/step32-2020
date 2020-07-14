@@ -41,7 +41,7 @@
                             and presence (bad), and 10 indicates excellent mask usage (good)">
                   MASK
                 </a>
-                <p><b>{{ store.masks }}</b>/10</p>
+                <p><b>{{ store.masks | round }}</b>/10</p>
             </div>
             <div class="stat-elem-quarter" style="text-align: center;">
                 <a class="stat-obj"
@@ -50,7 +50,7 @@
                               ery busy (bad), and 10 indicates not busy at all (good)">
                   BUSY
                 </a>
-                <p><b>{{ store.busy }}</b>/10</p>
+                <p><b>{{ store.busy | round }}</b>/10</p>
             </div>
             <div class="stat-elem-quarter" style="text-align: center;">
                 <a class="stat-obj"
@@ -58,7 +58,7 @@
                             1 indicates very long (bad), and 10 indicates not long at all (good)">
                   LINE
                 </a>
-                <p><b>{{ store.line }}</b>/10</p>
+                <p><b>{{ store.line | round }}</b>/10</p>
             </div>
             <div class="stat-elem-quarter" style="text-align: right;">
                 <a class="stat-obj"
@@ -67,7 +67,7 @@
                             (bad), and 10 indicates good hygiene (good)">
                   HYGIENE
                 </a>
-                <p><b>{{ store.hygiene }}</b>/10</p>
+                <p><b>{{ store.hygiene | round }}</b>/10</p>
             </div>
           </div>
         </div>
