@@ -26,8 +26,12 @@
             </div>
         </div>
         <button id='check-in-button' (click)="openModal()">CHECK IN AT THIS STORE</button>
+        <div class="stat-bar-wrapper">
+          <h2>Check-In Statistics for {{ store.name }}</h2>
+          <p>Chart statistics represent check-in entries averaged per day. To view more about the statistics, try clicking the check-in button!</p>
+        </div>
         <div id="line-chart" class="chart">
-          <app-line-chart></app-line-chart>
+          <app-line-chart [mask]='maskData' [busy]='busyData' [line]='lineData' [hygiene]='hygieneData'></app-line-chart>
         </div>
         <div class="stat-bar-wrapper">
             <h2>Statistics for {{ countyStats.countyName }} County</h2>
