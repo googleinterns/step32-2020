@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,10 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-result',
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css']
+})
+
+@Injectable({
+  providedIn: 'root',
 })
 
 export class ResultComponent implements OnInit {

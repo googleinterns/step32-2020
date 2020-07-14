@@ -35,7 +35,6 @@ export class LineChartComponent implements OnInit {
 
   // Assumes that all input arrays are the same length
   // TODO: custom colorization with options
-  // FIXME: hide timestamp
   private drawChart() {
 
     let data = new this.gLib.visualization.DataTable();
