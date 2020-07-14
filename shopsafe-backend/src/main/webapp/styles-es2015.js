@@ -491,8 +491,8 @@ module.exports = exported;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/gabrielstewart/capstone/step32-2020/shopsafe-frontend/node_modules/@angular/material/prebuilt-themes/indigo-pink.css */"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css");
-module.exports = __webpack_require__(/*! /home/gabrielstewart/capstone/step32-2020/shopsafe-frontend/src/styles.css */"./src/styles.css");
+__webpack_require__(/*! /home/raulpalomo/step32-2020/shopsafe-frontend/node_modules/@angular/material/prebuilt-themes/indigo-pink.css */"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css");
+module.exports = __webpack_require__(/*! /home/raulpalomo/step32-2020/shopsafe-frontend/src/styles.css */"./src/styles.css");
 
 
 /***/ })

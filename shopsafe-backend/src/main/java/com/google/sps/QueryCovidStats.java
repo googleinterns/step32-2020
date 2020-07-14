@@ -165,13 +165,13 @@ public class QueryCovidStats {
 
         // If there are null values, set failedQuery to true and log error.
         if (cases == -1 || deaths == -1 || date == "") {
-            System.out.println("Error: Failed to obtain values");
+            System.out.println("Error: Failed to obtain values for fips: " + fips);
             return new QueryCovidStats(0, 0, 0, true, covidData);
         }
-
+        //bigquery-public-data.covid19_public_forecasts.county_14d
         // Prepare SQL query for getting projected recovered cases Forecasts.
         QueryJobConfiguration queryConfigForecast = QueryJobConfiguration.newBuilder(
-            "SELECT recovered_documented FROM `bigquery-public-data.covid19_public_forecasts.county_14d` WHERE county_fips_code = '" +
+            "SELECT recovered FROM `bigquery-public-data.covid19_public_forecasts.county_14d` WHERE county_fips_code = '" +
             fips +
             "' AND prediction_date = '" +
             date +
@@ -195,7 +195,7 @@ public class QueryCovidStats {
 
             // Get most recent recovered values, there should only be one result.
             for (FieldValueList row : queryJobForecast.getQueryResults().iterateAll()) {
-                recovered = (long) row.get("recovered_documented").getDoubleValue();
+                recovered = (long) row.get("recovered").getDoubleValue();
             }
         } 
         
