@@ -21,7 +21,6 @@ import java.util.Date;
 
 import com.google.sps.data.DataPoint;
 import com.google.sps.data.StoreDatastoreHandler;
-import com.google.appengine.api.datastore.DatastoreNeedIndexException;
 import com.google.appengine.api.datastore.Entity;
 
 /** Class contains all the averaged check in stats for a store. */
