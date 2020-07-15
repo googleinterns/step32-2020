@@ -21,6 +21,7 @@ import java.util.Date;
 
 import com.google.sps.data.DataPoint;
 import com.google.sps.data.StoreDatastoreHandler;
+import com.google.appengine.api.datastore.DatastoreNeedIndexException;
 import com.google.appengine.api.datastore.Entity;
 
 /** Class contains all the averaged check in stats for a store. */
@@ -47,7 +48,6 @@ public final class CheckInStats {
         StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
         this.ratingEntities = dataStoreService.getRatings();
         checkInCount = ratingEntities.size();
-
         // Sum the values for each category.
         for (Entity ratingEntity: ratingEntities) {
             busy += (double) ratingEntity.getProperty("busy");
