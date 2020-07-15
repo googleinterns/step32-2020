@@ -8,7 +8,9 @@
           <google-map
             height="500px"
             width="100%"
+            [zoom]="12"
             [center]="center"
+            [options]="options"
           >
             <map-marker
               *ngFor="let marker of markers"

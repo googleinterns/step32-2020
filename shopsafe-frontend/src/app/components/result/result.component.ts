@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -8,10 +8,6 @@ import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps';
   selector: 'app-result',
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css']
-})
-
-@Injectable({
-  providedIn: 'root',
 })
 
 export class ResultComponent implements OnInit {
@@ -30,14 +26,6 @@ export class ResultComponent implements OnInit {
       stylers: [
         {
           color: "#f5f5f5"
-        }
-      ]
-    },
-    {
-      elementType: "labels",
-      stylers: [
-        {
-          visibility: "off"
         }
       ]
     },
@@ -209,10 +197,8 @@ export class ResultComponent implements OnInit {
     }
   ];
   options: google.maps.MapOptions = {
-    minZoom: 1,
-    maxZoom: 5,
     disableDefaultUI: true,
-    styles: this.styles
+    styles: this.styles,
   };
 
   constructor(
@@ -272,192 +258,6 @@ export class ResultComponent implements OnInit {
       lat: this.result.stores[0].latitude,
       lng: this.result.stores[0].longitude
     };
-
-    // Set map options after API call
-    this.styles = [
-      {
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#f5f5f5"
-          }
-        ]
-      },
-      {
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off"
-          }
-        ]
-      },
-      {
-        elementType: "labels.icon",
-        stylers: [
-          {
-            visibility: "off"
-          }
-        ]
-      },
-      {
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#616161"
-          }
-        ]
-      },
-      {
-        elementType: "labels.text.stroke",
-        stylers: [
-          {
-            color: "#f5f5f5"
-          }
-        ]
-      },
-      {
-        featureType: "administrative.land_parcel",
-        stylers: [
-          {
-            visibility: "off"
-          }
-        ]
-      },
-      {
-        featureType: "administrative.land_parcel",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#bdbdbd"
-          }
-        ]
-      },
-      {
-        featureType: "administrative.neighborhood",
-        stylers: [
-          {
-            visibility: "off"
-          }
-        ]
-      },
-      {
-        featureType: "poi",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#eeeeee"
-          }
-        ]
-      },
-      {
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#757575"
-          }
-        ]
-      },
-      {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#e5e5e5"
-          }
-        ]
-      },
-      {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e"
-          }
-        ]
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#ffffff"
-          }
-        ]
-      },
-      {
-        featureType: "road.arterial",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#757575"
-          }
-        ]
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#dadada"
-          }
-        ]
-      },
-      {
-        featureType: "road.highway",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#616161"
-          }
-        ]
-      },
-      {
-        featureType: "road.local",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e"
-          }
-        ]
-      },
-      {
-        featureType: "transit.line",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#e5e5e5"
-          }
-        ]
-      },
-      {
-        featureType: "transit.station",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#eeeeee"
-          }
-        ]
-      },
-      {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [
-          {
-            color: "#c9c9c9"
-          }
-        ]
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [
-          {
-            color: "#9e9e9e"
-          }
-        ]
-      }
-    ]
   }
 
   addMarkers(): void {
