@@ -1,7 +1,6 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { GoogleChartService } from  '../service/google-chart.service';
 import { DataPoint } from '../../classes/data-point/data-point';
-import { StoreComponent } from '../../components/store/store.component';
 
 @Component({
   selector: 'app-covid-chart',
@@ -11,19 +10,21 @@ import { StoreComponent } from '../../components/store/store.component';
 export class CovidChartComponent implements OnInit {
 
   private gLib: any;
-  covidData: DataPoint[];
+  @Input() covidData: DataPoint[];
 
   constructor(
-    private gChartService: GoogleChartService,
-    private storeComponent: StoreComponent
+    private gChartService: GoogleChartService
   ) 
   {
-    this.covidData = this.storeComponent.covidData;
     this.gLib = this.gChartService.getGoogle();
     this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnChanges() {
+    // Updates chart with new parent input values
+    this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
 
   // TODO: custom colorization with options

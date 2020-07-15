@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
@@ -12,11 +12,6 @@ import { DataPoint } from '../../classes/data-point/data-point';
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.css']
 })
-
-@Injectable({
-  providedIn: 'root',
-})
-
 export class StoreComponent implements OnInit {
   store: Store;
   countyStats: CountyStats;
@@ -104,8 +99,10 @@ export class StoreComponent implements OnInit {
     dialogConfig.height = "510px";
     dialogConfig.width = "460px";
     CheckInModalComponent.setId(this.storeId);
-    this.matDialog.afterClosed().subscribe(() => { this.getStore() });
     const modalDialog = this.matDialog.open(CheckInModalComponent, dialogConfig);
+    
+    // Updates changes in place after modal closes
+    modalDialog.afterClosed().subscribe(() => { this.getStore() });
   }
 
   /**

@@ -1,7 +1,6 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { GoogleChartService } from  '../service/google-chart.service';
 import { DataPoint } from '../../classes/data-point/data-point';
-import { StoreComponent } from '../../components/store/store.component';
 
 @Component({
   selector: 'app-line-chart',
@@ -11,26 +10,24 @@ import { StoreComponent } from '../../components/store/store.component';
 export class LineChartComponent implements OnInit {
 
   private gLib: any;
-  mask: DataPoint[];
-  busy: DataPoint[];
-  line: DataPoint[];
-  hygiene: DataPoint[];
+  @Input() mask: DataPoint[];
+  @Input() busy: DataPoint[];
+  @Input() line: DataPoint[];
+  @Input() hygiene: DataPoint[];
 
   constructor(
     private gChartService: GoogleChartService,
-    private storeComponent: StoreComponent
     )
   {
-    this.mask = this.storeComponent.maskData;
-    this.busy = this.storeComponent.busyData;
-    this.line = this.storeComponent.lineData;
-    this.hygiene = this.storeComponent.hygieneData;
-    
     this.gLib = this.gChartService.getGoogle();
     this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnChanges() {
+    // Updates chart with new parent input values
+    this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
 
   // Assumes that all input arrays are the same length
