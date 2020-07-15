@@ -16,7 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
-import com.google.sps.data.CountyStats;
+import com.google.sps.data.CountyStatsOverTime;
 import com.google.sps.data.LatLng;
 import com.google.sps.data.StoreResult;
 import com.google.sps.data.Store;
@@ -139,7 +139,7 @@ public class StoreServlet extends HttpServlet {
         }
 
         // Get Covid stats based on county.
-        CountyStats countyStats = new CountyStats(county);
+        CountyStatsOverTime countyStats = new CountyStatsOverTime(county);
 
         // If the county stats were not obtained, return error message.
         if (countyStats.getPopulation() == 0) {

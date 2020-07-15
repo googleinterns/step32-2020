@@ -14,17 +14,21 @@
 
 package com.google.sps.data;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
 /** Class containing all the stores and county statistics. */
 public final class Result {
 
     private final List<StoreStats> stores;
-    private final List<CountyStats> countyStats;
 
-    public Result(List<StoreStats> stores, List<CountyStats> countyStats) {
+    public Result(List<StoreStats> stores) {
+        stores.sort(
+            (StoreStats s2, StoreStats s1)->
+                new Double (s1.getScore()).compareTo(
+                    new Double (s2.getScore())
+                )
+        );
         this.stores = stores;
-        this.countyStats = countyStats;
     }
 }
