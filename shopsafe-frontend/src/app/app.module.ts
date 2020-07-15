@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 // Custom components
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { GoogleMapsModule } from '@angular/google-maps'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule }   from '@angular/forms';
 import { GoogleChartModule } from './google-chart/google-chart.module';
@@ -54,7 +55,8 @@ import { HttpErrorComponent } from './components/http-error/http-error.component
     HttpClientModule,
     FormsModule,
     MatProgressSpinnerModule,
-    GoogleChartModule
+    GoogleChartModule,
+    GoogleMapsModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

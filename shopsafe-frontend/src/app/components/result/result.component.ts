@@ -2,6 +2,7 @@ import { Component, OnInit, Injectable } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
+import { MapMarker } from '@angular/google-maps'
 
 @Component({
   selector: 'app-result',
@@ -19,6 +20,19 @@ export class ResultComponent implements OnInit {
   isLoaded: boolean;
   httpError: boolean;
   httpErrorMessage: string;
+  markers = [];
+  center: google.maps.LatLngLiteral;
+  options: google.maps.MapOptions = {
+    styles: [
+      {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [
+          { visibility: "off" }
+        ]
+      }
+    ]
+  }
 
   constructor(
     private apiService: ApiService,
@@ -66,5 +80,34 @@ export class ResultComponent implements OnInit {
     // Sets loaded state to true
     this.isLoaded = true;
     console.log("CLIENT: API call finished");
+
+    // Add all map markers
+    this.addMarkers();
+    console.log("CLIENT: added markers");
+
+    // Set center of map to first result of store 
+    // FIXME: return latlng of location?
+    this.center = {
+      lat: this.result.stores[0].latitude,
+      lng: this.result.stores[0].longitude
+    };
+    console.log("CLIENT" + this.center);
+  }
+
+  addMarkers(): void {
+    for (let store of this.result.stores) {
+      this.markers.push({
+        position: {
+          lat: store.latitude,
+          lng: store.longitude
+        },
+        label: {
+          color: 'red',
+          text: store.name
+        },
+        title: store.name,
+        options: { animation: google.maps.Animation.BOUNCE }
+      })
+    }
   }
 }
