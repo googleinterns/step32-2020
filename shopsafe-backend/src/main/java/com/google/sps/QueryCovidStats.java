@@ -130,9 +130,9 @@ public class QueryCovidStats {
 
             // Get most recent case and death values, there should only be one result.
             for (FieldValueList row : queryJobUSA.getQueryResults().iterateAll()) {
-                    cases = row.get("confirmed_cases").getLongValue();
-                    deaths = row.get("deaths").getLongValue();
-                    date = row.get("date").getStringValue();
+                cases = row.get("confirmed_cases").getLongValue();
+                deaths = row.get("deaths").getLongValue();
+                date = row.get("date").getStringValue();
             }
         } 
         

@@ -58,7 +58,7 @@ public class CountyStats {
         this.activeCases = queryResults.getActiveCases();
     }
 
-        /*
+    /*
      * Given a county, use Census API to find population
      */
     private static long getPopulation (County county) {

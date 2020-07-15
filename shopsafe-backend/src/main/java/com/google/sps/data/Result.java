@@ -15,7 +15,6 @@
 package com.google.sps.data;
 
 import java.util.List;
-import java.util.Comparator;
 
 /** Class containing all the stores and county statistics. */
 public final class Result {
