@@ -212,8 +212,7 @@ export class ResultComponent implements OnInit {
     minZoom: 1,
     maxZoom: 5,
     disableDefaultUI: true,
-    // styles: this.styles,
-    // TODO: fix this -- I don't know why it doesn't work :"(
+    styles: this.styles
   };
 
   constructor(
