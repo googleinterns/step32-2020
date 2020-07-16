@@ -6,6 +6,7 @@ import { ResultInterface } from 'src/app/interfaces/interface';
  */
 export class Result implements ResultInterface {
   stores: Store[];
+  latLng: { latitude: number, longitude: number };
 
   // Allows for constructing of obj by declaring all class variables
   constructor(values: Object = {}) {

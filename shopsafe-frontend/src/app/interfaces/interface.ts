@@ -4,6 +4,7 @@ import { DataPoint } from '../classes/data-point/data-point';
 
 export interface ResultInterface {
   stores: Store[];
+  latLng: { latitude: number, longitude: number };
 }
 
 export interface StoreResultInterface {

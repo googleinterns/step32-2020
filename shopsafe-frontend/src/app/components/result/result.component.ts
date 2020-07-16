@@ -19,6 +19,7 @@ export class ResultComponent implements OnInit {
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
   markers = [];
+  latLng;
   center: google.maps.LatLngLiteral;
   styles: google.maps.MapTypeStyle[] = [
     // {
@@ -258,7 +259,8 @@ export class ResultComponent implements OnInit {
     this.apiService.getNearbyStores(this.location)
       .subscribe(data => 
         this.result = {
-          stores: (data as any).stores
+          stores: (data as any).stores,
+          latLng: (data as any).latLng
         },
         err => {
           console.log(err),
@@ -288,8 +290,8 @@ export class ResultComponent implements OnInit {
     // Set center of map to first result of store 
     // FIXME: return latlng of location then center (?)
     this.center = {
-      lat: this.result.stores[0].latitude,
-      lng: this.result.stores[0].longitude
+      lat: this.latLng.latitude,
+      lng: this.latLng.longitude
     };
   }
 
@@ -317,8 +319,7 @@ export class ResultComponent implements OnInit {
         },
         title: store.name,
         info: store.score,
-        options: { 
-          // animation: google.maps.Animation.BOUNCE, 
+        options: {  
           icon: { url: currIcon } 
         }
       })
