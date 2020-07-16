@@ -260,23 +260,21 @@ export class ResultComponent implements OnInit {
   }
 
   addMarkers(): void {
-    var safeIcon = "http:// google.com/mapfiles/ms/micons/lightblue.png";
-    var cautionIcon = "http:// google.com/mapfiles/ms/micons/yellow.png";
-    var unsafeIcon = "http:// google.com/mapfiles/ms/micons/red.png";
+    var safeIcon = "http://maps.google.com/mapfiles/ms/icons/lightblue.png";
+    var cautionIcon = "http://maps.google.com/mapfiles/ms/icons/yellow.png";
+    var unsafeIcon = "http://maps.google.com/mapfiles/ms/icons/red.png";
     var currIcon = '';
 
     for (let store of this.result.stores) {
 
       // Set icon according to colour
-      if (store.score <= 3.0) {
+      if (store.score <= 3.3) {
         currIcon = unsafeIcon;
-      } else if (store.score <= 6.0) {
+      } else if (store.score <= 6.6) {
         currIcon = cautionIcon;
       } else {
         currIcon = safeIcon;
       }
-
-      console.log(currIcon);
 
       this.markers.push({
         position: {
@@ -290,8 +288,11 @@ export class ResultComponent implements OnInit {
         },
         title: store.name,
         info: store.score,
-        icon: { currIcon },
-        options: { animation: google.maps.Animation.BOUNCE }
+        icon: { url: currIcon },
+        options: { 
+          // animation: google.maps.Animation.BOUNCE, 
+          icon: { url: currIcon } 
+        }
       })
     }
   }
