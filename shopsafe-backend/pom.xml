@@ -135,11 +135,13 @@
                     <deploy.version>1</deploy.version>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
             </plugin>
+
             <!-- Having builds fail on chekstyle warnings commented out
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -164,6 +166,38 @@
                     </execution>
                 </executions>
             </plugin> -->
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>pip-install</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>pip3</executable>
+                            <arguments>
+                                <argument>install</argument>
+                                <argument>pandas</argument>
+                                <argument>numpy</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.7.2</version>
+                <configuration>
+                    <workingDirectory>./target/test</workingDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
