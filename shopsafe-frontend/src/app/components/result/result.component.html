@@ -8,14 +8,13 @@
           <google-map
             height="500px"
             width="100%"
-            [zoom]="12"
+            [zoom]="14"
             [center]="center"
             [options]="options"
           >
             <map-marker
               *ngFor="let marker of markers"
               [position]="marker.position"
-              [label]="marker.label"
               [title]="marker.title"
               [options]="marker.options"
             >
@@ -29,7 +28,7 @@
         <div class="stores-list" *ngFor="let store of result.stores">
             <div class="stores-list-item">
                 <div class="left-text markers">
-                    <a class="location-icon"><i class="fas fa-map-marker-alt"></i></a> &nbsp;
+                    <a class="location-icon" (click)="recenterMap(store.latitude, store.longitude)"><i class="fas fa-map-marker-alt"></i></a> &nbsp;
                     <a 
                         class="stores-list-location" 
                         [routerLink]="['/store', store.id]"
