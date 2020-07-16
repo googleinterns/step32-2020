@@ -47,7 +47,6 @@ public final class CheckInStats {
         StoreDatastoreHandler dataStoreService =  new StoreDatastoreHandler(storeId);
         this.ratingEntities = dataStoreService.getRatings();
         checkInCount = ratingEntities.size();
-
         // Sum the values for each category.
         for (Entity ratingEntity: ratingEntities) {
             busy += (double) ratingEntity.getProperty("busy");

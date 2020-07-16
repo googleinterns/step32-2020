@@ -64,21 +64,23 @@ public class StoresServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         // Gets API key for places from shopsafe-backend.
-        try {
-            File myObj = new File(PLACE_KEY_LOCATION);
-            Scanner myReader = new Scanner(myObj);
-            PLACE_KEY = "&key=" + myReader.nextLine();
-            myReader.close();
-        }
+        // try {
+        //     File myObj = new File(PLACE_KEY_LOCATION);
+        //     Scanner myReader = new Scanner(myObj);
+        //     PLACE_KEY = "&key=" + myReader.nextLine();
+        //     myReader.close();
+        // }
         
-        // If error, print error, and set status to bad reuqest and send error response.
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.setContentType("text/html;");
-            response.getWriter().println("Failed to get api key.");
-            return;
-        }
+        // // If error, print error, and set status to bad reuqest and send error response.
+        // catch (FileNotFoundException e) {
+        //     e.printStackTrace();
+        //     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        //     response.setContentType("text/html;");
+        //     response.getWriter().println("Failed to get api key.");
+        //     return;
+        // }
+
+        PLACE_KEY = "&key=" + "API_KEY";
 
         // Get the address input from the param.
         String address = request.getParameter("location"); 
@@ -188,6 +190,7 @@ public class StoresServlet extends HttpServlet {
             }
 
             // Todo: Get reviews for a store.
+
             CheckInStats checkInStats = new CheckInStats(store.getId());
 
             // Add score and review stats to the store.
@@ -208,7 +211,7 @@ public class StoresServlet extends HttpServlet {
         // Todo: Return stores with scores and county info as json as result.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(storeStats, countyStats)));
+        response.getWriter().println(gson.toJson(new Result(storeStats)));
     }
 
     /**
