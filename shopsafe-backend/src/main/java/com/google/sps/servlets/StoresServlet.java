@@ -211,7 +211,7 @@ public class StoresServlet extends HttpServlet {
         // Todo: Return stores with scores and county info as json as result.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(storeStats)));
+        response.getWriter().println(gson.toJson(new Result(storeStats, location)));
     }
 
     /**

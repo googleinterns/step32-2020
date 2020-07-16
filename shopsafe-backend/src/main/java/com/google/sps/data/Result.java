@@ -20,8 +20,9 @@ import java.util.List;
 public final class Result {
 
     private final List<StoreStats> stores;
+    private final LatLng latLng;
 
-    public Result(List<StoreStats> stores) {
+    public Result(List<StoreStats> stores, LatLng latLng) {
         stores.sort(
             (StoreStats s2, StoreStats s1)->
                 new Double (s1.getScore()).compareTo(
@@ -29,5 +30,6 @@ public final class Result {
                 )
         );
         this.stores = stores;
+        this.latLng = latLng;
     }
 }
