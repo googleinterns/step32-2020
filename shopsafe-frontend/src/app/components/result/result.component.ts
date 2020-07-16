@@ -17,7 +17,8 @@ export class ResultComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
 
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
   markers = [];
   center: google.maps.LatLngLiteral;
   styles: google.maps.MapTypeStyle[] = [
@@ -224,8 +225,7 @@ export class ResultComponent implements OnInit {
     this.apiService.getNearbyStores(this.location)
       .subscribe(data => 
         this.result = {
-          stores: (data as any).stores,
-          countyStats: (data as any).countyStats
+          stores: (data as any).stores
         },
         err => {
           console.log(err),
@@ -273,8 +273,13 @@ export class ResultComponent implements OnInit {
           text: store.name
         },
         title: store.name,
+        info: store.score,
         options: { animation: google.maps.Animation.BOUNCE }
       })
     }
+  }
+
+  openInfo (marker: MapMarker, content: string): void {
+    this.infoWindow.open(marker);
   }
 }
