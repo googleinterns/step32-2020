@@ -31,68 +31,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /** Class contains the name, state, population and covid cases and deaths of a county. */
-public final class CountyStats {
+public class CountyStats {
 
-    private final String countyName;
-    private final String stateName;
-    private final long cases;
-    private final long deaths;
-    private final long activeCases;
-    private final long population;
-    private final ArrayList<DataPoint> covidData;
+    protected String countyName;
+    protected String stateName;
+    protected long cases;
+    protected long deaths;
+    protected long activeCases;
+    protected long population;
 
     public CountyStats(County county) {
         this.countyName = county.getCountyName();
         this.stateName = county.getStateName();
 
-        // Make query for active covid cases and deaths.
-        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
-        this.cases = queryResults.getCases();
-        this.deaths = queryResults.getDeaths();
-        this.activeCases = queryResults.getActiveCases();
-
-        this.covidData = queryResults.getCovidData();
+        applyCovidQuery(county);
 
         // Find the population of county using Census API
         this.population = getPopulation(county);
     }
 
-    public String getCountyName() {
-        return countyName;
-    }
-
-    public String getStateName() {
-        return stateName;
-    }
-
-    public long getCases() {
-        return cases;
-    }
-
-    public long getDeaths() {
-        return deaths;
-    }
-
-    public long getActiveCases() {
-        return activeCases;
-    }
-    
-    public long getPopulation() {
-        return population;
-    }
-
-    public ArrayList<DataPoint> getCovidData() {
-        return covidData;
-    }
-
-    public double getCountyScore() {
-        long populationUS = 331002651;
-        long casesUS = 1996000;
-        double percentageUS = (double) casesUS / (double) populationUS;
-        double percentageCounty = (double) activeCases / (double) population;
-
-        // TODO: Create a better scoring system for counties.
-        return (percentageUS - percentageCounty) * 5 + 5;
+    void applyCovidQuery(County county) {
+        // Make query for active covid cases and deaths.
+        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
+        this.cases = queryResults.getCases();
+        this.deaths = queryResults.getDeaths();
+        this.activeCases = queryResults.getActiveCases();
     }
 
     /*
@@ -135,4 +98,39 @@ public final class CountyStats {
             + countyFips + "&in=STATE:" + stateFips + "&key=ccca49e2b71e9f3e52453d70bf499baa821b9f77";
         return url;
     }
+
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public long getCases() {
+        return cases;
+    }
+
+    public long getDeaths() {
+        return deaths;
+    }
+
+    public long getActiveCases() {
+        return activeCases;
+    }
+    
+    public long getPopulation() {
+        return population;
+    }
+
+    public double getCountyScore() {
+        long populationUS = 331002651;
+        long casesUS = 1996000;
+        double percentageUS = (double) casesUS / (double) populationUS;
+        double percentageCounty = (double) activeCases / (double) population;
+
+        // TODO: Create a better scoring system for counties.
+        return (percentageUS - percentageCounty) * 5 + 5;
+    }
+
 }

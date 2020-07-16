@@ -15,6 +15,7 @@
 package com.google.sps;
 
 import com.google.sps.data.DataPoint;
+import com.google.sps.QueryCovidStats;
 
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
@@ -36,64 +37,24 @@ import java.util.Date;
 /*
  * Class for using BigQuery to query the COVID-19 public forecast dataset.
  */
-public class QueryCovidStats {
+public class QueryOverTime extends QueryCovidStats {
 
-    protected long cases;
-    protected long deaths;
-    protected long activeCases;
-    protected boolean failedQuery;
+    private ArrayList<DataPoint> covidData; 
 
-    protected QueryCovidStats(long cases, long deaths, long activeCases,
-        boolean failedQuery) {
-        this.cases = cases;
-        this.deaths = deaths;
-        this.activeCases = activeCases;
-        this.failedQuery = failedQuery;
+    private QueryOverTime(long cases, long deaths, long activeCases,
+        boolean failedQuery, ArrayList<DataPoint> covidData) {
+        super(cases, deaths, activeCases, failedQuery);
+        this.covidData = covidData;
     }
 
-    public long getCases() {
-        return cases;
-    }
-
-    public long getDeaths() {
-        return deaths;
-    }
-
-    public long getActiveCases() {
-        return activeCases;
-    }
-
-    public boolean failedQuery() {
-        return failedQuery;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        // If the object is compared with itself then return true   
-        if (o == this) { 
-            return true; 
-        } 
-  
-        /* Check if o is an instance of QueryUSA or not 
-          "null instanceof [type]" also returns false */
-        if (!(o instanceof QueryCovidStats)) { 
-            return false; 
-        } 
-          
-        // Typecast o to QueryUSA so that we can compare data members  
-        QueryCovidStats other = (QueryCovidStats) o; 
-
-        return (this.cases == other.cases &&
-            this.deaths == other.deaths &&
-            this.activeCases == other.activeCases &&
-            this.failedQuery == other.failedQuery
-            );
+    public ArrayList<DataPoint> getCovidData () {
+        return covidData; 
     }
     
     /*
-     * Return instance of QueryCovidStats if possible, otherwise, return failure.
+     * Return instance of QueryOverTime if possible, otherwise, return failure.
      */
-    public static QueryCovidStats getCovidStatsFips(String fips) {
+    public static QueryOverTime getCovidStatsFips(String fips) {
 
         // Set up BigQuery service.
         BigQuery bigquery = BigQueryOptions
@@ -103,7 +64,7 @@ public class QueryCovidStats {
         QueryJobConfiguration queryConfigUSA = QueryJobConfiguration.newBuilder(
             "SELECT confirmed_cases, deaths, date FROM `bigquery-public-data.covid19_usafacts.summary` WHERE county_fips_code = '" +
             fips +
-            "' ORDER BY date DESC LIMIT 1"
+            "' ORDER BY date DESC LIMIT 7"
             ).setUseLegacySql(false).build();
 
         // Create unique job id and job for call to USA.
@@ -115,6 +76,7 @@ public class QueryCovidStats {
         long deaths = -1;
         long recovered = -1;
         String date = "";
+        ArrayList<DataPoint> covidData = new ArrayList(); 
 
         try {
 
@@ -130,22 +92,36 @@ public class QueryCovidStats {
 
             // Get most recent case and death values, there should only be one result.
             for (FieldValueList row : queryJobUSA.getQueryResults().iterateAll()) {
-                cases = row.get("confirmed_cases").getLongValue();
-                deaths = row.get("deaths").getLongValue();
-                date = row.get("date").getStringValue();
+                
+                //assign most recent case but insert previous data
+                if (cases == -1) {
+                    cases = row.get("confirmed_cases").getLongValue();
+                    deaths = row.get("deaths").getLongValue();
+                    date = row.get("date").getStringValue();
+                }
+                double casesNum = row.get("confirmed_cases").getDoubleValue();
+                String dateString = row.get("date").getStringValue();
+                Date dateObj = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+                //Insert at beginning so order increases by date
+                DataPoint data = new DataPoint(casesNum, dateObj);
+                covidData.add(0, data);
             }
         } 
         
         // Set failedQuery to true and log error if query fails.
         catch (InterruptedException exception) {
             System.out.println("Error: Big Query Failure!");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryOverTime(0, 0, 0, true, covidData);
+        }
+        catch (ParseException e) {
+            System.out.println("Unable to parse date");
+            return new QueryOverTime(0, 0, 0, true, covidData);
         }
 
         // If there are null values, set failedQuery to true and log error.
         if (cases == -1 || deaths == -1 || date == "") {
             System.out.println("Error: Failed to obtain values for fips: " + fips);
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryOverTime(0, 0, 0, true, covidData);
         }
         //bigquery-public-data.covid19_public_forecasts.county_14d
         // Prepare SQL query for getting projected recovered cases Forecasts.
@@ -181,16 +157,16 @@ public class QueryCovidStats {
         // Set failedQuery to true and log error if query fails.
         catch (InterruptedException exception) {
             System.out.println("Error: Big Query Failure!");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryOverTime(0, 0, 0, true, covidData);
         }
 
         // If recovered is -1, set failedQuery to true and log error.
         if (recovered == -1) {
             System.out.println("Error: Failed to obtain values");
-            return new QueryCovidStats(0, 0, 0, true);
+            return new QueryOverTime(0, 0, 0, true, covidData);
         }
 
         // Return Query Covid-19 stats for a county.
-        return new QueryCovidStats(cases, deaths, cases - (deaths + recovered), false);
+        return new QueryOverTime(cases, deaths, cases - (deaths + recovered), false, covidData);
     }
 }

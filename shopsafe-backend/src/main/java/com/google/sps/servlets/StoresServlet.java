@@ -190,6 +190,7 @@ public class StoresServlet extends HttpServlet {
             }
 
             // Todo: Get reviews for a store.
+
             CheckInStats checkInStats = new CheckInStats(store.getId());
 
             // Add score and review stats to the store.
@@ -210,7 +211,7 @@ public class StoresServlet extends HttpServlet {
         // Todo: Return stores with scores and county info as json as result.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(storeStats, countyStats)));
+        response.getWriter().println(gson.toJson(new Result(storeStats)));
     }
 
     /**
