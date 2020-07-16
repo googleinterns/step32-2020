@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
-import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps';
+import { GoogleMap } from '@angular/google-maps';
 
 @Component({
   selector: 'app-result',
@@ -18,7 +18,6 @@ export class ResultComponent implements OnInit {
   httpErrorMessage: string;
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
-  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
   markers = [];
   center: google.maps.LatLngLiteral;
   styles: google.maps.MapTypeStyle[] = [
@@ -261,7 +260,24 @@ export class ResultComponent implements OnInit {
   }
 
   addMarkers(): void {
+    var safeIcon = "http:// google.com/mapfiles/ms/micons/lightblue.png";
+    var cautionIcon = "http:// google.com/mapfiles/ms/micons/yellow.png";
+    var unsafeIcon = "http:// google.com/mapfiles/ms/micons/red.png";
+    var currIcon = '';
+
     for (let store of this.result.stores) {
+
+      // Set icon according to colour
+      if (store.score <= 3.0) {
+        currIcon = unsafeIcon;
+      } else if (store.score <= 6.0) {
+        currIcon = cautionIcon;
+      } else {
+        currIcon = safeIcon;
+      }
+
+      console.log(currIcon);
+
       this.markers.push({
         position: {
           lat: store.latitude,
@@ -274,12 +290,9 @@ export class ResultComponent implements OnInit {
         },
         title: store.name,
         info: store.score,
+        icon: { currIcon },
         options: { animation: google.maps.Animation.BOUNCE }
       })
     }
-  }
-
-  openInfo (marker: MapMarker, content: string): void {
-    this.infoWindow.open(marker);
   }
 }
