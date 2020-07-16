@@ -63,23 +63,20 @@ public class CountyStats {
      */
     private static long getPopulation (County county) {
         try {
-            String results = "";
-            String line;
+            Process p = Runtime.getRuntime().exec("python3 ../../get_county_population.py " + county.getCountyFips());
+            
+            BufferedReader stdInput = new BufferedReader(new 
+                 InputStreamReader(p.getInputStream()));
 
-            // Read response of census api call
-            URL url = new URL(getAPIUrl(county.getCountyFips()));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            while ((line = reader.readLine()) != null) {
-                    results += line;
-            }
-            reader.close();
+            Long output = Long.parseLong(stdInput.readLine());
 
-            //Convert to Json and parse for population
-            JSONArray jsonResult = new JSONArray(results).getJSONArray(1); //skip schema on first entry
-            return jsonResult.getLong(0);
-
-        } catch (Exception e) {
-            //Population not found
+            stdInput.close();
+        
+            return(output);
+        } 
+        
+        // If there is an exception, send error message and return 0.
+        catch (Exception e) {
             System.out.println(
                 "Unable to get population for " + county.getCountyName() + ", " + county.getStateName());
             return 0;
