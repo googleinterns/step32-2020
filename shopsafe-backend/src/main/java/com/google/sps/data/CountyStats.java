@@ -31,18 +31,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /** Class contains the name, state, population and covid cases and deaths of a county. */
-public class CountyStats {
+public class CountyStats extends County {
 
-    protected String countyName;
-    protected String stateName;
     protected long cases;
     protected long deaths;
     protected long activeCases;
     protected long population;
 
     public CountyStats(County county) {
-        this.countyName = county.getCountyName();
-        this.stateName = county.getStateName();
+
+        super(county.countyName, county.stateName, county.countyFips);
 
         applyCovidQuery(county);
 
@@ -63,16 +61,16 @@ public class CountyStats {
      */
     private static long getPopulation (County county) {
         try {
-            Process p = Runtime.getRuntime().exec("python3 ../../get_county_population.py " + county.getCountyFips());
+            Process p = Runtime.getRuntime().exec("python3 ../classes/get_county_population.py " + county.getCountyFips());
             
             BufferedReader stdInput = new BufferedReader(new 
-                 InputStreamReader(p.getInputStream()));
+                InputStreamReader(p.getInputStream()));
 
             Long output = Long.parseLong(stdInput.readLine());
 
             stdInput.close();
         
-            return(output);
+            return output;
         } 
         
         // If there is an exception, send error message and return 0.
@@ -81,27 +79,6 @@ public class CountyStats {
                 "Unable to get population for " + county.getCountyName() + ", " + county.getStateName());
             return 0;
         }
-    }
-
-    /*
-     * Helper Function to format URL call for population API
-     */
-    private static String getAPIUrl(String stateCountyFips) {
-        //Split state and County Fips
-        String stateFips = stateCountyFips.substring(0,2);
-        String countyFips = stateCountyFips.substring(2, 5);
-
-        String url = "https://api.census.gov/data/2019/pep/population?get=POP&for=COUNTY:"
-            + countyFips + "&in=STATE:" + stateFips + "&key=ccca49e2b71e9f3e52453d70bf499baa821b9f77";
-        return url;
-    }
-
-    public String getCountyName() {
-        return countyName;
-    }
-
-    public String getStateName() {
-        return stateName;
     }
 
     public long getCases() {
@@ -120,14 +97,28 @@ public class CountyStats {
         return population;
     }
 
+    /*
+     * Get a county score based on its percentile.
+     */
     public double getCountyScore() {
-        long populationUS = 331002651;
-        long casesUS = 1996000;
-        double percentageUS = (double) casesUS / (double) populationUS;
-        double percentageCounty = (double) activeCases / (double) population;
+        try {
+            Process p = Runtime.getRuntime().exec("python3 ../classes/get_county_percentile.py " + countyFips);
+            
+            BufferedReader stdInput = new BufferedReader(new 
+                InputStreamReader(p.getInputStream()));
 
-        // TODO: Create a better scoring system for counties.
-        return (percentageUS - percentageCounty) * 5 + 5;
+            Double output = Double.parseDouble(stdInput.readLine()) * 10.0;
+
+            stdInput.close();
+        
+            return output;
+        } 
+        
+        // If there is an exception, send error message and return 5.0.
+        catch (Exception e) {
+            System.out.println(
+                "Unable to get score for " + countyName + ", " + stateName);
+            return 5.0;
+        }
     }
-
 }
