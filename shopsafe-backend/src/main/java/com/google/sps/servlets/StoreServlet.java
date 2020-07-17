@@ -54,7 +54,7 @@ public class StoreServlet extends HttpServlet {
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
     public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry";
     private String PLACE_KEY;
-    private String PLACE_KEY_LOCATION = "../classes/key.txt";
+    private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
 
     /**
      * For a get request, return all nearby stores.
