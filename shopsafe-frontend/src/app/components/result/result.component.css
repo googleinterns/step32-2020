@@ -40,7 +40,11 @@
 #result .location-icon {
     font-size: 18px;
     color: #FF8756;
-    cursor: auto;
+    cursor: pointer;
+}
+
+#result .location-icon:hover {
+  color: rgb(255, 135, 86, 0.7);
 }
 
 #result .stores-list-location {
