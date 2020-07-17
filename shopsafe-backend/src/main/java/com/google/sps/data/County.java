@@ -26,16 +26,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /** Class contains the name, state, and fips of a county. */
-public final class County {
+public class County {
 
     // FCC api url for county information
     public static final String FCC_BASE_URL = "https://geo.fcc.gov/api/census/area?lat=";
     public static final String FCC_END_URL = "&format=json";
 
     // County properties
-    private final String countyName;
-    private final String stateName;
-    private final String countyFips;
+    protected String countyName;
+    protected String stateName;
+    protected String countyFips;
 
     public County(String countyName, String stateName, String countyFips) {
         this.countyName = countyName;

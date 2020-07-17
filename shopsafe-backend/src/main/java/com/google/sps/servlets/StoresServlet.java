@@ -55,7 +55,7 @@ public class StoresServlet extends HttpServlet {
     public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
     public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private String PLACE_KEY;
-    private String PLACE_KEY_LOCATION = "../../key.txt";
+    private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
 
     /**
      * For a get request, return all nearby stores.
@@ -63,24 +63,24 @@ public class StoresServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
-        // // Gets API key for places from shopsafe-backend.
-        // try {
-        //     File myObj = new File(PLACE_KEY_LOCATION);
-        //     Scanner myReader = new Scanner(myObj);
-        //     PLACE_KEY = "&key=" + myReader.nextLine();
-        //     myReader.close();
-        // }
-        
-        // // If error, print error, and set status to bad reuqest and send error response.
-        // catch (FileNotFoundException e) {
-        //     e.printStackTrace();
-        //     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        //     response.setContentType("text/html;");
-        //     response.getWriter().println("Failed to get api key.");
-        //     return;
-        // }
+        // Gets API key for places from shopsafe-backend.
+        try {
+            File myObj = new File(PLACE_KEY_LOCATION);
+            Scanner myReader = new Scanner(myObj);
+            PLACE_KEY = "&key=" + myReader.nextLine();
+            myReader.close();
+        }
 
-        PLACE_KEY = "&key=" + "";
+        // If error, print error, and set status to bad reuqest and send error response.
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get api key.");
+            return;
+        }
+
+        // PLACE_KEY = "&key=" + "API_KEY";
 
         // Get the address input from the param.
         String address = request.getParameter("location"); 
