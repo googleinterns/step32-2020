@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import com.google.sps.data.StoreDatastoreHandler;
 import com.google.appengine.api.datastore.Entity;
 
-/* For Data*/
+/*Class to associate data with a date*/
 public final class DataPoint {
 
     private double value = 0.0;

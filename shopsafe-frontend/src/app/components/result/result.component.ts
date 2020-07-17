@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
-import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps';
+import { GoogleMap } from '@angular/google-maps';
 
 @Component({
   selector: 'app-result',
@@ -17,19 +17,204 @@ export class ResultComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
 
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
   markers = [];
+  latLng;
   center: google.maps.LatLngLiteral;
   styles: google.maps.MapTypeStyle[] = [
+    // {
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#f5f5f5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   elementType: "labels.icon",
+    //   stylers: [
+    //     {
+    //       visibility: "off"
+    //     }
+    //   ]
+    // },
+    // {
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#616161"
+    //     }
+    //   ]
+    // },
+    // {
+    //   elementType: "labels.text.stroke",
+    //   stylers: [
+    //     {
+    //       color: "#f5f5f5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "administrative.land_parcel",
+    //   stylers: [
+    //     {
+    //       visibility: "off"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "administrative.land_parcel",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#bdbdbd"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "administrative.neighborhood",
+    //   stylers: [
+    //     {
+    //       visibility: "off"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#eeeeee"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#757575"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi.park",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#e5e5e5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi.park",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#9e9e9e"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#ffffff"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.arterial",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#757575"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.highway",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#dadada"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.highway",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#616161"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.local",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#9e9e9e"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "transit.line",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#e5e5e5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "transit.station",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#eeeeee"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "water",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#c9c9c9"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "water",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#9e9e9e"
+    //     }
+    //   ]
+    // }
     {
+      featureType: "administrative",
       elementType: "geometry",
       stylers: [
         {
-          color: "#f5f5f5"
+          visibility: "off"
         }
       ]
     },
     {
+      featureType: "poi",
+      stylers: [
+        {
+          visibility: "off"
+        }
+      ]
+    },
+    {
+      featureType: "road",
       elementType: "labels.icon",
       stylers: [
         {
@@ -38,160 +223,10 @@ export class ResultComponent implements OnInit {
       ]
     },
     {
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#616161"
-        }
-      ]
-    },
-    {
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          color: "#f5f5f5"
-        }
-      ]
-    },
-    {
-      featureType: "administrative.land_parcel",
+      featureType: "transit",
       stylers: [
         {
           visibility: "off"
-        }
-      ]
-    },
-    {
-      featureType: "administrative.land_parcel",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#bdbdbd"
-        }
-      ]
-    },
-    {
-      featureType: "administrative.neighborhood",
-      stylers: [
-        {
-          visibility: "off"
-        }
-      ]
-    },
-    {
-      featureType: "poi",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#eeeeee"
-        }
-      ]
-    },
-    {
-      featureType: "poi",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#757575"
-        }
-      ]
-    },
-    {
-      featureType: "poi.park",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#e5e5e5"
-        }
-      ]
-    },
-    {
-      featureType: "poi.park",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#9e9e9e"
-        }
-      ]
-    },
-    {
-      featureType: "road",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#ffffff"
-        }
-      ]
-    },
-    {
-      featureType: "road.arterial",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#757575"
-        }
-      ]
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#dadada"
-        }
-      ]
-    },
-    {
-      featureType: "road.highway",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#616161"
-        }
-      ]
-    },
-    {
-      featureType: "road.local",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#9e9e9e"
-        }
-      ]
-    },
-    {
-      featureType: "transit.line",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#e5e5e5"
-        }
-      ]
-    },
-    {
-      featureType: "transit.station",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#eeeeee"
-        }
-      ]
-    },
-    {
-      featureType: "water",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#c9c9c9"
-        }
-      ]
-    },
-    {
-      featureType: "water",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#9e9e9e"
         }
       ]
     }
@@ -225,7 +260,7 @@ export class ResultComponent implements OnInit {
       .subscribe(data => 
         this.result = {
           stores: (data as any).stores,
-          countyStats: (data as any).countyStats
+          latLng: (data as any).latLng
         },
         err => {
           console.log(err),
@@ -255,26 +290,47 @@ export class ResultComponent implements OnInit {
     // Set center of map to first result of store 
     // FIXME: return latlng of location then center (?)
     this.center = {
-      lat: this.result.stores[0].latitude,
-      lng: this.result.stores[0].longitude
+      lat: this.result.latLng.latitude,
+      lng: this.result.latLng.longitude
     };
   }
 
   addMarkers(): void {
+    var safeIcon = "http://maps.google.com/mapfiles/ms/icons/green.png";
+    var cautionIcon = "http://maps.google.com/mapfiles/ms/icons/yellow.png";
+    var unsafeIcon = "http://maps.google.com/mapfiles/ms/icons/red.png";
+    var currIcon = '';
+
     for (let store of this.result.stores) {
+
+      // Set icon according to colour
+      if (store.score <= 3.3) {
+        currIcon = unsafeIcon;
+      } else if (store.score <= 6.6) {
+        currIcon = cautionIcon;
+      } else {
+        currIcon = safeIcon;
+      }
+
       this.markers.push({
         position: {
           lat: store.latitude,
           lng: store.longitude
         },
-        label: {
-          color: 'black',
-          fontWeight: '500',
-          text: store.name
-        },
         title: store.name,
-        options: { animation: google.maps.Animation.BOUNCE }
+        info: store.score,
+        options: {  
+          icon: { url: currIcon } 
+        }
       })
     }
+  }
+
+  recenterMap(lat: number, lng: number): void {
+    this.center = {
+      lat: lat,
+      lng: lng
+    };
+    this.map.center = this.center;
   }
 }
