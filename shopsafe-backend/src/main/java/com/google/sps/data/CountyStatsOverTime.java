@@ -31,7 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/** Class contains the name, state, population and covid cases and deaths of a county. */
+/** Similar to CountyStats class but also contains change in cases over 7 day period */
 public class CountyStatsOverTime extends CountyStats {
 
     private ArrayList<DataPoint> covidData;

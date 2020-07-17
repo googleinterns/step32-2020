@@ -63,7 +63,7 @@ public class StoresServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
-        // Gets API key for places from shopsafe-backend.
+        // // Gets API key for places from shopsafe-backend.
         // try {
         //     File myObj = new File(PLACE_KEY_LOCATION);
         //     Scanner myReader = new Scanner(myObj);
@@ -80,7 +80,7 @@ public class StoresServlet extends HttpServlet {
         //     return;
         // }
 
-        PLACE_KEY = "&key=" + "API_KEY";
+        PLACE_KEY = "&key=" + "";
 
         // Get the address input from the param.
         String address = request.getParameter("location"); 
