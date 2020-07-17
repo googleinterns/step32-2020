@@ -54,7 +54,7 @@ public class StoreServlet extends HttpServlet {
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
     public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry";
     private String PLACE_KEY;
-    private String PLACE_KEY_LOCATION = "../../key.txt";
+    private String PLACE_KEY_LOCATION = "../classes/key.txt";
 
     /**
      * For a get request, return all nearby stores.
@@ -63,23 +63,23 @@ public class StoreServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         // Gets API key for places from shopsafe-backend.
-        // try {
-        //     File myObj = new File(PLACE_KEY_LOCATION);
-        //     Scanner myReader = new Scanner(myObj);
-        //     PLACE_KEY = "&key=" + myReader.nextLine();
-        //     myReader.close();
-        // }
-        
-        // // If error, print error, set status to bad reuqest and send error response.
-        // catch (FileNotFoundException e) {
-        //     e.printStackTrace();
-        //     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        //     response.setContentType("text/html;");
-        //     response.getWriter().println("Failed to get api key.");
-        //     return;
-        // }
+        try {
+            File myObj = new File(PLACE_KEY_LOCATION);
+            Scanner myReader = new Scanner(myObj);
+            PLACE_KEY = "&key=" + myReader.nextLine();
+            myReader.close();
+        }
 
-        PLACE_KEY = "&key=" + "API_KEY";
+        // If error, print error, set status to bad reuqest and send error response.
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get api key.");
+            return;
+        }
+
+        // PLACE_KEY = "&key=" + "API_KEY";
 
         // Get id from request.
         String id = request.getParameter("id");
