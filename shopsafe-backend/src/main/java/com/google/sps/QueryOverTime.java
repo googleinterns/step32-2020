@@ -35,7 +35,8 @@ import java.util.Date;
 
 
 /*
- * Class for using BigQuery to query the COVID-19 public forecast dataset.
+ * Similar to Query CovidStats but keep list of reported cases over 7
+ * day period
  */
 public class QueryOverTime extends QueryCovidStats {
 

@@ -290,8 +290,8 @@ export class ResultComponent implements OnInit {
     // Set center of map to first result of store 
     // FIXME: return latlng of location then center (?)
     this.center = {
-      lat: this.latLng.latitude,
-      lng: this.latLng.longitude
+      lat: this.result.latLng.latitude,
+      lng: this.result.latLng.longitude
     };
   }
 

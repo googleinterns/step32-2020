@@ -20,7 +20,10 @@ import java.util.List;
 
 import com.google.sps.data.DataPoint;
 
-/** Class containing the stats for a store and its county statistics. */
+/* 
+ * Class representing the response from /store contains store information,
+ * county stats over time, and compiled list of score averages for a given day
+ */
 public final class StoreResult {
 
     private final StoreStats store;
