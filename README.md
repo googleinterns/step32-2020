@@ -24,7 +24,7 @@ npm install -g @angular/cli
 cd shopsafe-frontend/
 ng build --prod --delete-output-path=false
 
-// Deploy Web Apllication 
+// Deploy Web Application 
 cd ../shopsafe-backend/
 mvn package appengine:deploy
 
