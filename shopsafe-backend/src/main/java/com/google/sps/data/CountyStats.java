@@ -46,8 +46,7 @@ public class CountyStats extends County {
 
         applyCovidQuery(county);
 
-        // Find the population of county using Census API
-        this.population = getPopulation(county);
+        this.population = county.getPopulationFromCsv();
     }
 
     void applyCovidQuery(County county) {
@@ -56,40 +55,6 @@ public class CountyStats extends County {
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
         this.activeCases = queryResults.getActiveCases();
-    }
-
-    /*
-     * Given a county, use Census API to find population
-     */
-    private static long getPopulation (County county) {
-        try {
-
-            // See if fips in the csv file, if so, return the population.
-            CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_population.csv"));
-            String[] nextLine = reader.readNext();
-            while ((nextLine = reader.readNext()) != null) {
-                if (Integer.parseInt(county.getCountyFips()) == Integer.parseInt(nextLine[3])) {
-                    return Long.parseLong(nextLine[2]);
-                }
-            }
-
-            // Otherwise, log failure and return 0.
-            System.out.println("Unable to get population for " 
-                + county.getCountyName() 
-                + ", " 
-                + county.getStateName());
-            return 0;
-        } 
-        
-        // If there is an exception, send error message and return 0.
-        catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("An error occured while getting the population for " 
-                + county.getCountyName() 
-                + ", " 
-                + county.getStateName());
-            return 0;
-        }
     }
 
     public long getCases() {
@@ -106,39 +71,5 @@ public class CountyStats extends County {
     
     public long getPopulation() {
         return population;
-    }
-
-    /*
-     * Get a county score based on its percentile.
-     */
-    public double getCountyScore() {
-        try {
-
-            // See if fips in the csv file, if so, return the population.
-            CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_percentile.csv"));
-            String[] nextLine = reader.readNext();
-            while ((nextLine = reader.readNext()) != null) {
-                if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[1])) {
-                    return Double.parseDouble(nextLine[3]) * 10;
-                }
-            }
-
-            // Otherwise, log failure and return 0.
-            System.out.println("Unable to get the score for " 
-                + countyName
-                + ", " 
-                + stateName);
-            return 5.0;
-        } 
-        
-        // If there is an exception, send error message and return 0.
-        catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("An error occured while getting the score for " 
-                + countyName
-                + ", " 
-                + stateName);
-            return 5.0;
-        }
     }
 }

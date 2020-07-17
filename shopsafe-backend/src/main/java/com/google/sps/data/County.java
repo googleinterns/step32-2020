@@ -14,7 +14,10 @@
 
 package com.google.sps.data;
 
+import com.opencsv.*;
+
 import java.io.BufferedReader;
+import java.io.FileReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -84,6 +87,74 @@ public class County {
         catch (Exception e) {
             e.printStackTrace();
             return new County("", "", "");
+        }
+    }
+
+    /*
+     * Get a county score based on the county percentile csv file.
+     */
+    public double getCountyScore() {
+        try {
+
+            // See if fips in the csv file, if so, return the score.
+            CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_percentile.csv"));
+            String[] nextLine = reader.readNext();
+            while ((nextLine = reader.readNext()) != null) {
+                if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[1])) {
+                    return Double.parseDouble(nextLine[3]) * 10;
+                }
+            }
+
+            // Otherwise, log failure and return 5.0.
+            System.out.println("Unable to get the score for " 
+                + countyName
+                + ", " 
+                + stateName);
+            return 5.0;
+        } 
+        
+        // If there is an exception, send error message and return 5.0.
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("An error occured while getting the score for " 
+                + countyName
+                + ", " 
+                + stateName);
+            return 5.0;
+        }
+    }
+
+    /*
+     * Given a county, find the population using the population csv file.
+     */
+    public long getPopulationFromCsv() {
+        try {
+
+            // See if fips in the csv file, if so, return the population.
+            CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_population.csv"));
+            String[] nextLine = reader.readNext();
+            while ((nextLine = reader.readNext()) != null) {
+                if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[3])) {
+                    return Long.parseLong(nextLine[2]);
+                }
+            }
+
+            // Otherwise, log failure and return 0.
+            System.out.println("Unable to get population for " 
+                + countyName
+                + ", " 
+                + stateName);
+            return 0;
+        } 
+        
+        // If there is an exception, send error message and return 0.
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("An error occured while getting the population for " 
+                + countyName 
+                + ", " 
+                + stateName);
+            return 0;
         }
     }
 }
