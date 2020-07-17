@@ -16,8 +16,10 @@ package com.google.sps.data;
 
 import com.google.sps.QueryCovidStats;
 import com.google.sps.data.DataPoint;
+import com.opencsv.*;
 
 import java.io.BufferedReader;
+import java.io.FileReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -61,22 +63,31 @@ public class CountyStats extends County {
      */
     private static long getPopulation (County county) {
         try {
-            Process p = Runtime.getRuntime().exec("python3 ../classes/get_county_population.py " + county.getCountyFips());
-            
-            BufferedReader stdInput = new BufferedReader(new 
-                InputStreamReader(p.getInputStream()));
 
-            Long output = Long.parseLong(stdInput.readLine());
+            // See if fips in the csv file, if so, return the population.
+            CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_population.csv"));
+            String[] nextLine = reader.readNext();
+            while ((nextLine = reader.readNext()) != null) {
+                if (Integer.parseInt(county.getCountyFips()) == Integer.parseInt(nextLine[3])) {
+                    return Long.parseLong(nextLine[2]);
+                }
+            }
 
-            stdInput.close();
-        
-            return output;
+            // Otherwise, log failure and return 0.
+            System.out.println("Unable to get population for " 
+                + county.getCountyName() 
+                + ", " 
+                + county.getStateName());
+            return 0;
         } 
         
         // If there is an exception, send error message and return 0.
         catch (Exception e) {
-            System.out.println(
-                "Unable to get population for " + county.getCountyName() + ", " + county.getStateName());
+            e.printStackTrace();
+            System.out.println("An error occured while getting the population for " 
+                + county.getCountyName() 
+                + ", " 
+                + county.getStateName());
             return 0;
         }
     }
@@ -102,22 +113,31 @@ public class CountyStats extends County {
      */
     public double getCountyScore() {
         try {
-            Process p = Runtime.getRuntime().exec("python3 ../classes/get_county_percentile.py " + countyFips);
-            
-            BufferedReader stdInput = new BufferedReader(new 
-                InputStreamReader(p.getInputStream()));
 
-            Double output = Double.parseDouble(stdInput.readLine()) * 10.0;
+            // See if fips in the csv file, if so, return the population.
+            CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_percentile.csv"));
+            String[] nextLine = reader.readNext();
+            while ((nextLine = reader.readNext()) != null) {
+                if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[1])) {
+                    return Double.parseDouble(nextLine[3]) * 10;
+                }
+            }
 
-            stdInput.close();
-        
-            return output;
+            // Otherwise, log failure and return 0.
+            System.out.println("Unable to get the score for " 
+                + countyName
+                + ", " 
+                + stateName);
+            return 5.0;
         } 
         
-        // If there is an exception, send error message and return 5.0.
+        // If there is an exception, send error message and return 0.
         catch (Exception e) {
-            System.out.println(
-                "Unable to get score for " + countyName + ", " + stateName);
+            e.printStackTrace();
+            System.out.println("An error occured while getting the score for " 
+                + countyName
+                + ", " 
+                + stateName);
             return 5.0;
         }
     }
