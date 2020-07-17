@@ -6,7 +6,7 @@
             <br/>
             <a [routerLink]="['/about']">Learn more about this tool &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
         </div>
-        <form>
+        <!-- <form>
             <div class="input-container">
                 <mat-icon class="search-icon">search</mat-icon>
                 <input
@@ -18,6 +18,7 @@
                     (keyup.enter) = "getNearbyStores()"
                 >
             </div>
-        </form>
+        </form> -->
+        <app-search-bar (setAddress)="getAddress($event)"></app-search-bar>
     </div>
 </div>
