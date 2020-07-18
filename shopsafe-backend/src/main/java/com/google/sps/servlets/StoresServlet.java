@@ -16,9 +16,8 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
-import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
-import com.google.sps.data.Result;
+import com.google.sps.data.StoresResult;
 import com.google.sps.data.Store;
 import com.google.sps.data.StoreStats;
 
@@ -151,7 +150,6 @@ public class StoresServlet extends HttpServlet {
         List<Store> stores = getStores(location);
 
         HashMap<String, Double> countyScores = new HashMap<String, Double>();
-        List<CountyStats> countyStats = new ArrayList<>();
 
         // Add fake score values to the stores.
         List<StoreStats> storeStats = new ArrayList<>();
@@ -175,18 +173,8 @@ public class StoresServlet extends HttpServlet {
             // If county not in hashmap, add to hashmap and counties list.
             if (!countyScores.containsKey(county.getCountyFips())) {
 
-                // Get Covid stats based on county.
-                CountyStats countyStat = new CountyStats(county);
-                
-                // If the county stats were not obtained, log error message and don't add the store.
-                if (countyStat.getPopulation() == 0) {
-                    System.out.println("Failed to get county stats for FIPS: " + county.getCountyFips());
-                    continue;
-                }
-
                 // Calculate and store the score for county and add the county stats to the list.
-                countyScores.put(county.getCountyFips(), countyStat.getCountyScore());
-                countyStats.add(countyStat);
+                countyScores.put(county.getCountyFips(), county.getCountyScore());;
             }
 
             // Todo: Get reviews for a store.
@@ -208,10 +196,10 @@ public class StoresServlet extends HttpServlet {
             return;
         }
 
-        // Todo: Return stores with scores and county info as json as result.
+        // Todo: Return stores with scores and county info as json as StoresResult.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(storeStats, location)));
+        response.getWriter().println(gson.toJson(new StoresResult(storeStats, location)));
     }
 
     /**

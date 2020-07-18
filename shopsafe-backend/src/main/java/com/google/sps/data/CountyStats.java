@@ -14,7 +14,7 @@
 
 package com.google.sps.data;
 
-import com.google.sps.QueryCovidStats;
+import com.google.sps.QueryOverTime;
 import com.google.sps.data.DataPoint;
 import com.opencsv.*;
 
@@ -37,24 +37,21 @@ public class CountyStats extends County {
 
     protected long cases;
     protected long deaths;
-    protected long activeCases;
     protected long population;
+    protected ArrayList<DataPoint> covidData;
 
     public CountyStats(County county) {
 
         super(county.countyName, county.stateName, county.countyFips);
 
-        applyCovidQuery(county);
-
+        // Get population from the Csv file.
         this.population = county.getPopulationFromCsv();
-    }
 
-    void applyCovidQuery(County county) {
-        // Make query for active covid cases and deaths.
-        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
+        // Make query to find cases and deaths, and cases over time.
+        QueryOverTime queryResults = QueryOverTime.getCovidStatsFips(county.getCountyFips());
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
-        this.activeCases = queryResults.getActiveCases();
+        this.covidData = queryResults.getCovidData();
     }
 
     public long getCases() {
@@ -64,12 +61,12 @@ public class CountyStats extends County {
     public long getDeaths() {
         return deaths;
     }
-
-    public long getActiveCases() {
-        return activeCases;
-    }
     
     public long getPopulation() {
         return population;
+    }
+
+    public ArrayList<DataPoint> getCovidData() {
+        return covidData;
     }
 }

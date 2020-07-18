@@ -20,12 +20,12 @@ import java.util.List;
  * Class representing the response from /stores contains store information
  * and latititude and longitude of assigned user location.
  */
-public final class Result {
+public final class StoresResult {
 
     private final List<StoreStats> stores;
     private final LatLng latLng;
 
-    public Result(List<StoreStats> stores, LatLng latLng) {
+    public StoresResult(List<StoreStats> stores, LatLng latLng) {
         stores.sort(
             (StoreStats s2, StoreStats s1)->
                 new Double (s1.getScore()).compareTo(
