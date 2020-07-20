@@ -17,10 +17,185 @@ export class ResultComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
 
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map
-  markers = []; // Array of store markers rendered in Google Map
-  center: google.maps.LatLngLiteral; // Current center of Google Map
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
+  markers = [];
+  latLng;
+  center: google.maps.LatLngLiteral;
   styles: google.maps.MapTypeStyle[] = [
+    // {
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#f5f5f5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   elementType: "labels.icon",
+    //   stylers: [
+    //     {
+    //       visibility: "off"
+    //     }
+    //   ]
+    // },
+    // {
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#616161"
+    //     }
+    //   ]
+    // },
+    // {
+    //   elementType: "labels.text.stroke",
+    //   stylers: [
+    //     {
+    //       color: "#f5f5f5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "administrative.land_parcel",
+    //   stylers: [
+    //     {
+    //       visibility: "off"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "administrative.land_parcel",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#bdbdbd"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "administrative.neighborhood",
+    //   stylers: [
+    //     {
+    //       visibility: "off"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#eeeeee"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#757575"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi.park",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#e5e5e5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "poi.park",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#9e9e9e"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#ffffff"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.arterial",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#757575"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.highway",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#dadada"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.highway",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#616161"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "road.local",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#9e9e9e"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "transit.line",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#e5e5e5"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "transit.station",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#eeeeee"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "water",
+    //   elementType: "geometry",
+    //   stylers: [
+    //     {
+    //       color: "#c9c9c9"
+    //     }
+    //   ]
+    // },
+    // {
+    //   featureType: "water",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#9e9e9e"
+    //     }
+    //   ]
+    // }
     {
       featureType: "administrative",
       elementType: "geometry",
@@ -55,11 +230,11 @@ export class ResultComponent implements OnInit {
         }
       ]
     }
-  ]; // Custom map styling
+  ];
   options: google.maps.MapOptions = {
     disableDefaultUI: true,
     styles: this.styles,
-  }; // Options for Google Map rendered in template
+  };
 
   constructor(
     private apiService: ApiService,
@@ -112,19 +287,14 @@ export class ResultComponent implements OnInit {
     this.addMarkers();
     console.log("CLIENT: added markers");
 
-    // Set center of map to latLng of user location
+    // Set center of map to first result of store 
+    // FIXME: return latlng of location then center (?)
     this.center = {
       lat: this.result.latLng.latitude,
       lng: this.result.latLng.longitude
     };
   }
 
-  /**
-   * Populates map with markers indicating score range based on latLng geolocation
-   * of each rendered grocery store.
-   * 
-   * Red markers: [0, 3.3], yellow markers: (3.3, 6.6], greeen markers: (6.6, 10]
-   */
   addMarkers(): void {
     var safeIcon = "http://maps.google.com/mapfiles/ms/icons/green.png";
     var cautionIcon = "http://maps.google.com/mapfiles/ms/icons/yellow.png";
@@ -156,11 +326,6 @@ export class ResultComponent implements OnInit {
     }
   }
 
-  /**
-   * Recenters map based on latLng
-   * @param lat latitude to be recentered to
-   * @param lng longitude to be recentered to
-   */
   recenterMap(lat: number, lng: number): void {
     this.center = {
       lat: lat,

@@ -1,5 +1,6 @@
 import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from "@angular/router";
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { } from 'googlemaps';
 
 @Component({
@@ -22,14 +23,10 @@ export class SearchBarComponent implements OnInit {
   ngOnInit(): void {
   }
   
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.getPlace();
   }
 
-  /**
-   * Fetches places based on changing input values using Google Places API autocomplete feature.
-   * Restricted to the US for geocoded locations (ie. not corporate)
-   */
   getPlace(): void {
     const autocomplete = new google.maps.places.Autocomplete(this.address.nativeElement,
       {
@@ -44,10 +41,6 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  /**
-   * Invokes EventEmitter to toggle changes for autocomplete.
-   * @param place contained value within event to be emitted
-   */
   invokeEvent(place: Object): void {
     this.setAddress.emit(place);
   }
