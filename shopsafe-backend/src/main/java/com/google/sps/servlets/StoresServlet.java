@@ -16,9 +16,8 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
-import com.google.sps.data.CountyStats;
 import com.google.sps.data.LatLng;
-import com.google.sps.data.Result;
+import com.google.sps.data.StoresResult;
 import com.google.sps.data.Store;
 import com.google.sps.data.StoreStats;
 
@@ -61,7 +60,7 @@ public class StoresServlet extends HttpServlet {
     public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
     public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private String PLACE_KEY;
-    private String PLACE_KEY_LOCATION = "../../key.txt";
+    private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
 
     /**
      * For a get request, return all nearby stores.
@@ -69,24 +68,24 @@ public class StoresServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
-        // // Gets API key for places from shopsafe-backend.
-        // try {
-        //     File myObj = new File(PLACE_KEY_LOCATION);
-        //     Scanner myReader = new Scanner(myObj);
-        //     PLACE_KEY = "&key=" + myReader.nextLine();
-        //     myReader.close();
-        // }
-        
-        // // If error, print error, and set status to bad reuqest and send error response.
-        // catch (FileNotFoundException e) {
-        //     e.printStackTrace();
-        //     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        //     response.setContentType("text/html;");
-        //     response.getWriter().println("Failed to get api key.");
-        //     return;
-        // }
+        // Gets API key for places from shopsafe-backend.
+        try {
+            File myObj = new File(PLACE_KEY_LOCATION);
+            Scanner myReader = new Scanner(myObj);
+            PLACE_KEY = "&key=" + myReader.nextLine();
+            myReader.close();
+        }
 
-        PLACE_KEY = "&key=" + "";
+        // If error, print error, and set status to bad reuqest and send error response.
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/html;");
+            response.getWriter().println("Failed to get api key.");
+            return;
+        }
+
+        // PLACE_KEY = "&key=" + "API_KEY";
 
         // Get the address input from the param.
         String address = request.getParameter("location"); 
@@ -169,9 +168,10 @@ public class StoresServlet extends HttpServlet {
         ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(count, factory);
         for (int i=0 ; i< count; i++) {
             Store store = stores.get(i);
-
+          
             //Run thread for each store
             pool.execute(()->addStore(store, countyScores, storeStats));
+
         }
         pool.shutdown();
         while (!pool.isTerminated());
@@ -184,10 +184,10 @@ public class StoresServlet extends HttpServlet {
             return;
         }
 
-        // Todo: Return stores with scores and county info as json as result.
+        // Todo: Return stores with scores and county info as json as StoresResult.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new Result(new ArrayList(storeStats), location)));
+        response.getWriter().println(gson.toJson(new StoresResult(storeStats, location)));
     }
 
 
@@ -199,27 +199,18 @@ public class StoresServlet extends HttpServlet {
 
         // Get county based on location of the store
         County county = County.GetCounty(store);
-
+      
         // If the county was not found, log error message and don't add the store.
         if (county.getCountyName() == "") {
             System.out.println("Failed to get county information for store id: " + store.getId());
-            return;
+            continue;
         }
 
         // If county not in hashmap, add to hashmap and counties list.
         if (!countyScores.containsKey(county.getCountyFips())) {
 
-            // Get Covid stats based on county.
-            CountyStats countyStat = new CountyStats(county);
-            
-            // If the county stats were not obtained, log error message and don't add the store.
-            if (countyStat.getPopulation() == 0) {
-                System.out.println("Failed to get county stats for FIPS: " + county.getCountyFips());
-                return;
-            }
-
             // Calculate and store the score for county and add the county stats to the list.
-            countyScores.put(county.getCountyFips(), countyStat.getCountyScore());
+            countyScores.put(county.getCountyFips(), county.getCountyScore());;
         }
 
         // Todo: Get reviews for a store.

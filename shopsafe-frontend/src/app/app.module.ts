@@ -30,6 +30,7 @@ import { ApiService } from './api/api.service';
 // Pipes
 import { RoundPipe } from './pipes/round.pipe';
 import { HttpErrorComponent } from './components/http-error/http-error.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { HttpErrorComponent } from './components/http-error/http-error.component
     CheckInModalComponent,
     RoundPipe,
     HttpErrorComponent,
+    SearchBarComponent,
   ],
   imports: [
     BrowserModule,

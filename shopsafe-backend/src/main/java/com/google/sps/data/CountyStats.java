@@ -14,10 +14,12 @@
 
 package com.google.sps.data;
 
-import com.google.sps.QueryCovidStats;
+import com.google.sps.data.QueryOverTime;
 import com.google.sps.data.DataPoint;
+import com.opencsv.*;
 
 import java.io.BufferedReader;
+import java.io.FileReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -31,80 +33,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /** Class contains the name, state, population and covid cases and deaths of a county. */
-public class CountyStats {
+public class CountyStats extends County {
 
-    protected String countyName;
-    protected String stateName;
     protected long cases;
     protected long deaths;
-    protected long activeCases;
     protected long population;
+    protected ArrayList<DataPoint> covidData;
 
     public CountyStats(County county) {
-        this.countyName = county.getCountyName();
-        this.stateName = county.getStateName();
 
-        applyCovidQuery(county);
+        super(county.countyName, county.stateName, county.countyFips);
 
-        // Find the population of county using Census API
-        this.population = getPopulation(county);
-    }
+        // Get population from the Csv file.
+        this.population = county.getPopulationFromCsv();
 
-    void applyCovidQuery(County county) {
-        // Make query for active covid cases and deaths.
-        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
+        // Make query to find cases and deaths, and cases over time.
+        QueryOverTime queryResults = QueryOverTime.getCovidStatsFips(county.getCountyFips());
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
-        this.activeCases = queryResults.getActiveCases();
-    }
-
-    /*
-     * Given a county, use Census API to find population
-     */
-    private static long getPopulation (County county) {
-        try {
-            String results = "";
-            String line;
-
-            // Read response of census api call
-            URL url = new URL(getAPIUrl(county.getCountyFips()));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            while ((line = reader.readLine()) != null) {
-                    results += line;
-            }
-            reader.close();
-
-            //Convert to Json and parse for population
-            JSONArray jsonResult = new JSONArray(results).getJSONArray(1); //skip schema on first entry
-            return jsonResult.getLong(0);
-
-        } catch (Exception e) {
-            //Population not found
-            System.out.println(
-                "Unable to get population for " + county.getCountyName() + ", " + county.getStateName());
-            return 0;
-        }
-    }
-
-    /*
-     * Helper Function to format URL call for population API
-     */
-    private static String getAPIUrl(String stateCountyFips) {
-        //Split state and County Fips
-        String stateFips = stateCountyFips.substring(0,2);
-        String countyFips = stateCountyFips.substring(2, 5);
-
-        String url = "https://api.census.gov/data/2019/pep/population?get=POP&for=COUNTY:"
-            + countyFips + "&in=STATE:" + stateFips + "&key=ccca49e2b71e9f3e52453d70bf499baa821b9f77";
-        return url;
-    }
-
-    public String getCountyName() {
-        return countyName;
-    }
-
-    public String getStateName() {
-        return stateName;
+        this.covidData = queryResults.getCovidData();
     }
 
     public long getCases() {
@@ -114,23 +61,12 @@ public class CountyStats {
     public long getDeaths() {
         return deaths;
     }
-
-    public long getActiveCases() {
-        return activeCases;
-    }
     
     public long getPopulation() {
         return population;
     }
 
-    public double getCountyScore() {
-        long populationUS = 331002651;
-        long casesUS = 1996000;
-        double percentageUS = (double) casesUS / (double) populationUS;
-        double percentageCounty = (double) activeCases / (double) population;
-
-        // TODO: Create a better scoring system for counties.
-        return (percentageUS - percentageCounty) * 5 + 5;
+    public ArrayList<DataPoint> getCovidData() {
+        return covidData;
     }
-
 }

@@ -14,6 +14,8 @@
 
 package com.google.sps;
 
+import com.google.sps.data.QueryCovidStats;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

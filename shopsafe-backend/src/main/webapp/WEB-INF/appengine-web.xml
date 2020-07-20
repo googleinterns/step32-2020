@@ -7,4 +7,7 @@
     <!-- prevent unwanted caching when accessing via the web preview server -->
     <include path="/**" expiration="0s" />
   </static-files>
+  <resource-files>
+    <include path="/**" />
+  </resource-files>
 </appengine-web-app>

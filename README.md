@@ -2,6 +2,7 @@
 A web application for informed and safe shopping during COVID-19.
 
 ## Running Development Server
+```
 // Install Angular
 npm install -g @angular/cli
 
@@ -13,7 +14,8 @@ ng build --delete-output-path=false
 cd ../shopsafe-backend/
 mvn package appengine:run 
 
-//Add -Dmaven.test.skip to skip tests
+// Add -Dmaven.test.skip to skip tests
+```
 
 ## Deployment Instructions
 ```

@@ -27,14 +27,13 @@ import com.google.sps.data.DataPoint;
 public final class StoreResult {
 
     private final StoreStats store;
-    private final CountyStatsOverTime countyStats;
+    private final CountyStats countyStats;
     private final ArrayList<DataPoint> maskData;
     private final ArrayList<DataPoint> busyData;
     private final ArrayList<DataPoint> lineData;
     private final ArrayList<DataPoint> hygieneData;
 
-
-    public StoreResult(StoreStats store, CountyStatsOverTime countyStats, 
+    public StoreResult(StoreStats store, CountyStats countyStats, 
         HashMap<String, ArrayList<DataPoint>> compiledRatings) {
         this.store = store;
         this.countyStats = countyStats;
