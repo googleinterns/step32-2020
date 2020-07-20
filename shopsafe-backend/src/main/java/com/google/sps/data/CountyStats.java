@@ -14,7 +14,7 @@
 
 package com.google.sps.data;
 
-import com.google.sps.QueryOverTime;
+import com.google.sps.data.QueryOverTime;
 import com.google.sps.data.DataPoint;
 import com.opencsv.*;
 
