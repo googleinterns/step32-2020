@@ -14,14 +14,13 @@
 
 package com.google.sps.data;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Date;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.sps.data.DataPoint;
 import com.google.sps.data.StoreDatastoreHandler;
-import com.google.appengine.api.datastore.Entity;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /** Class contains all the averaged check in stats for a store. */
 public final class CheckInStats {
@@ -32,7 +31,6 @@ public final class CheckInStats {
     private double hygiene = 0.0;
     private double masks = 0.0;
     private long checkInCount = 0;
-    
     private List<Entity> ratingEntities;
 
     // Static final weights for calculating score.
@@ -96,7 +94,7 @@ public final class CheckInStats {
      * Using the list of Rating Entities, incrementally average the ratings for each category
      * over a daily basis.
      */
-    public HashMap<String, ArrayList<DataPoint>> compileRatingDays () {
+    public HashMap<String, ArrayList<DataPoint>> compileRatingDays() {
         double maskSum = 0.0;
         double hygieneSum = 0.0;
         double lineSum = 0.0;

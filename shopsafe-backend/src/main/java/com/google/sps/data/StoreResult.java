@@ -33,7 +33,6 @@ public final class StoreResult {
     private final ArrayList<DataPoint> lineData;
     private final ArrayList<DataPoint> hygieneData;
 
-
     public StoreResult(StoreStats store, CountyStats countyStats, 
         HashMap<String, ArrayList<DataPoint>> compiledRatings) {
         this.store = store;

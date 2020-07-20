@@ -22,17 +22,17 @@ import java.util.List;
  */
 public final class StoresResult {
 
-    private final List<StoreStats> stores;
-    private final LatLng latLng;
+  private final List<StoreStats> stores;
+  private final LatLng latLng;
 
-    public StoresResult(List<StoreStats> stores, LatLng latLng) {
-        stores.sort(
-            (StoreStats s2, StoreStats s1)->
-                new Double (s1.getScore()).compareTo(
-                    new Double (s2.getScore())
-                )
-        );
-        this.stores = stores;
-        this.latLng = latLng;
-    }
+  public StoresResult(List<StoreStats> stores, LatLng latLng) {
+    stores.sort(
+      (StoreStats s2, StoreStats s1) ->
+        new Double (s1.getScore()).compareTo(
+          new Double (s2.getScore())
+        )
+    );
+    this.stores = stores;
+    this.latLng = latLng;
+  }
 }
