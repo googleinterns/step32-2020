@@ -187,7 +187,7 @@ public class StoresServlet extends HttpServlet {
         // Todo: Return stores with scores and county info as json as StoresResult.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new StoresResult(storeStats, location)));
+        response.getWriter().println(gson.toJson(new StoresResult(new ArrayList(storeStats), location)));
     }
 
 
@@ -203,7 +203,7 @@ public class StoresServlet extends HttpServlet {
         // If the county was not found, log error message and don't add the store.
         if (county.getCountyName() == "") {
             System.out.println("Failed to get county information for store id: " + store.getId());
-            continue;
+            return;
         }
 
         // If county not in hashmap, add to hashmap and counties list.
