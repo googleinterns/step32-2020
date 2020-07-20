@@ -25,12 +25,8 @@ export class LandingComponent implements OnInit {
     console.log("CLIENT: redirecting to results");
   }
 
-  /**
-   * Fetches address from search bar autocomplete by parsing returned 
-   * place array for 'formatted_address' value
-   * @param place array emitted from setAddress event from search bar component
-   */
-  getAddress(place: object): void {
+  getAddress(place: object) {
+    // this.location = place['formatted_address'];
     this.zone.run(() => this.location = place['formatted_address']);
     this.getNearbyStores();
   }

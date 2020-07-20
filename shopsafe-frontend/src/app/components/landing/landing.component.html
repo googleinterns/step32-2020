@@ -6,6 +6,19 @@
             <br/>
             <a [routerLink]="['/about']">Learn more about this tool &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
         </div>
+        <!-- <form>
+            <div class="input-container">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input
+                    class="input-field"
+                    type="text"
+                    placeholder="ENTER YOUR LOCATION TO FIND NEARBY GROCERY STORES"
+                    name="search"
+                    [(ngModel)]="location"
+                    (keyup.enter) = "getNearbyStores()"
+                >
+            </div>
+        </form> -->
         <app-search-bar (setAddress)="getAddress($event)"></app-search-bar>
     </div>
 </div>
