@@ -47,7 +47,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 @RunWith(JUnit4.class)
-public final class ServletTest {
+public final class StoresSpeedBenchmarkTest {
 
     private final LocalServiceTestHelper helper =
         new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -66,7 +66,7 @@ public final class ServletTest {
      * For benchmarking speed
      */
     @Test
-    public void checkValidLocation() throws IOException, ServletException {
+    public void phillyInput() throws IOException, ServletException {
         
         //Initialize request, response, and servlet.
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class); 
