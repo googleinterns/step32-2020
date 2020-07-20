@@ -22,12 +22,18 @@ export class CovidChartComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Called when parameters are changed by the parent component.
+   */
   ngOnChanges() {
     // Updates chart with new parent input values
     this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
 
   // TODO: custom colorization with options
+  /**
+   * Draws line chart and renders within template.
+   */
   private drawChart() {
 
     let data = new this.gLib.visualization.DataTable();

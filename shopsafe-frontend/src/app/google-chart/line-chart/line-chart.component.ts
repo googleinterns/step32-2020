@@ -25,13 +25,19 @@ export class LineChartComponent implements OnInit {
 
   ngOnInit(): void {}
 
+   /**
+   * Called when parameters are changed by the parent component.
+   */
   ngOnChanges() {
     // Updates chart with new parent input values
     this.gLib.charts.load('current', {'packages': ['corechart', 'table'], callback: this.drawChart.bind(this)});
   }
 
-  // Assumes that all input arrays are the same length
   // TODO: custom colorization with options
+  /**
+   * Draws COVID-19 statistics line chart and renders within template.
+   * Assumes that all input arrays are the same length
+   */
   private drawChart() {
 
     let data = new this.gLib.visualization.DataTable();
