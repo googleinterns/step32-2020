@@ -18,15 +18,9 @@ import com.google.sps.data.Store;
 import com.google.sps.data.CheckInStats;
 
 /** Class contains all the information for a store. */
-public final class StoreStats {
+public final class StoreStats extends Store{
 
     // Store stat properties.
-    private final String id;
-    private final String name;
-    private final String address;
-    private final Boolean open;
-    private final double latitude;
-    private final double longitude;
     private final double score;
     private final double busy;
     private final double line;
@@ -39,12 +33,7 @@ public final class StoreStats {
     static private final double CHECK_IN_WEIGHT = 0.5;
 
     public StoreStats(Store store, double countyScore, CheckInStats stats) {
-        this.id = store.getId();
-        this.name = store.getName();
-        this.address = store.getAddress();
-        this.open = store.getOpen();
-        this.latitude = store.getLatitude();
-        this.longitude = store.getLongitude();
+        super(store.id ,store.name, store.address, store.open, new LatLng(store.latitude, store.longitude));
         this.score = countyScore * COUNTY_WEIGHT + stats.getCheckInScore() * CHECK_IN_WEIGHT;
         this.busy = stats.getBusy();
         this.line = stats.getLine();

@@ -17,14 +17,14 @@ package com.google.sps.data;
 import com.google.sps.data.LatLng;
 
 /** Class contains all the information for a store without the scores. */
-public final class Store {
+public class Store {
 
-    private final String id;
-    private final String name;
-    private final String address;
-    private final Boolean open;
-    private final double latitude;
-    private final double longitude;
+    protected String id;
+    protected String name;
+    protected String address;
+    protected Boolean open;
+    protected double latitude;
+    protected double longitude;
 
     public Store(String id, String name, String address, Boolean open, LatLng location) {
         this.id = id;

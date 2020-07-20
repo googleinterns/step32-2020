@@ -52,7 +52,6 @@ public final class CountyStatsTest {
 
         Assert.assertTrue(countyStats.getCases() > 0);
         Assert.assertTrue(countyStats.getDeaths() > 0);
-        Assert.assertTrue(countyStats.getActiveCases() > 0);   
         Assert.assertTrue(countyStats.getPopulation() > 0);   
     }
 }
