@@ -1,6 +1,7 @@
 #title .heading-text {
     padding-bottom: 20px;
     text-align: center;
+    text-transform: uppercase;
 }
 
 #title .box p {
