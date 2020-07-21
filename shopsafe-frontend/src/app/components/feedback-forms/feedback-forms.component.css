@@ -1,0 +1,16 @@
+#title .heading-text {
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+#title .box p {
+    text-align: justify;
+}
+
+#title .box p:hover {
+    color: rgb(255, 135, 86, 0.7);
+}
+
+#title .section {
+    padding-top: 20px;
+}

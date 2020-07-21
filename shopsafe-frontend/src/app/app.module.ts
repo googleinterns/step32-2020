@@ -16,6 +16,7 @@ import { StoreComponent } from './components/store/store.component';
 import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CheckInModalComponent } from './components/check-in-modal/check-in-modal.component';
+import { FeedbackFormsComponent } from './components/feedback-forms/feedback-forms.component';
 
 // Material Angular components
 import { MatDialogModule } from '@angular/material/dialog';
@@ -45,6 +46,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
     RoundPipe,
     HttpErrorComponent,
     SearchBarComponent,
+    FeedbackFormsComponent,
   ],
   imports: [
     BrowserModule,
