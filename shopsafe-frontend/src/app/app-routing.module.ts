@@ -6,6 +6,7 @@ import { ResultComponent } from './components/result/result.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { StoreComponent } from './components/store/store.component';
 import { AboutComponent } from './components/about/about.component';
+import { FeedbackFormsComponent } from './components/feedback-forms/feedback-forms.component';
 
 const routes: Routes = [
   { 
@@ -23,6 +24,10 @@ const routes: Routes = [
   { 
     path: 'about', 
     component: AboutComponent 
+  },
+  {
+    path: "feedback",
+    component: FeedbackFormsComponent 
   },
   { 
     path: "**", 
