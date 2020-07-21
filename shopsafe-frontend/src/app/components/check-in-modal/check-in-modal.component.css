@@ -28,10 +28,10 @@
 }
 
 #check-in-modal #submit-check-in-button {
-    background: rgba(104, 187, 207, 0.1);
+    background: #68BBCF;
     border-radius: 8px;
     padding: 10px 15px 10px;
-    color: #68BBCF;
+    color: #EEEEEE;
     margin-right: 15px;
     border: none;
     font-weight: 600;
@@ -43,6 +43,7 @@
 
 #check-in-modal #submit-check-in-button:hover {
     background: rgba(104, 187, 207, 0.3);
+    color: #68BBCF;
 }
 
 #check-in-modal .mat-tooltip {
