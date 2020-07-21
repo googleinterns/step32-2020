@@ -108,3 +108,7 @@
   padding-top: 30px;
   padding-bottom: 30px;
 }
+
+#result .stores-list-item:hover {
+  transform: scale(1.02);
+}
