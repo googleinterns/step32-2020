@@ -103,3 +103,15 @@
     background: rgba(104, 187, 207, 0.3);
     color: #68BBCF;
 }
+
+#store .card {
+  padding: 25px 40px 25px;
+  box-shadow: 0 0 12px 3px #F6F6F6;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 40px;
+}
+
+#store .card:hover {
+  transform: scale(1.02);
+}

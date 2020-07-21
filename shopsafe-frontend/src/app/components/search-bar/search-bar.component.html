@@ -2,6 +2,7 @@
   <div class="input-container">
     <mat-icon class="search-icon">search</mat-icon>
     <input
+      [ngStyle]="{'disabled': (queryWait) ? 'false' : 'true'}"
       #address
       class="input-field"
       type="text"

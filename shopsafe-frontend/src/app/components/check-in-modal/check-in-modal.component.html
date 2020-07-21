@@ -33,14 +33,17 @@
                     <i class="far fa-question-circle"></i>
                 </a>
             </h2>
-            <mat-slider
-                [(ngModel)]="line"
-                min="1" 
-                max="10" 
-                step="0.5" 
-                class="right-text"
-                thumbLabel tickInterval="1"
-            ></mat-slider>
+             <div class="slider" class="right-text grey-text">
+              <i class="far fa-frown"></i>
+              <mat-slider
+                  [(ngModel)]="line"
+                  min="1" 
+                  max="10" 
+                  step="0.5" 
+                  thumbLabel tickInterval="1"
+              ></mat-slider>
+              <i class="far fa-smile"></i>
+            </div>
         </div>
         <div class="option">
             <h2 class="left-text">
@@ -53,14 +56,17 @@
                     <i class="far fa-question-circle"></i>
                 </a>
             </h2>
-            <mat-slider 
-                [(ngModel)]="hygiene"
-                min="1" 
-                max="10" 
-                step="0.5" 
-                class="right-text"
-                thumbLabel tickInterval="1"
-            ></mat-slider>
+            <div class="slider" class="right-text grey-text">
+              <i class="far fa-frown"></i>
+              <mat-slider
+                  [(ngModel)]="hygiene"
+                  min="1" 
+                  max="10" 
+                  step="0.5" 
+                  thumbLabel tickInterval="1"
+              ></mat-slider>
+              <i class="far fa-smile"></i>
+            </div>
         </div>
         <div class="option">
             <h2 class="left-text">
@@ -72,14 +78,17 @@
                     <i class="far fa-question-circle"></i>
                 </a>
             </h2>
-            <mat-slider
-                [(ngModel)]="mask"
-                min="1" 
-                max="10" 
-                step="0.5" 
-                class="right-text"
-                thumbLabel tickInterval="1"
-            ></mat-slider>
+             <div class="slider" class="right-text grey-text">
+              <i class="far fa-frown"></i>
+              <mat-slider
+                  [(ngModel)]="mask"
+                  min="1" 
+                  max="10" 
+                  step="0.5" 
+                  thumbLabel tickInterval="1"
+              ></mat-slider>
+              <i class="far fa-smile"></i>
+            </div>
         </div>
     </div>
     <button id='submit-check-in-button' (click) = "checkIn()">CHECK IN AT THIS STORE</button>

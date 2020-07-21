@@ -4,8 +4,8 @@
             <a class="back-link" (click)="goBack()"><i class="fas fa-long-arrow-alt-left"></i> &nbsp; Back to Results</a>
             <br/>
             <h1>{{ store.name }}</h1>
+            <p>{{ store.address }}</p>
             <p>
-                {{ store.address }} &nbsp; &nbsp; 
                 <button class="maps-button" (click)="redirectToMap()"><i class="fas fa-map-marked-alt"></i> &nbsp; VIEW ON MAPS</button>
                 <button id='check-in-button' (click)="openModal()"><i class="fas fa-pencil-alt"></i> &nbsp; CHECK IN AT THIS STORE</button>
             </p>
@@ -28,72 +28,77 @@
         </div>
         
         <br/><br/>
-        <div class="stat-bar-wrapper">
-          <h2>Check-In Statistics for {{ store.name }}</h2>
-          <p>
-            Chart statistics represent check-in entries averaged per day. To view more about the statistics, 
-            hover over each of the most current values of the statistics below.
-          </p>
-          <div class="stat-bar-secondary">
-            <div class="stat-elem-quarter" style="text-align: left">
-                <a class="stat-obj"
-                matTooltip="How strict is the store with masks? Are the customers and workers 
-                            wearing masks properly? 1 indicates no to little mask policy 
-                            and presence (bad), and 10 indicates excellent mask usage (good)">
-                  MASK
-                </a>
-                <p><b>{{ store.checkInCount == 0 ? '—' : store.masks | round }}</b>/10</p>
-            </div>
-            <div class="stat-elem-quarter" style="text-align: center;">
-                <a class="stat-obj"
-                matTooltip="How crowded is it inside the store? Essentially, is there 
-                            enough space to social distance, maintain 6 feet? 1 indicates 
-                            very busy (bad), and 10 indicates not busy at all (good)">
-                  BUSY
-                </a>
-                <p><b>{{ store.checkInCount == 0 ? '—' : store.busy | round }}</b>/10</p>
-            </div>
-            <div class="stat-elem-quarter" style="text-align: center;">
-                <a class="stat-obj"
-                matTooltip="How long is the line to get into the store from the outside?
-                            1 indicates very long (bad), and 10 indicates not long at all (good)">
-                  LINE
-                </a>
-                <p><b>{{ store.checkInCount == 0 ? '—' : store.line | round }}</b>/10</p>
-            </div>
-            <div class="stat-elem-quarter" style="text-align: right;">
-                <a class="stat-obj"
-                matTooltip="How clean is the store overall? Are the shared carts, 
-                            baskets, and surfaces sanitized? 1 indicates poor hygiene 
-                            (bad), and 10 indicates good hygiene (good)">
-                  HYGIENE
-                </a>
-                <p><b>{{ store.checkInCount == 0 ? '—' : store.hygiene | round }}</b>/10</p>
+        <div class="card">
+          <div class="stat-bar-wrapper">
+            <h2>Check-In Statistics for {{ store.name }}</h2>
+            <p>
+              Chart statistics represent check-in entries averaged per day. To view more about the statistics, 
+              hover over each of the most current values of the statistics below.
+            </p>
+            <div class="stat-bar-secondary">
+              <div class="stat-elem-quarter" style="text-align: left">
+                  <a class="stat-obj"
+                  matTooltip="How strict is the store with masks? Are the customers and workers 
+                              wearing masks properly? 1 indicates no to little mask policy 
+                              and presence (bad), and 10 indicates excellent mask usage (good)">
+                    MASK
+                  </a>
+                  <p><b>{{ store.checkInCount == 0 ? '—' : store.masks | round }}</b>/10</p>
+              </div>
+              <div class="stat-elem-quarter" style="text-align: center;">
+                  <a class="stat-obj"
+                  matTooltip="How crowded is it inside the store? Essentially, is there 
+                              enough space to social distance, maintain 6 feet? 1 indicates 
+                              very busy (bad), and 10 indicates not busy at all (good)">
+                    BUSY
+                  </a>
+                  <p><b>{{ store.checkInCount == 0 ? '—' : store.busy | round }}</b>/10</p>
+              </div>
+              <div class="stat-elem-quarter" style="text-align: center;">
+                  <a class="stat-obj"
+                  matTooltip="How long is the line to get into the store from the outside?
+                              1 indicates very long (bad), and 10 indicates not long at all (good)">
+                    LINE
+                  </a>
+                  <p><b>{{ store.checkInCount == 0 ? '—' : store.line | round }}</b>/10</p>
+              </div>
+              <div class="stat-elem-quarter" style="text-align: right;">
+                  <a class="stat-obj"
+                  matTooltip="How clean is the store overall? Are the shared carts, 
+                              baskets, and surfaces sanitized? 1 indicates poor hygiene 
+                              (bad), and 10 indicates good hygiene (good)">
+                    HYGIENE
+                  </a>
+                  <p><b>{{ store.checkInCount == 0 ? '—' : store.hygiene | round }}</b>/10</p>
+              </div>
             </div>
           </div>
+          <div id="line-chart" class="chart">
+            <app-line-chart [mask]='maskData' [busy]='busyData' [line]='lineData' [hygiene]='hygieneData'></app-line-chart>
+          </div>
         </div>
-        <div id="line-chart" class="chart">
-          <app-line-chart [mask]='maskData' [busy]='busyData' [line]='lineData' [hygiene]='hygieneData'></app-line-chart>
-        </div>
-        <div class="stat-bar-wrapper">
-            <h2>COVID-19 Statistics for {{ countyStats.countyName }} County</h2>
-            <div class="stat-bar-secondary">
-                <div class="stat-elem">
-                    <a class="stat-obj">TOTAL CASES</a>
-                    <p>{{ countyStats.cases }}</p>
-                </div>
-                <div class="stat-elem" style="text-align: center;">
-                    <a class="stat-obj">TOTAL DEATHS</a>
-                    <p>{{ countyStats.deaths }}</p>
-                </div>
-                <div class="stat-elem" style="text-align: right; margin-top: -5px">
-                    <a class="stat-obj">PERCENT AFFECTED</a>
-                    <p class="shopsafe-score">{{ proportion | round }}%</p>
-                </div>
-            </div>
-        </div>
-        <div id="covid-chart" class="chart">
-          <app-covid-chart [covidData]='covidData'></app-covid-chart>
+
+        <div class="card">
+          <div class="stat-bar-wrapper">
+              <h2>COVID-19 Statistics for {{ countyStats.countyName }} County</h2>
+              <div class="stat-bar-secondary">
+                  <div class="stat-elem">
+                      <a class="stat-obj">TOTAL CASES</a>
+                      <p>{{ countyStats.cases }}</p>
+                  </div>
+                  <div class="stat-elem" style="text-align: center;">
+                      <a class="stat-obj">TOTAL DEATHS</a>
+                      <p>{{ countyStats.deaths }}</p>
+                  </div>
+                  <div class="stat-elem" style="text-align: right; margin-top: -5px">
+                      <a class="stat-obj">PERCENT AFFECTED</a>
+                      <p class="shopsafe-score">{{ proportion | round }}%</p>
+                  </div>
+              </div>
+          </div>
+          <div id="covid-chart" class="chart">
+            <app-covid-chart [covidData]='covidData'></app-covid-chart>
+          </div>
         </div>
     </div>
 </div>
