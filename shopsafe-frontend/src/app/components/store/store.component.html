@@ -6,7 +6,8 @@
             <h1>{{ store.name }}</h1>
             <p>
                 {{ store.address }} &nbsp; &nbsp; 
-                <a class="maps-button" (click)="redirectToMap()">VIEW ON MAPS</a>
+                <button class="maps-button" (click)="redirectToMap()"><i class="fas fa-map-marked-alt"></i> &nbsp; VIEW ON MAPS</button>
+                <button id='check-in-button' (click)="openModal()"><i class="fas fa-pencil-alt"></i> &nbsp; CHECK IN AT THIS STORE</button>
             </p>
         </div>
         <div class="stat-bar-wrapper">
@@ -25,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <button id='check-in-button' (click)="openModal()">CHECK IN AT THIS STORE</button>
+        
         <br/><br/>
         <div class="stat-bar-wrapper">
           <h2>Check-In Statistics for {{ store.name }}</h2>

@@ -39,12 +39,12 @@
 
 #result .location-icon {
     font-size: 18px;
-    color: #FF8756;
+    color: #68BBCF;
     cursor: pointer;
 }
 
 #result .location-icon:hover {
-  color: rgb(255, 135, 86, 0.7);
+  color: rgba(104, 187, 207, 0.3);
 }
 
 #result .stores-list-location {
@@ -87,6 +87,7 @@
     display: flex;
     color: #FF8756;
     padding-left: 10px;
+    cursor: auto;
 }
 
 #result .address {

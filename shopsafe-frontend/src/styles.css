@@ -102,3 +102,7 @@ a:hover {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.grey-text {
+  color: rgba(0, 0, 0, 0.08);
+}
