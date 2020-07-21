@@ -2,9 +2,10 @@
     <div class="segment-text">
         <div class="heading-text">
             <h1>{{ location }}</h1>
-            <p>Showing all grocery stores for your location.</p>
+            <p>Showing all grocery stores for your location. The map is centered to your current location.</p>
+            <p><button class="maps-button" (click)="recenterMap(result.latLng.latitude, result.latLng.longitude)"><i class="fas fa-location-arrow"></i> &nbsp; RECENTER MAP</button></p>
         </div>
-        <div class="map">
+        <div id="map">
           <google-map
             height="500px"
             width="100%"
@@ -21,9 +22,10 @@
             </map-marker>
           </google-map>
         </div>
+        <br/>
         <div class="stores-list-heading">
             <h2 class="left-text">Local Grocery Stores</h2>
-            <p class="right-text subtext">Click on a store to view store statistics, click on the &nbsp; <i class="fas fa-map-marker-alt"></i> &nbsp; to view on map</p>
+            <p class="right-text subtext">Click on a store to view store statistics, click on the <i class="fas fa-map-marker-alt"></i> to view on map</p>
         </div>
         <div class="stores-list" *ngFor="let store of result.stores">
             <div class="stores-list-item">
