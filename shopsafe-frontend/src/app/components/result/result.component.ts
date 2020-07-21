@@ -129,8 +129,22 @@ export class ResultComponent implements OnInit {
     var unsafeIcon = "http://maps.google.com/mapfiles/ms/icons/red.png";
     var currIcon = '';
 
-    for (let store of this.result.stores) {
+    var userIcon = "https://img.icons8.com/material-two-tone/24/000000/street-view.png";
 
+    // Adds current user query location to markers
+    this.markers.push({
+      position: {
+        lat: this.result.latLng.latitude,
+        lng: this.result.latLng.longitude
+      },
+      title: "Your location!",
+      options: {
+        icon: { url: userIcon }
+      }
+    })
+
+    // Adds each stores as marker
+    for (let store of this.result.stores) {
       // Set icon according to colour
       if (store.score <= 3.3) {
         currIcon = unsafeIcon;
