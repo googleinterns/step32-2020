@@ -23,6 +23,8 @@ import com.google.sps.data.StoreStats;
 
 import com.google.gson.Gson;
 
+import com.google.appengine.api.ThreadManager;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException; 
@@ -35,6 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -149,44 +155,26 @@ public class StoresServlet extends HttpServlet {
         // Get all grocery stores based on LatLng and migrate to the Store class.
         List<Store> stores = getStores(location);
 
-        HashMap<String, Double> countyScores = new HashMap<String, Double>();
+        ConcurrentHashMap<String, Double> countyScores = new ConcurrentHashMap();
 
         // Add fake score values to the stores.
-        List<StoreStats> storeStats = new ArrayList<>();
+        ConcurrentLinkedQueue<StoreStats> storeStats = new ConcurrentLinkedQueue();
 
         // For every store, get reviews and county data and add scores to the store.
         int count = stores.size(); 
+
+        //Create Thread Factory Scoped to request
+        ThreadFactory factory = ThreadManager.currentRequestThreadFactory();
+        ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(count, factory);
         for (int i=0 ; i< count; i++) {
-
-            // Get store without the score.
             Store store = stores.get(i);
-            
-            // Get county based on location of the store
-            County county = County.GetCounty(store);
+          
+            //Run thread for each store
+            pool.execute(()->addStore(store, countyScores, storeStats));
 
-            // If the county was not found, log error message and don't add the store.
-            if (county.getCountyName() == "") {
-                System.out.println("Failed to get county information for store id: " + store.getId());
-                continue;
-            }
-
-            // If county not in hashmap, add to hashmap and counties list.
-            if (!countyScores.containsKey(county.getCountyFips())) {
-
-                // Calculate and store the score for county and add the county stats to the list.
-                countyScores.put(county.getCountyFips(), county.getCountyScore());;
-            }
-
-            // Todo: Get reviews for a store.
-
-            CheckInStats checkInStats = new CheckInStats(store.getId());
-
-            // Add score and review stats to the store.
-            storeStats.add(new StoreStats(
-                store,
-                countyScores.get(county.getCountyFips()),
-                checkInStats));
         }
+        pool.shutdown();
+        while (!pool.isTerminated());
 
         // If there are no valid stores found, set status to bad reuqest and send error response.
         if (storeStats.size() == 0) {
@@ -199,7 +187,41 @@ public class StoresServlet extends HttpServlet {
         // Todo: Return stores with scores and county info as json as StoresResult.
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(new StoresResult(storeStats, location)));
+        response.getWriter().println(gson.toJson(new StoresResult(new ArrayList(storeStats), location)));
+    }
+
+
+
+    /*
+     * Populate StoreStats object and add to list
+     */
+    private void addStore(Store store, ConcurrentHashMap<String, Double> countyScores, ConcurrentLinkedQueue<StoreStats> storeStats) {
+
+        // Get county based on location of the store
+        County county = County.GetCounty(store);
+      
+        // If the county was not found, log error message and don't add the store.
+        if (county.getCountyName() == "") {
+            System.out.println("Failed to get county information for store id: " + store.getId());
+            return;
+        }
+
+        // If county not in hashmap, add to hashmap and counties list.
+        if (!countyScores.containsKey(county.getCountyFips())) {
+
+            // Calculate and store the score for county and add the county stats to the list.
+            countyScores.put(county.getCountyFips(), county.getCountyScore());;
+        }
+
+        // Todo: Get reviews for a store.
+
+        CheckInStats checkInStats = new CheckInStats(store.getId());
+
+        // Add score and review stats to the store.
+        storeStats.add(new StoreStats(
+            store,
+            countyScores.get(county.getCountyFips()),
+            checkInStats));
     }
 
     /**
