@@ -112,3 +112,21 @@
 #result .stores-list-item:hover {
   transform: scale(1.02);
 }
+
+#result .maps-button {
+    background: #68BBCF;
+    border-radius: 8px;
+    padding: 10px 15px 10px;
+    color: #EEEEEE;
+    margin-right: 15px;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+#result .maps-button:hover {
+    background: rgba(104, 187, 207, 0.3);
+    color: #68BBCF;
+}

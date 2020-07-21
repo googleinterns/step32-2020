@@ -3,8 +3,9 @@
         <div class="heading-text">
             <h1>{{ location }}</h1>
             <p>Showing all grocery stores for your location. The map is centered to your current location.</p>
+            <p><button class="maps-button" (click)="recenterMap(result.latLng.latitude, result.latLng.longitude)"><i class="fas fa-location-arrow"></i> &nbsp; RECENTER MAP</button></p>
         </div>
-        <div class="map">
+        <div id="map">
           <google-map
             height="500px"
             width="100%"
@@ -29,7 +30,7 @@
         <div class="stores-list" *ngFor="let store of result.stores">
             <div class="stores-list-item">
                 <div class="left-text markers">
-                    <a class="location-icon" (click)="recenterMap(store.latitude, store.longitude)" href="#map"><i class="fas fa-map-marker-alt"></i></a> &nbsp;
+                    <a class="location-icon" (click)="recenterMap(store.latitude, store.longitude)"><i class="fas fa-map-marker-alt"></i></a> &nbsp;
                     <a 
                         class="stores-list-location" 
                         [routerLink]="['/store', store.id]"
