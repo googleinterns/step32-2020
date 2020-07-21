@@ -67,10 +67,8 @@ export class ResultComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Defaults to API not called yet
-    this.isLoaded = false;
-    // Defaults to no HTTP error
-    this.httpError = false;
+    this.isLoaded = false; // Defaults to API not called yet
+    this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
     this.getResult();
   }
