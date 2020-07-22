@@ -35,4 +35,25 @@ export class LandingComponent implements OnInit {
     this.getNearbyStores();
   }
 
+  geoSuccess(position: Position): void {
+    console.log(position);
+    this.location = position.coords.latitude.toString() + ',' + position.coords.longitude.toString();
+    console.log(this.location);
+    // this.location = positi
+    // document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+    // document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+  };
+  
+  geoError(positionError: PositionError): void {
+    console.log(positionError);
+  };
+
+  /**
+   * Fetches address from geolocation 
+   */
+  getUserLatLng(): void {
+    console.log("getting user location");
+    navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
+  }
+
 }
