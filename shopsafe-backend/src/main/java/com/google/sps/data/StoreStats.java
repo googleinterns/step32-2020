@@ -33,37 +33,13 @@ public final class StoreStats extends Store{
     static private final double CHECK_IN_WEIGHT = 0.5;
 
     public StoreStats(Store store, double countyScore, CheckInStats stats) {
-        super(store.id ,store.name, store.address, store.open, new LatLng(store.latitude, store.longitude));
+        super(store.id ,store.name, store.address, store.open, new LatLng(store.latitude, store.longitude), store.rating);
         this.score = countyScore * COUNTY_WEIGHT + stats.getCheckInScore() * CHECK_IN_WEIGHT;
         this.busy = stats.getBusy();
         this.line = stats.getLine();
         this.hygiene = stats.getHygiene();
         this.masks = stats.getMasks();
         this.checkInCount = stats.getCheckInCount();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Boolean getOpen() {
-        return open;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
     }
 
     public double getScore() {
