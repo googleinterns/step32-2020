@@ -56,8 +56,8 @@ import org.json.JSONObject;
 @WebServlet("/stores")
 public class StoresServlet extends HttpServlet {
 
-    public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
-    public static final String PLACE_TYPE = "&radius=12000&type=grocery_or_supermarket";
+    public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=grocery+store+or+supermarket&location=";
+    public static final String PLACE_RANK = "&rankby=distance";
     public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private String PLACE_KEY;
     private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
@@ -234,7 +234,7 @@ public class StoresServlet extends HttpServlet {
         try {
 
             // Read response of call to FCC API given lat and lng.
-            URL url = new URL(PLACE_URL + location.getLatitude() + "," + location.getLongitude()+ PLACE_TYPE + PLACE_KEY);
+            URL url = new URL(PLACE_URL + location.getLatitude() + "," + location.getLongitude() + PLACE_RANK + PLACE_KEY);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             
             // Store response in json, by reading each line.
@@ -258,7 +258,7 @@ public class StoresServlet extends HttpServlet {
                 stores.add(new Store(
                     store.getString("place_id"),
                     store.getString("name"),
-                    store.getString("vicinity"),
+                    store.getString("formatted_address"),
                     (store.has("opening_hours")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
                     new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng"))));
             }
