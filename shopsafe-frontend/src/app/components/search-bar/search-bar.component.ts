@@ -1,4 +1,4 @@
-import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit, AfterContentInit } from '@angular/core';
 import { } from 'googlemaps';
 
 @Component({
@@ -23,18 +23,20 @@ export class SearchBarComponent implements OnInit {
     this.getPlace();
   }
 
-  /**
-   * Fetches places based on changing input values using Google Places API autocomplete feature.
-   * Restricted to the US for geocoded locations (ie. not corporate)
-   */
-  getPlace(): void {
+  ngAfterContentInit(): void {
     // Check if API is loaded
     if (google.maps.places) {
       this.queryWait = true;
     } else {
       this.queryWait = false;
     }
+  }
 
+  /**
+   * Fetches places based on changing input values using Google Places API autocomplete feature.
+   * Restricted to the US for geocoded locations (ie. not corporate)
+   */
+  getPlace(): void {
     const autocomplete = new google.maps.places.Autocomplete(this.address.nativeElement,
       {
           componentRestrictions: { country: 'US' },
