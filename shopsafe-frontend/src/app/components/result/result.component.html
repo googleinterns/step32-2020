@@ -29,6 +29,7 @@
         </div>
         <div class="stores-list" *ngFor="let store of result.stores">
             <div class="stores-list-item">
+              <div class="row">
                 <div class="left-text markers">
                     <a class="location-icon" (click)="recenterMap(store.latitude, store.longitude)"><i class="fas fa-map-marker-alt"></i></a> &nbsp;
                     <a 
@@ -38,18 +39,25 @@
                         {{ store.name }}
                     </a>
                     <a class="rating">{{ store.score | round }}/10</a>
-                    <a class="tag">0.3 mi</a>
-                    <a class="tag">
-                      5/10 &nbsp;
-                       <a 
-                          matTooltip="Google Review">
-                          <i class="far fa-question-circle"></i>
-                        </a>
-                    </a>
                 </div>
                 <div class="right-text">
                     <p class="address">{{ store.address }}</p>
                 </div>
+              </div>
+              <br/>
+              <hr/>
+              <div class="row">
+                <div class="right-text">
+                  <a class="tag">0.3 mi</a>
+                    <a class="tag">
+                      5/10 &nbsp;
+                      <a class="tooltip"
+                        matTooltip="Google Review">
+                        <i class="far fa-question-circle"></i>
+                      </a>
+                  </a>
+                </div>
+              </div>
             </div>
         </div>
     </div>
