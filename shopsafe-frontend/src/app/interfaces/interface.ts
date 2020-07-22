@@ -34,6 +34,7 @@ export interface StoreInterface {
   hygiene: number;
   masks: number;
   checkInCount: number;
+  distance: number;
 }
 
 export interface CountyStatsInterface {
