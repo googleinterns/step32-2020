@@ -12,15 +12,19 @@
         </div>
         <div class="stat-bar-wrapper">
             <div class="stat-bar">
-                <div class="stat-elem">
+                <div class="stat-elem-quarter" style="text-align: left;">
                     <a class="stat-obj">CHECKED IN</a>
                     <p>{{ store.checkInCount }}</p>
                 </div>
-                <div class="stat-elem" style="text-align: center;">
+                <div class="stat-elem-quarter" style="text-align: center;">
                     <a class="stat-obj">STATUS</a>
                     <p [ngStyle]="{'color': (store.open) ? '#7AC665' : '#FF5151'}"><b>{{ store.open ? 'OPEN' : 'CLOSED' }}</b></p>
                 </div>
-                <div class="stat-elem" style="text-align: right; margin-top: -5px">
+                <div class="stat-elem-quarter" style="text-align: center;">
+                    <a class="stat-obj">RATING</a>
+                    <p>{{ store.rating | round }}/5</p>
+                </div>
+                <div class="stat-elem-quarter" style="text-align: right; margin-top: -5px">
                     <a class="stat-obj">SHOPSAFE SCORE</a>
                     <p class="shopsafe-score">{{ store.score | round }}/10</p>
                 </div>
