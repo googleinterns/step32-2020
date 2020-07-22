@@ -14,22 +14,20 @@ export class SearchBarComponent implements OnInit {
   autocompleteInput: string;
   queryWait: boolean;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-  
-  ngAfterViewInit(): void {
-    this.getPlace();
-  }
-
-  ngAfterContentInit(): void {
+  constructor() {
     // Check if API is loaded
     if (google.maps.places) {
       this.queryWait = true;
     } else {
       this.queryWait = false;
     }
+  }
+
+  ngOnInit(): void {
+  }
+  
+  ngAfterViewInit(): void {
+    this.getPlace();
   }
 
   /**
