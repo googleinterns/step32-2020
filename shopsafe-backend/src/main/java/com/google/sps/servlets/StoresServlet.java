@@ -57,7 +57,7 @@ import org.json.JSONObject;
 public class StoresServlet extends HttpServlet {
 
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=grocery+store+or+supermarket&location=";
-    public static final String PLACE_RANK = "&radius=2000&rankby=prominence";
+    public static final String PLACE_RANK = "&radius=10&rankby=prominence";
     public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private String PLACE_KEY;
     private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
