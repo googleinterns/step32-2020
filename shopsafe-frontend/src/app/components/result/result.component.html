@@ -25,7 +25,9 @@
         <br/>
         <div class="stores-list-heading">
             <h2 class="left-text">Local Grocery Stores</h2>
-            <p class="right-text subtext">Click on a store to view store statistics, click on the <i class="fas fa-map-marker-alt"></i> to view on map</p>
+            <p class="right-text subtext">
+              Click on a store to view store statistics, click on the &nbsp; <i class="fas fa-map-marker-alt" style="color:#68BBCF"></i> &nbsp; to view on map
+            </p>
         </div>
         <div class="stores-list" *ngFor="let store of result.stores">
             <div class="stores-list-item">
@@ -38,7 +40,7 @@
                     >
                         {{ store.name }}
                     </a>
-                    <a class="rating">{{ store.score | round }}/10</a>
+                    <!-- <a class="rating">{{ store.score | round }}/10</a> -->
                 </div>
                 <div class="right-text">
                     <p class="address">{{ store.address }}</p>
@@ -49,13 +51,14 @@
               <div class="row">
                 <div class="right-text">
                   <a class="tag">{{ store.distance | round }} mi</a>
-                    <a class="tag">
-                      5/10 &nbsp;
-                      <a class="tooltip"
-                        matTooltip="Google Review">
-                        <i class="far fa-question-circle"></i>
-                      </a>
+                  <a class="tag">
+                    5/10 &nbsp;
+                    <a class="tooltip"
+                      matTooltip="Google Review">
+                      <i class="far fa-question-circle"></i>
+                    </a>
                   </a>
+                  <a class="rating">{{ store.score | round }}/10</a>
                 </div>
               </div>
             </div>
@@ -63,7 +66,7 @@
     </div>
 </div>
 
-<div *ngIf="!isLoaded && !httpError" class="loading-screen" color="grey">
+<div *ngIf="!isLoaded && !httpError" class="loading-screen">
   <mat-spinner></mat-spinner>
   <br/>
   <p>Fetching Results...</p>
