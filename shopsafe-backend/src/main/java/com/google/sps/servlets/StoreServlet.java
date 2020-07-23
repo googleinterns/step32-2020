@@ -52,7 +52,7 @@ import org.json.JSONObject;
 public class StoreServlet extends HttpServlet {
 
     public static final String PLACE_URL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
-    public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry";
+    public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry,rating";
     private String PLACE_KEY;
     private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
 
@@ -117,7 +117,8 @@ public class StoreServlet extends HttpServlet {
                 result.getString("name"),
                 result.getString("vicinity"),
                 (result.has("opening_hours")) ? result.getJSONObject("opening_hours").getBoolean("open_now") : null,
-                new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")));
+                new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")),
+                result.has("rating") ? result.getDouble("rating"): 2.5);
         }
 
         // If error, print error, and set status to bad reuqest and send error response.

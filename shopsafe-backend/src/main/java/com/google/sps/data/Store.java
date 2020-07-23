@@ -26,8 +26,9 @@ public class Store {
     protected double latitude;
     protected double longitude;
     protected double distance;
+    protected double rating;
 
-    public Store(String id, String name, String address, Boolean open, LatLng location) {
+    public Store(String id, String name, String address, Boolean open, LatLng location, double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -35,12 +36,13 @@ public class Store {
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
         this.distance = 0; // default value
+        this.rating = rating;
     }
 
     /**
      * Overloaded constructor to include userLocation to calculate distance between user and store
      */
-    public Store(String id, String name, String address, Boolean open, LatLng location, LatLng userLocation) {
+    public Store(String id, String name, String address, Boolean open, LatLng location, LatLng userLocation, double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -48,6 +50,7 @@ public class Store {
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
         this.distance = getDistance(userLocation);
+        this.rating = rating;
     }
 
     public String getName() {
@@ -76,6 +79,10 @@ public class Store {
 
     public double getDistance() {
         return distance;
+    }
+  
+     public double getRating() {
+        return rating;
     }
     
     /**
@@ -109,5 +116,4 @@ public class Store {
       return distance;
 
       // TODO: add error handling
-    }
 }
