@@ -15,6 +15,7 @@ export class Store implements StoreInterface {
   hygiene: number;
   masks: number;
   checkInCount: number;
+  distance: number;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);
