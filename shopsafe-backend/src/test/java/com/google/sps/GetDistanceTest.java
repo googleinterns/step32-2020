@@ -16,8 +16,8 @@ package com.google.sps;
 
 import com.google.sps.data.LatLng;
 import com.google.sps.data.Store;
-import com.google.sps.data.County;
-import com.google.sps.data.CountyStats;
+import com.google.sps.data.StoreStats;
+import com.google.sps.data.CheckInStats;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,16 +29,22 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class GetDistanceTest {
 
+    CheckInStats stats = new CheckInStats("0");;
+    Store store;
+    StoreStats storeStats;
+
     /*
      * Gets distance between Philadelphia and New York for fake store.
      */
     @Test
     public void getDistanceTest() {
-        Store store = new Store("0", "Test", "1234 Test Street", true, 
-                                new LatLng(39.952583, -75.165222),
-                                new LatLng(40.712776, -74.005974));
+        store = new Store("0", "Test", "1234 Test Street", true, 
+                          new LatLng(39.952583, -75.165222),
+                          5.0);
+
+        storeStats = new StoreStats(store, 0.0, stats, new LatLng(40.712776, -74.005974));
         
-        Assert.assertEquals(store.getDistance(), 80.48319052067637, 0.01);
+        Assert.assertEquals(storeStats.getDistance(), 80.48319052067637, 0.01);
     }
 
     /**
@@ -46,11 +52,13 @@ public final class GetDistanceTest {
      */
     @Test 
     public void getSameDistanceTest() {
-        Store store = new Store("0", "Test", "1234 Test Street", true, 
-                                new LatLng(39.952583, -75.165222),
-                                new LatLng(39.952583, -75.165222));
+        store = new Store("0", "Test", "1234 Test Street", true, 
+                          new LatLng(39.952583, -75.165222),
+                          5.0);
 
-        Assert.assertEquals(store.getDistance(), 0.0, 0.001);
+        storeStats = new StoreStats(store, 0.0, stats, new LatLng(39.952583, -75.165222));
+
+        Assert.assertEquals(storeStats.getDistance(), 0.0, 0.001);
     }
 
 }
