@@ -31,8 +31,8 @@ export class LandingComponent implements OnInit {
    * @param place array emitted from setAddress event from search bar component
    */
   getAddress(place: object): void {
-    this.zone.run(() => this.location = place['formatted_address']);
-    this.getNearbyStores();
+    this.location = place['formatted_address']
+    this.zone.run(() => this.getNearbyStores());
   }
 
 

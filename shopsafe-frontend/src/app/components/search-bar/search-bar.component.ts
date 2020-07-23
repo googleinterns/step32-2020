@@ -1,4 +1,4 @@
-import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit, AfterContentInit } from '@angular/core';
 import { } from 'googlemaps';
 
 @Component({
@@ -14,7 +14,14 @@ export class SearchBarComponent implements OnInit {
   autocompleteInput: string;
   queryWait: boolean;
 
-  constructor() { }
+  constructor() {
+    // Check if API is loaded
+    if (google.maps.places) {
+      this.queryWait = true;
+    } else {
+      this.queryWait = false;
+    }
+  }
 
   ngOnInit(): void {
   }
@@ -28,13 +35,6 @@ export class SearchBarComponent implements OnInit {
    * Restricted to the US for geocoded locations (ie. not corporate)
    */
   getPlace(): void {
-    // Check if API is loaded
-    if (google.maps.places) {
-      this.queryWait = true;
-    } else {
-      this.queryWait = false;
-    }
-
     const autocomplete = new google.maps.places.Autocomplete(this.address.nativeElement,
       {
           componentRestrictions: { country: 'US' },
