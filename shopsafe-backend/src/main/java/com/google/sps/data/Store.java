@@ -25,14 +25,16 @@ public class Store {
     protected Boolean open;
     protected double latitude;
     protected double longitude;
+    protected double rating;
 
-    public Store(String id, String name, String address, Boolean open, LatLng location) {
+    public Store(String id, String name, String address, Boolean open, LatLng location, double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.open = open;
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
+        this.rating = rating;
     }
 
     public String getName() {
@@ -57,5 +59,9 @@ public class Store {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public double getRating() {
+        return rating;
     }
 }
