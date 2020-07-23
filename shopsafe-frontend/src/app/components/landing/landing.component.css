@@ -9,9 +9,8 @@
 
 #landing .loc-button {
     
-    width: fit-content;
-    margin-left: 15px;
-    margin-right: 12px;
+    width: auto;
+    margin-right: 5px;
     padding: 14px 14px 17px 14px;
     float: left;
     display: flex;
@@ -25,6 +24,8 @@
 #landing .loc-button:hover {
     
     background-color: orange;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
     transform: scale(1.07);
 
 }

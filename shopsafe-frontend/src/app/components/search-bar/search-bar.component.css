@@ -1,8 +1,8 @@
 .input-container {
+    float: left;
     padding-top: 0px;
     display: flex;
-    width: 100%;
-    margin-bottom: 10px;
+    width: calc(100% - 46px - 5px);
 }
 
 .input-container .search-icon {
@@ -24,11 +24,6 @@
 
 .input-container i {
     position: absolute;
-}
-
-.input-container {
-    float: left;
-    width: 80%;
 }
 
 form {
