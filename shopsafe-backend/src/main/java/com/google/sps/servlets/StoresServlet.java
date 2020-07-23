@@ -170,7 +170,7 @@ public class StoresServlet extends HttpServlet {
             Store store = stores.get(i);
           
             //Run thread for each store
-            pool.execute(()->addStore(store, countyScores, storeStats));
+            pool.execute(()->addStore(store, countyScores, storeStats, location));
 
         }
         pool.shutdown();
@@ -195,7 +195,7 @@ public class StoresServlet extends HttpServlet {
     /*
      * Populate StoreStats object and add to list
      */
-    private void addStore(Store store, ConcurrentHashMap<String, Double> countyScores, ConcurrentLinkedQueue<StoreStats> storeStats) {
+    private void addStore(Store store, ConcurrentHashMap<String, Double> countyScores, ConcurrentLinkedQueue<StoreStats> storeStats, LatLng userLocation) {
 
         // Get county based on location of the store
         County county = County.GetCounty(store);
@@ -221,7 +221,8 @@ public class StoresServlet extends HttpServlet {
         storeStats.add(new StoreStats(
             store,
             countyScores.get(county.getCountyFips()),
-            checkInStats));
+            checkInStats,
+            userLocation));
     }
 
     /**
@@ -260,7 +261,8 @@ public class StoresServlet extends HttpServlet {
                     store.getString("name"),
                     store.getString("formatted_address"),
                     (store.has("opening_hours")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
-                    new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng"))));
+                    new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")),
+                    location));
             }
 
             // Return county using strings from the results.

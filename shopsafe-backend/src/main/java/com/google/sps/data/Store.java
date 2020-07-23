@@ -25,6 +25,7 @@ public class Store {
     protected Boolean open;
     protected double latitude;
     protected double longitude;
+    protected double distance;
 
     public Store(String id, String name, String address, Boolean open, LatLng location) {
         this.id = id;
@@ -33,6 +34,20 @@ public class Store {
         this.open = open;
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
+        this.distance = 0; // default value
+    }
+
+    /**
+     * Overloaded constructor to include userLocation to calculate distance between user and store
+     */
+    public Store(String id, String name, String address, Boolean open, LatLng location, LatLng userLocation) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.open = open;
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+        this.distance = getDistance(userLocation);
     }
 
     public String getName() {
@@ -57,5 +72,42 @@ public class Store {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+    
+    /**
+     * Returns the distance in miles from the user to the store location.
+     * @param userLocation LatLng of user
+     * @param storeLocation LatLng of store to calculate distance from user
+     * @return distance between the two LatLngs
+     */
+    private double getDistance(LatLng userLocation) {
+      double earthRadius = 3956; // Radius of earth in miles.
+      double distance = 0;
+
+      // Convert latLngs to radians.
+      double userLon = Math.toRadians(userLocation.getLongitude());
+      double userLat = Math.toRadians(userLocation.getLatitude());
+      double storeLon = Math.toRadians(getLongitude());
+      double storeLat = Math.toRadians(getLatitude());
+
+      double deltaLon = userLon - storeLon;
+      double deltaLat = userLat - storeLat;
+
+      // Calculating the distance using the Haversine formula
+      double a = Math.pow(Math.sin(deltaLat / 2), 2) 
+               + Math.cos(userLat) 
+               * Math.cos(storeLat) 
+               * Math.pow(Math.sin(deltaLon / 2), 2);
+
+      double c = 2 * Math.asin(Math.sqrt(a));
+
+      distance = c * earthRadius;
+      return distance;
+
+      // TODO: add error handling
     }
 }
