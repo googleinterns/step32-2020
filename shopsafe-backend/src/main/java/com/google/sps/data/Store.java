@@ -81,7 +81,7 @@ public class Store {
         return distance;
     }
   
-     public double getRating() {
+    public double getRating() {
         return rating;
     }
     
@@ -116,4 +116,5 @@ public class Store {
       return distance;
 
       // TODO: add error handling
+    }
 }
