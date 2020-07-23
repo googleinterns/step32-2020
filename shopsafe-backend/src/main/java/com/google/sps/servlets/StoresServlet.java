@@ -259,7 +259,7 @@ public class StoresServlet extends HttpServlet {
                     store.getString("place_id"),
                     store.getString("name"),
                     store.getString("formatted_address"),
-                    (store.has("opening_hours")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
+                    (store.has("opening_hours") && store.getJSONObject("opening_hours").has("open_now")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
                     new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng"))));
             }
 
