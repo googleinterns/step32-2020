@@ -195,17 +195,38 @@ export class ResultComponent implements OnInit {
    */
   sortResults(): void {
     // Get chosen method. Since the user picks from a set list, there are only three.
-    var sortVariable = '';
+    // Sort by ShopSafe Score in descending order.
     if (this.currSort == "Sort by ShopSafe Score") {
-      
+      this.result.stores.sort((n1, n2) => {
+        if (n1.score > n2.score) {
+          return 1;
+        } else if (n1.score < n2.score) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    // Sort by Google Review in descending order.
     } else if (this.currSort == "Sort by Google Review") {
-      
+      this.result.stores.sort((n1, n2) => {
+      if (n1.rating > n2.rating) {
+        return 1;
+      } else if (n1.rating < n2.rating) {
+        return -1;
+      } else {
+        return 0;
+      }
+    // Sort by distance in ascending order. 
     } else {
-
+      this.result.stores.sort((n1, n2) => {
+        if (n1.distance < n2.distance) {
+          return 1;
+        } else if (n1.distance > n2.distance) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
     }
-
-    // use array.sort() 
-    // define sort function
-    
   }
 }
