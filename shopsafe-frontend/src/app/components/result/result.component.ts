@@ -17,9 +17,12 @@ export class ResultComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
 
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map
-  markers = []; // Array of store markers rendered in Google Map
-  center: google.maps.LatLngLiteral; // Current center of Google Map
+  sortingMethods: string[];
+  currSort: string;
+
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
+  markers = []; // Array of store markers rendered in Google Map.
+  center: google.maps.LatLngLiteral; // Current center of Google Map.
   styles: google.maps.MapTypeStyle[] = [
     {
       featureType: "administrative",
@@ -55,16 +58,20 @@ export class ResultComponent implements OnInit {
         }
       ]
     }
-  ]; // Custom map styling
+  ]; // Custom map styling.
   options: google.maps.MapOptions = {
     disableDefaultUI: true,
     styles: this.styles,
-  }; // Options for Google Map rendered in template
+  }; // Options for Google Map rendered in template.
 
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
-  ) { }
+  ) { 
+    this.sortingMethods = ['Sort by ShopSafe Score', 
+                           'Sort by Google Review',
+                           'Sort by Distance']; // Init sorting methods.
+  }
 
   ngOnInit(): void {
     this.isLoaded = false; // Defaults to API not called yet
@@ -131,7 +138,7 @@ export class ResultComponent implements OnInit {
 
     var userIcon = "https://img.icons8.com/material-two-tone/24/000000/street-view.png";
 
-    // Adds current user query location to markers
+    // Adds current user query location to markers.
     this.markers.push({
       position: {
         lat: this.result.latLng.latitude,
@@ -143,9 +150,9 @@ export class ResultComponent implements OnInit {
       }
     })
 
-    // Adds each stores as marker
+    // Adds each stores as marker.
     for (let store of this.result.stores) {
-      // Set icon according to colour
+      // Set icon according to colour.
       if (store.score <= 3.3) {
         currIcon = unsafeIcon;
       } else if (store.score <= 6.6) {
@@ -179,5 +186,26 @@ export class ResultComponent implements OnInit {
       lng: lng
     };
     this.map.center = this.center;
+  }
+
+  /**
+   * Sorts results in descending order with the selected method through 
+   * the dropdown in the results page.
+   * Method gets called when the selector is changed.
+   */
+  sortResults(): void {
+    // Get chosen method. Since the user picks from a set list, there are only three.
+    var sortVariable = '';
+    if (this.currSort == "Sort by ShopSafe Score") {
+      
+    } else if (this.currSort == "Sort by Google Review") {
+      
+    } else {
+
+    }
+
+    // use array.sort() 
+    // define sort function
+    
   }
 }
