@@ -14,26 +14,6 @@
 
 package com.google.sps.data;
 
-import com.opencsv.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
 import com.google.cloud.bigquery.FieldValueList;
@@ -41,23 +21,34 @@ import com.google.cloud.bigquery.Job;
 import com.google.cloud.bigquery.JobId;
 import com.google.cloud.bigquery.JobInfo;
 import com.google.cloud.bigquery.QueryJobConfiguration;
-import com.google.cloud.bigquery.TableResult;
-
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.util.UUID;
+import com.opencsv.CSVReader;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.Long;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /** Class contains the name, state, and fips of a county. */
 public class CountyPercentile implements Comparable<CountyPercentile> {
 
-    // FCC api url for county information
-    public static final String FCC_BASE_URL = "https://geo.fcc.gov/api/census/area?lat=";
-    public static final String FCC_END_URL = "&format=json";
+    // Static date used to check if county percentile needs to be updated.
+    public static LocalDate date = LocalDate.of(2020, 7, 22);
 
-    // County properties
+    // CountyPercentile properties
     protected String countyFips;
     protected double activeCasesPerCapita;
 
@@ -74,6 +65,9 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
         return activeCasesPerCapita;
     }
 
+    /*
+     * Special comparison for county percentile.
+     */
     @Override
     public int compareTo(CountyPercentile countyPerentile) {
         if (getActiveCasesPerCapita() == null || countyPerentile.getActiveCasesPerCapita() == null) {
@@ -87,11 +81,16 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
      */
     public static void Update() {
 
+        // If the date is currently correct return it, otherwise update to today.
+        if (date.compareTo(LocalDate.now()) == 0){
+            return;
+        }
+        CountyPercentile.date = LocalDate.now();
+        System.out.println("Updating County Percentile csv file to: " + date);
+
+        // Add all the populations with fips code from the population file.
         List<String[]> populations = new ArrayList<String[]>();  
-
         try {
-
-            // See if fips in the csv file, if so, return the population.
             CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_population.csv"));
             String[] nextLine = reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
@@ -100,21 +99,17 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
                     populations.add(array);
                 }
             }
-
-            // Otherwise, log failure and return 0.
-            System.out.println(Integer.toString(populations.size()) + " counties in county_population.csv");
         } 
         
-        // If there is an exception, send error message and return 0.
+        // If there is an error, report it, print error, and return.
         catch (Exception e) {
             e.printStackTrace();
-            System.out.println("An error occured while getting the populations from in county_population.csv");
+            System.out.println("An error occured while getting the populations from in county_population.csv.");
             return;
         }
         
+        // Create list of CountyPercentiles to add to.
         List<CountyPercentile> countyPercentiles = new ArrayList<CountyPercentile>(); 
-
-        String date = "2020-07-22";
 
         // Set up BigQuery service.
         BigQuery bigquery = BigQueryOptions
@@ -122,17 +117,15 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
 
         // Prepare SQL query for getting projected recovered cases Forecasts.
         QueryJobConfiguration queryConfigForecast = QueryJobConfiguration.newBuilder(
-            "SELECT county_fips_code, cumulative_confirmed, cumulative_deaths, recovered FROM `bigquery-public-data.covid19_public_forecasts.county_14d` WHERE prediction_date = '" +
-            date +
-            "' AND county_fips_code IS NOT NULL ORDER BY county_fips_code"
+            "SELECT county_fips_code, cumulative_confirmed, cumulative_deaths, recovered FROM `bigquery-public-data.covid19_public_forecasts.county_14d` WHERE prediction_date = '"
+            + date.toString() 
+            + "' AND county_fips_code IS NOT NULL ORDER BY county_fips_code"
             ).setUseLegacySql(false).build();
 
         // Create unique job id and job for call to Forecasts.
         JobId jobIdForecast = JobId.of(UUID.randomUUID().toString());
         Job queryJobForecast = bigquery.create(JobInfo.newBuilder(queryConfigForecast).setJobId(jobIdForecast).build());
 
-        System.out.println("Here1");
-        
         // Try to query forecast.
         try {
             queryJobForecast = queryJobForecast.waitFor();
@@ -143,8 +136,6 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
             } else if (queryJobForecast.getStatus().getError() != null) {
                 throw new RuntimeException(queryJobForecast.getStatus().getError().toString());
             }
-
-            System.out.println("Here2");
 
             // Get most recent recovered values, there should only be one result.
             int index = 0;
@@ -162,17 +153,17 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
             }
         } 
         
-        // Set failedQuery to true and log error if query fails.
+        // If there is an error, report it, print error, and return.
         catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error: Big Query Failure!");
+            System.out.println("An error occured while getting projections from BigQuery.");
             return;
         }
 
-        // County , log failure and return 0.
-        System.out.println(Integer.toString(countyPercentiles.size()) + " elements in countyPercentiles");
+        // Sort countyPercentile using special comparison.
         Collections.sort(countyPercentiles);
 
+        // Try to rewrite the county percentile file.
         try {
             FileWriter csvWriter = new FileWriter("WEB-INF/classes/county_percentile.csv");
             csvWriter.append("county_fips_code");
@@ -182,29 +173,31 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
 
             double latestValue = 0.0;
             double latestPercentile = 1.0;
-
             int index = 0;
             while(index < countyPercentiles.size()) {
 
+                // Check if there is a need to update the latest value and percentile.
                 if (latestValue != countyPercentiles.get(index).getActiveCasesPerCapita()) {
                     latestPercentile = 1.0 - (Double.valueOf(index) / countyPercentiles.size());
                     latestValue = countyPercentiles.get(index).getActiveCasesPerCapita();
                 }
 
+                // Write the new percentile value for each fips.
                 csvWriter.append(countyPercentiles.get(index).getCountyFips() + "," + Double.toString(latestPercentile));
                 csvWriter.append("\n");
 
                 index += 1;
             }
 
+            // Close the writer.
             csvWriter.flush();
             csvWriter.close();
         }
         
-        // Set failedQuery to true and log error if query fails.
+        // If there is an error, report it, print error, and return.
         catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Failed to write csv file!");
+            System.out.println("Failed to write csv file.");
             return;
         }
     }
