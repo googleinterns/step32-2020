@@ -36,7 +36,8 @@ public final class GetDistanceTest {
     public void getDistanceTest() {
         Store store = new Store("0", "Test", "1234 Test Street", true, 
                                 new LatLng(39.952583, -75.165222),
-                                new LatLng(40.712776, -74.005974));
+                                new LatLng(40.712776, -74.005974), 
+                                4.5);
         
         Assert.assertEquals(store.getDistance(), 80.48319052067637, 0.01);
     }
@@ -48,7 +49,8 @@ public final class GetDistanceTest {
     public void getSameDistanceTest() {
         Store store = new Store("0", "Test", "1234 Test Street", true, 
                                 new LatLng(39.952583, -75.165222),
-                                new LatLng(39.952583, -75.165222));
+                                new LatLng(39.952583, -75.165222),
+                                4.5);
 
         Assert.assertEquals(store.getDistance(), 0.0, 0.001);
     }
