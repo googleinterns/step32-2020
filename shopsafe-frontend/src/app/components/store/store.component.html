@@ -22,7 +22,7 @@
                 </div>
                 <div class="stat-elem-quarter" style="text-align: center;">
                     <a class="stat-obj">RATING</a>
-                    <p>{{ store.rating | round }}/5</p>
+                    <p>{{ store.rating ? ( store.rating | round ) : '-' }}/5</p>
                 </div>
                 <div class="stat-elem-quarter" style="text-align: right; margin-top: -5px">
                     <a class="stat-obj">SHOPSAFE SCORE</a>
