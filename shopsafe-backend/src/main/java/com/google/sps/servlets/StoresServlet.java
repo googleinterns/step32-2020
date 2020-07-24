@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.CheckInStats;
 import com.google.sps.data.County;
+import com.google.sps.data.CountyPercentile;
 import com.google.sps.data.LatLng;
 import com.google.sps.data.StoresResult;
 import com.google.sps.data.Store;
@@ -85,7 +86,8 @@ public class StoresServlet extends HttpServlet {
             return;
         }
 
-        // PLACE_KEY = "&key=" + "API_KEY";
+        // Update CountyPercentile, if necessary.
+        CountyPercentile.Update();
 
         // Get the address input from the param.
         String address = request.getParameter("location"); 
