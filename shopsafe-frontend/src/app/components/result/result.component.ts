@@ -179,5 +179,9 @@ export class ResultComponent implements OnInit {
       lng: lng
     };
     this.map.center = this.center;
+
+    //scroll to map
+    const mapElement = document.getElementById("map");
+    mapElement.scrollIntoView({behavior: 'smooth'});
   }
 }
