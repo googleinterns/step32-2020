@@ -18,7 +18,7 @@ import com.google.sps.data.Store;
 import com.google.sps.data.CheckInStats;
 
 /** Class contains all the information for a store. */
-public final class StoreStats extends Store{
+public final class StoreStats extends Store {
 
     // Store stat properties.
     private final double score;
@@ -33,7 +33,20 @@ public final class StoreStats extends Store{
     static private final double CHECK_IN_WEIGHT = 0.5;
 
     public StoreStats(Store store, double countyScore, CheckInStats stats) {
-        super(store.id ,store.name, store.address, store.open, new LatLng(store.latitude, store.longitude));
+        super(store.id ,store.name, store.address, store.open, new LatLng(store.latitude, store.longitude), store.rating);
+        this.score = countyScore * COUNTY_WEIGHT + stats.getCheckInScore() * CHECK_IN_WEIGHT;
+        this.busy = stats.getBusy();
+        this.line = stats.getLine();
+        this.hygiene = stats.getHygiene();
+        this.masks = stats.getMasks();
+        this.checkInCount = stats.getCheckInCount();
+    }
+
+    /**
+     * Overloaded constructor to include userLocation to calculate distance between user and store
+     */
+    public StoreStats(Store store, double countyScore, CheckInStats stats, LatLng userLocation) {
+        super(store.id ,store.name, store.address, store.open, new LatLng(store.latitude, store.longitude), userLocation, store.rating);
         this.score = countyScore * COUNTY_WEIGHT + stats.getCheckInScore() * CHECK_IN_WEIGHT;
         this.busy = stats.getBusy();
         this.line = stats.getLine();
@@ -88,5 +101,9 @@ public final class StoreStats extends Store{
 
     public long getCheckInCount() {
         return checkInCount;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 }

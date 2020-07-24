@@ -35,4 +35,22 @@ export class LandingComponent implements OnInit {
     this.zone.run(() => this.getNearbyStores());
   }
 
+
+  /**
+   * Fetches address from geolocation 
+   */
+  getUserLatLng(): void {
+    console.log("getting user location");
+    navigator.geolocation.getCurrentPosition(
+      (position: Position) => {
+        const stringLocation:string = position.coords.latitude.toString()+ ',' + position.coords.longitude.toString();
+        this.zone.run(() => this.location = stringLocation);
+        this.getNearbyStores();
+      }, 
+      (positionError: PositionError) => {
+        console.log(positionError);
+      }
+    );
+  }
+
 }

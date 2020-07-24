@@ -33,7 +33,7 @@ public final class GetCountyTest {
      */
     @Test
     public void checkValidLocation() {
-        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(40.803639, -77.862574));
+        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(40.803639, -77.862574), 2.4);
         String actual = County.GetCounty(store).getCountyName();
         String expected = "Centre";
         Assert.assertEquals(expected, actual);
@@ -44,7 +44,7 @@ public final class GetCountyTest {
      */
     @Test
     public void checkLocationOutsideUS() {
-        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(43.650300, -79.383785));
+        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(43.650300, -79.383785), 4.6);
         String actual = County.GetCounty(store).getCountyName();
         String expected = "";
         Assert.assertEquals(expected, actual);
@@ -55,7 +55,7 @@ public final class GetCountyTest {
      */
     @Test
     public void checkInvalidLocation() {
-        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(1000.0, 1000.0));
+        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(1000.0, 1000.0), 3.2);
         String actual = County.GetCounty(store).getCountyName();
         String expected = "";
         Assert.assertEquals(expected, actual);
