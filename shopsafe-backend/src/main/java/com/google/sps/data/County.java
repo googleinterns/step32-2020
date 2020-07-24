@@ -100,8 +100,8 @@ public class County {
             CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_percentile.csv"));
             String[] nextLine = reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
-                if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[1])) {
-                    return Double.parseDouble(nextLine[3]) * 10;
+                if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[0])) {
+                    return Double.parseDouble(nextLine[1]) * 10;
                 }
             }
 
