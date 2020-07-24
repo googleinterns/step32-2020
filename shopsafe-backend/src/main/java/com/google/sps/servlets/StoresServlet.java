@@ -264,7 +264,7 @@ public class StoresServlet extends HttpServlet {
                     store.getString("formatted_address"),
                     (store.has("opening_hours") && store.getJSONObject("opening_hours").has("open_now")) ? store.getJSONObject("opening_hours").getBoolean("open_now") : null,
                     new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")),
-                    store.getDouble("rating")));
+                    store.has("rating") ? store.getDouble("rating"): 0));
             }
 
             // Return county using strings from the results.

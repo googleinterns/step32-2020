@@ -118,7 +118,7 @@ public class StoreServlet extends HttpServlet {
                 result.getString("vicinity"),
                 (result.has("opening_hours")) ? result.getJSONObject("opening_hours").getBoolean("open_now") : null,
                 new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")),
-                result.has("rating") ? result.getDouble("rating"): 2.5);
+                result.has("rating") ? result.getDouble("rating"): 0);
         }
 
         // If error, print error, and set status to bad reuqest and send error response.
