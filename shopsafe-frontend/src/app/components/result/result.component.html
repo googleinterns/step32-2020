@@ -32,9 +32,9 @@
           </div>
           <div class="right-text">
             <mat-form-field appearance="fill">
-              <mat-label>Sort Results By</mat-label>
+              <mat-label>Sort Results</mat-label>
               <mat-select>
-                <mat-option *ngFor="let method of sortingMethods" [(value)]="currSort">
+                <mat-option *ngFor="let method of sortingMethods" [value]="method" (click)="getResult(method)">
                   {{ method }}
                 </mat-option>
               </mat-select>

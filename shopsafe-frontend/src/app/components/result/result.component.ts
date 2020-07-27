@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -18,7 +18,6 @@ export class ResultComponent implements OnInit {
   httpErrorMessage: string;
 
   sortingMethods: string[];
-  currSort: string;
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
   markers = []; // Array of store markers rendered in Google Map.
@@ -77,14 +76,14 @@ export class ResultComponent implements OnInit {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
-    this.getResult();
+    this.getResult('Sort by ShopSafe Score');
   }
 
   /**
    * Calls API to get result and subscribes local variables using data returned
    * in the Observable from the HTTP response.
    */
-  getResult(): void {
+  getResult(method: string): void {
     console.log('CLIENT: results api call at ' + this.location);
     this.apiService.getNearbyStores(this.location)
       .subscribe(data => 
@@ -98,6 +97,7 @@ export class ResultComponent implements OnInit {
           this.httpErrorMessage = err
         },
         () => {
+          this.sortResults(method);
           this.initTemplate()
         }
       );
@@ -193,36 +193,40 @@ export class ResultComponent implements OnInit {
    * the dropdown in the results page.
    * Method gets called when the selector is changed.
    */
-  sortResults(): void {
+  sortResults(method: string): void {
     // Get chosen method. Since the user picks from a set list, there are only three.
     // Sort by ShopSafe Score in descending order.
-    if (this.currSort == "Sort by ShopSafe Score") {
+    if (method == "Sort by ShopSafe Score") {
+      console.log("CLIENT: sorting by ShopSafe Score");
       this.result.stores.sort((n1, n2) => {
         if (n1.score > n2.score) {
-          return 1;
-        } else if (n1.score < n2.score) {
           return -1;
+        } else if (n1.score < n2.score) {
+          return 1;
         } else {
           return 0;
         }
       });
     // Sort by Google Review in descending order.
-    } else if (this.currSort == "Sort by Google Review") {
+    } else if (method == "Sort by Google Review") {
+      console.log("CLIENT: sorting by Google Review");
       this.result.stores.sort((n1, n2) => {
-      if (n1.rating > n2.rating) {
-        return 1;
-      } else if (n1.rating < n2.rating) {
-        return -1;
-      } else {
-        return 0;
-      }
+        if (n1.rating > n2.rating) {
+          return -1;
+        } else if (n1.rating < n2.rating) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
     // Sort by distance in ascending order. 
     } else {
       this.result.stores.sort((n1, n2) => {
+        console.log("CLIENT: sorting by Distance");
         if (n1.distance < n2.distance) {
-          return 1;
-        } else if (n1.distance > n2.distance) {
           return -1;
+        } else if (n1.distance > n2.distance) {
+          return 1;
         } else {
           return 0;
         }

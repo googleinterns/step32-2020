@@ -1048,13 +1048,12 @@ function ResultComponent_div_0_map_marker_13_Template(rf, ctx) { if (rf & 1) {
 function ResultComponent_div_0_mat_option_28_Template(rf, ctx) { if (rf & 1) {
     const _r9 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "mat-option", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("valueChange", function ResultComponent_div_0_mat_option_28_Template_mat_option_valueChange_0_listener($event) { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r9); const ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2); return ctx_r8.currSort = $event; });
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function ResultComponent_div_0_mat_option_28_Template_mat_option_click_0_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r9); const method_r7 = ctx.$implicit; const ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2); return ctx_r8.getResult(method_r7); });
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const method_r7 = ctx.$implicit;
-    const ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("value", ctx_r4.currSort);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("value", method_r7);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", method_r7, " ");
 } }
@@ -1154,7 +1153,7 @@ function ResultComponent_div_0_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](23, "div", 15);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](24, "mat-form-field", 16);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](25, "mat-label");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](26, "Sort Results By");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](26, "Sort Results");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](27, "mat-select");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](28, ResultComponent_div_0_mat_option_28_Template, 2, 2, "mat-option", 17);
@@ -1246,13 +1245,13 @@ class ResultComponent {
         this.isLoaded = false; // Defaults to API not called yet
         this.httpError = false; // Defaults to no HTTP error
         this.location = this.route.snapshot.paramMap.get('location').toString();
-        this.getResult();
+        this.getResult('Sort by ShopSafe Score');
     }
     /**
      * Calls API to get result and subscribes local variables using data returned
      * in the Observable from the HTTP response.
      */
-    getResult() {
+    getResult(method) {
         console.log('CLIENT: results api call at ' + this.location);
         this.apiService.getNearbyStores(this.location)
             .subscribe(data => this.result = {
@@ -1263,6 +1262,7 @@ class ResultComponent {
                 this.httpError = true,
                 this.httpErrorMessage = err;
         }, () => {
+            this.sortResults(method);
             this.initTemplate();
         });
     }
@@ -1349,18 +1349,53 @@ class ResultComponent {
      * the dropdown in the results page.
      * Method gets called when the selector is changed.
      */
-    sortResults() {
-        var sortVariable = '';
-        var sortedStores = [];
+    sortResults(method) {
         // Get chosen method. Since the user picks from a set list, there are only three.
-        if (this.currSort == "Sort by ShopSafe Score") {
+        // Sort by ShopSafe Score in descending order.
+        if (method == "Sort by ShopSafe Score") {
+            console.log("CLIENT: sorting by ShopSafe Score");
+            this.result.stores.sort((n1, n2) => {
+                if (n1.score > n2.score) {
+                    return -1;
+                }
+                else if (n1.score < n2.score) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            // Sort by Google Review in descending order.
         }
-        else if (this.currSort == "Sort by Google Review") {
+        else if (method == "Sort by Google Review") {
+            console.log("CLIENT: sorting by Google Review");
+            this.result.stores.sort((n1, n2) => {
+                if (n1.rating > n2.rating) {
+                    return -1;
+                }
+                else if (n1.rating < n2.rating) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            // Sort by distance in ascending order. 
         }
         else {
+            this.result.stores.sort((n1, n2) => {
+                console.log("CLIENT: sorting by Distance");
+                if (n1.distance < n2.distance) {
+                    return -1;
+                }
+                else if (n1.distance > n2.distance) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            });
         }
-        // use array.sort() 
-        // define sort function
     }
 }
 ResultComponent.ɵfac = function ResultComponent_Factory(t) { return new (t || ResultComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_api_api_service__WEBPACK_IMPORTED_MODULE_2__["ApiService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"])); };
@@ -1369,7 +1404,7 @@ ResultComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
     } if (rf & 2) {
         var _t;
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵloadQuery"]()) && (ctx.map = _t.first);
-    } }, decls: 3, vars: 3, consts: [["id", "result", "class", "segment", 4, "ngIf"], ["class", "loading-screen", 4, "ngIf"], [3, "httpErrorMessage", 4, "ngIf"], ["id", "result", 1, "segment"], [1, "segment-text"], [1, "heading-text"], [1, "maps-button", 3, "click"], [1, "fas", "fa-location-arrow"], ["id", "map"], ["height", "500px", "width", "100%", 3, "zoom", "center", "options"], [3, "position", "title", "options", 4, "ngFor", "ngForOf"], [1, "stores-list-heading"], [1, "left-text"], [1, "subtext"], [1, "fas", "fa-map-marker-alt", 2, "color", "#68BBCF"], [1, "right-text"], ["appearance", "fill"], [3, "value", "valueChange", 4, "ngFor", "ngForOf"], ["class", "stores-list", 4, "ngFor", "ngForOf"], [3, "position", "title", "options"], [3, "value", "valueChange"], [1, "stores-list"], [1, "stores-list-item"], [1, "row"], [1, "left-text", "markers"], [1, "location-icon", 3, "click"], [1, "fas", "fa-map-marker-alt"], [1, "stores-list-location", 3, "routerLink"], [1, "address"], [1, "tag"], ["matTooltip", "Google Review", 1, "tooltip"], [1, "far", "fa-question-circle"], [1, "rating"], [1, "loading-screen"], [3, "httpErrorMessage"]], template: function ResultComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, decls: 3, vars: 3, consts: [["id", "result", "class", "segment", 4, "ngIf"], ["class", "loading-screen", 4, "ngIf"], [3, "httpErrorMessage", 4, "ngIf"], ["id", "result", 1, "segment"], [1, "segment-text"], [1, "heading-text"], [1, "maps-button", 3, "click"], [1, "fas", "fa-location-arrow"], ["id", "map"], ["height", "500px", "width", "100%", 3, "zoom", "center", "options"], [3, "position", "title", "options", 4, "ngFor", "ngForOf"], [1, "stores-list-heading"], [1, "left-text"], [1, "subtext"], [1, "fas", "fa-map-marker-alt", 2, "color", "#68BBCF"], [1, "right-text"], ["appearance", "fill"], [3, "value", "click", 4, "ngFor", "ngForOf"], ["class", "stores-list", 4, "ngFor", "ngForOf"], [3, "position", "title", "options"], [3, "value", "click"], [1, "stores-list"], [1, "stores-list-item"], [1, "row"], [1, "left-text", "markers"], [1, "location-icon", 3, "click"], [1, "fas", "fa-map-marker-alt"], [1, "stores-list-location", 3, "routerLink"], [1, "address"], [1, "tag"], ["matTooltip", "Google Review", 1, "tooltip"], [1, "far", "fa-question-circle"], [1, "rating"], [1, "loading-screen"], [3, "httpErrorMessage"]], template: function ResultComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](0, ResultComponent_div_0_Template, 30, 7, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, ResultComponent_div_1_Template, 5, 0, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](2, ResultComponent_app_http_error_2_Template, 1, 1, "app-http-error", 2);
