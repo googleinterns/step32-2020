@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -65,6 +65,21 @@ export class ResultComponent implements OnInit {
     private apiService: ApiService,
     private route: ActivatedRoute,
   ) { }
+
+  zoomMap(): void {
+      if (this.map == null) {
+          return;
+      }
+      //Maximum distance from user latlng
+      const maxDistance = Math.max.apply(null, this.result.stores.map(store=>store.distance));
+
+      //Create circle with max distance to encapsulate all points
+      const userLatLng = new google.maps.LatLng(this.result.latLng.latitude,this.result.latLng.longitude);
+      const circle = new google.maps.Circle({radius: maxDistance * 1609.34, center: userLatLng});
+      
+      //bound map to fit circle
+      this.map.fitBounds(circle.getBounds());
+  }
 
   ngOnInit(): void {
     this.isLoaded = false; // Defaults to API not called yet
