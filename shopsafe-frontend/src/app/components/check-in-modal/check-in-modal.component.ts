@@ -26,10 +26,10 @@ export class CheckInModalComponent implements OnInit {
   }
 
   static storeId: string;
-  busy = '5';
-  line = '5';
-  hygiene = '5';
-  mask = '5';
+  busy = '';
+  line = '';
+  hygiene = '';
+  mask = '';
 
   /**
    * Sets ID variable of check in modal based on store id.
