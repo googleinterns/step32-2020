@@ -52,8 +52,13 @@ export class LineChartComponent implements OnInit {
     }
 
     const options = {
+      focusTarget: "category",
       height: 600,
-      hAxis: { textPosition: 'none' }
+      hAxis: { textPosition: 'none' },
+      pointSize: 5,
+      vAxis: {
+        ticks: [0, 2, 4, 6, 8, 10]
+      }
     }
 
     let chart = new this.gLib.visualization.LineChart(document.getElementById('line-chart'));
