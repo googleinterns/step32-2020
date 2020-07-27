@@ -13,19 +13,28 @@
         <div class="stat-bar-wrapper">
             <div class="stat-bar">
                 <div class="stat-elem-quarter" style="text-align: left;">
-                    <a class="stat-obj">CHECKED IN</a>
+                    <a class="stat-obj"
+                       matTooltip="The number of people who have checked into the current store.">
+                    CHECKED IN</a>
                     <p>{{ store.checkInCount }}</p>
                 </div>
                 <div class="stat-elem-quarter" style="text-align: center;">
-                    <a class="stat-obj">STATUS</a>
+                    <a class="stat-obj"
+                       matTooltip="The current operating status of the store.">
+                    STATUS</a>
                     <p [ngStyle]="{'color': (store.open) ? '#7AC665' : '#FF5151'}"><b>{{ store.open ? 'OPEN' : 'CLOSED' }}</b></p>
                 </div>
                 <div class="stat-elem-quarter" style="text-align: center;">
-                    <a class="stat-obj">RATING</a>
-                    <p>{{ store.rating ? ( store.rating | round ) : '-' }}/5</p>
+                    <a class="stat-obj"
+                       matTooltip="The Google Review rating of the score as found on Google Maps.">
+                    RATING</a>
+                    <p>{{ store.rating ? ( store.rating | round ) : '—' }}/5</p>
                 </div>
                 <div class="stat-elem-quarter" style="text-align: right; margin-top: -5px">
-                    <a class="stat-obj">SHOPSAFE SCORE</a>
+                    <a class="stat-obj"
+                       matTooltip="The ShopSafe Score of the store calculated using the check-in statistics and county
+                                   COVID-19 statistics.">
+                    SHOPSAFE SCORE</a>
                     <p class="shopsafe-score">{{ store.score | round }}/10</p>
                 </div>
             </div>
@@ -85,6 +94,9 @@
         <div class="card">
           <div class="stat-bar-wrapper">
               <h2>COVID-19 Statistics for {{ countyStats.countyName }} County</h2>
+              <p>
+                COVID-19 statistics per county are taken from the New York Times COVID-19 dataset.
+              </p>
               <div class="stat-bar-secondary">
                   <div class="stat-elem">
                       <a class="stat-obj">TOTAL CASES</a>
