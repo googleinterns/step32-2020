@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +17,7 @@ export class ResultComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
 
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map
+  @ViewChildren('googleMap') map: GoogleMap; // In-template Google Map
   markers = []; // Array of store markers rendered in Google Map
   center: google.maps.LatLngLiteral; // Current center of Google Map
   styles: google.maps.MapTypeStyle[] = [
@@ -66,26 +66,25 @@ export class ResultComponent implements OnInit {
     private route: ActivatedRoute,
   ) { }
 
-  zoomMap(): void {
-      if (this.map == null) {
-          return;
-      }
-      //Maximum distance from user latlng
-      const maxDistance = Math.max.apply(null, this.result.stores.map(store=>store.distance));
-
-      //Create circle with max distance to encapsulate all points
-      const userLatLng = new google.maps.LatLng(this.result.latLng.latitude,this.result.latLng.longitude);
-      const circle = new google.maps.Circle({radius: maxDistance * 1609.34, center: userLatLng});
-      
-      //bound map to fit circle
-      this.map.fitBounds(circle.getBounds());
-  }
-
   ngOnInit(): void {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
     this.getResult();
+  }
+
+  zoomMap(): void {
+    console.log("CLIENT: map resized");
+
+    //Maximum distance from user latlng
+    const maxDistance = Math.max.apply(null, this.result.stores.map(store => store.distance));
+
+    //Create circle with max distance to encapsulate all points
+    const userLatLng = new google.maps.LatLng(this.result.latLng.latitude,this.result.latLng.longitude);
+    const circle = new google.maps.Circle({radius: maxDistance * 1609.34, center: userLatLng});
+    
+    //bound map to fit circle
+    this.map.fitBounds(circle.getBounds());
   }
 
   /**
@@ -130,6 +129,8 @@ export class ResultComponent implements OnInit {
       lat: this.result.latLng.latitude,
       lng: this.result.latLng.longitude
     };
+
+    this.zoomMap();
   }
 
   /**
