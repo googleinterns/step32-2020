@@ -5,7 +5,7 @@
             <li><a [routerLink]="['/about']">About</a></li>
             <li><a [routerLink]="['/feedback']"><i class="fas fa-bug"></i> Feedback</a></li>
         </ul>
-        <li class="copyright">
+        <li class="copyright" *ngIf="!mobileCheck">
             Made with 😷 by Raul Palomo, Gabriel Stewart, Carol Li
         </li>
     </div>
