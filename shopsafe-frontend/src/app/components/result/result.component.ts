@@ -21,7 +21,7 @@ export class ResultComponent implements OnInit {
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
   @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow; // In-template Map info window.
-  infoWindowContent: string = '';
+  infoWindowOptions: google.maps.InfoWindowOptions = {}; // Options for Info Window.
   markers = []; // Array of store markers rendered in Google Map.
   center: google.maps.LatLngLiteral; // Current center of Google Map.
   styles: google.maps.MapTypeStyle[] = [
@@ -196,8 +196,8 @@ export class ResultComponent implements OnInit {
 
   /**
    * Sorts results in descending order with the selected method through 
-   * the dropdown in the results page.
-   * Method gets called when the selector is changed.
+   * the dropdown in the results page. Method gets called when the selector is changed.
+   * @param method The method from the dropdown selector.
    */
   sortResults(method: string): void {
     // Sort by ShopSafe Score in descending order.
@@ -239,8 +239,18 @@ export class ResultComponent implements OnInit {
     }
   }
 
-  openInfo(marker: MapMarker, store, storeScore) {
-    this.infoContent = store + ": " + storeScore + "/10";
-    this.infoWindow.open(marker);
+  /**
+   * Opens info window on map anchored to given marker.
+   * @param marker Marker that the window is anchored to.
+   * @param store The name of the store for the given marker.
+   * @param storeScore The score of the specified store.
+   */
+  openInfo(markerPosition, store, storeScore): void {
+    this.infoWindowOptions = { 
+      content: store + ": " + Math.round(storeScore * 100) / 100 + "/10",
+      position: markerPosition
+    };
+    
+    this.infoWindow.open();
   }
 }

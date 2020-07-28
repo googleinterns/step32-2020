@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   // Check for window size and redirect if mobile
   @HostListener('window:resize', ['$event'])
   onResizeDown(event) {
-    if (event.target.innerWidth <= 699) {
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       this.router.navigate(['mobile']);
     }
   }
