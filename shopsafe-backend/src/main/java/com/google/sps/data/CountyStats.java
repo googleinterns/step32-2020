@@ -15,56 +15,43 @@
 package com.google.sps.data;
 
 import com.opencsv.*;
-
-import java.io.BufferedReader;
-import java.io.FileReader; 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /** Class contains the name, state, population and covid cases and deaths of a county. */
 public class CountyStats extends County {
 
-    protected long cases;
-    protected long deaths;
-    protected long population;
-    protected ArrayList<DataPoint> covidData;
+  protected long cases;
+  protected long deaths;
+  protected long population;
+  protected ArrayList<DataPoint> covidData;
 
-    public CountyStats(County county) {
+  public CountyStats(County county) {
 
-        super(county.countyName, county.stateName, county.countyFips);
+    super(county.countyName, county.stateName, county.countyFips);
 
-        // Get population from the Csv file.
-        this.population = county.getPopulationFromCsv();
+    // Get population from the Csv file.
+    this.population = county.getPopulationFromCsv();
 
-        // Make query to find cases and deaths, and cases over time.
-        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
-        this.cases = queryResults.getCases();
-        this.deaths = queryResults.getDeaths();
-        this.covidData = queryResults.getCovidData();
-    }
+    // Make query to find cases and deaths, and cases over time.
+    QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
+    this.cases = queryResults.getCases();
+    this.deaths = queryResults.getDeaths();
+    this.covidData = queryResults.getCovidData();
+  }
 
-    public long getCases() {
-        return cases;
-    }
+  public long getCases() {
+    return cases;
+  }
 
-    public long getDeaths() {
-        return deaths;
-    }
-    
-    public long getPopulation() {
-        return population;
-    }
+  public long getDeaths() {
+    return deaths;
+  }
 
-    public ArrayList<DataPoint> getCovidData() {
-        return covidData;
-    }
+  public long getPopulation() {
+    return population;
+  }
+
+  public ArrayList<DataPoint> getCovidData() {
+    return covidData;
+  }
 }

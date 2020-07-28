@@ -1,6 +1,12 @@
 # ShopSafe
 A web application for informed and safe shopping during COVID-19. Created by [Gabriel Stewart](https://github.com/glstewart17), [Raul Palomo](https://github.com/Raulp8), and [Carol Li](https://github.com/caroljli).
 
+## Formatting Java Code
+```
+cd shopsafe-backend/
+mvn com.theoryinpractise:googleformatter-maven-plugin:format
+```
+
 ## Running Development Server
 ```
 // Install Angular

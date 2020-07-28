@@ -27,11 +27,8 @@ public final class StoresResult {
 
   public StoresResult(List<StoreStats> stores, LatLng latLng) {
     stores.sort(
-      (StoreStats s2, StoreStats s1) ->
-        new Double (s1.getScore()).compareTo(
-          new Double (s2.getScore())
-        )
-    );
+        (StoreStats s2, StoreStats s1) ->
+            new Double(s1.getScore()).compareTo(new Double(s2.getScore())));
     this.stores = stores;
     this.latLng = latLng;
   }
