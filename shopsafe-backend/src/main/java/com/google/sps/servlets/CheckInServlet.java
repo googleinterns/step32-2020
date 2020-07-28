@@ -14,58 +14,49 @@
 
 package com.google.sps.servlets;
 
-import java.io.IOException;
-
-import java.util.Map;
-import java.util.HashMap;
-
 import com.google.sps.data.StoreDatastoreHandler;
-
+import java.io.IOException;
+import java.util.HashMap;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 
-import com.google.appengine.api.datastore.KeyFactory.Builder;
-
-
-/** Servlet that handles user's rating of a store*/
-//TODO: determine url
+/** Servlet that handles user's rating of a store */
+// TODO: determine url
 @WebServlet("/checkin")
 public class CheckInServlet extends HttpServlet {
 
-    /*
-     * Request:
-     *    storeId - valid Places API ID
-     *    userId
-     *    RatingField1 - RatingValue1
-     *    RatingField2 - RatingValue2
-     *    .....
-     *    *TODO: Solidify rating fields and values*
-     *
-     * Updates datastore to reflect new rating
-     */
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
+  /*
+   * Request:
+   *    storeId - valid Places API ID
+   *    userId
+   *    RatingField1 - RatingValue1
+   *    RatingField2 - RatingValue2
+   *    .....
+   *    *TODO: Solidify rating fields and values*
+   *
+   * Updates datastore to reflect new rating
+   */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String placesID = request.getParameter("storeId");
-        if (placesID == null) {
-            response.sendError(400, "Provided no store ID");
-        }
-
-        //null case handled in StoreDatastoreHandler
-        String userID = request.getParameter("userId");
-
-        StoreDatastoreHandler store = new StoreDatastoreHandler(placesID);
-
-        //Create mutable hashmap from params to values and only keep ratings
-        HashMap<String, String[]> ratingsMap =  new HashMap(request.getParameterMap());
-        ratingsMap.remove("storeId");
-        ratingsMap.remove("userId");
-
-        //Update Datastore
-        store.placeStore(ratingsMap);
-
+    String placesID = request.getParameter("storeId");
+    if (placesID == null) {
+      response.sendError(400, "Provided no store ID");
     }
+
+    // null case handled in StoreDatastoreHandler
+    String userID = request.getParameter("userId");
+
+    StoreDatastoreHandler store = new StoreDatastoreHandler(placesID);
+
+    // Create mutable hashmap from params to values and only keep ratings
+    HashMap<String, String[]> ratingsMap = new HashMap(request.getParameterMap());
+    ratingsMap.remove("storeId");
+    ratingsMap.remove("userId");
+
+    // Update Datastore
+    store.placeStore(ratingsMap);
+  }
 }

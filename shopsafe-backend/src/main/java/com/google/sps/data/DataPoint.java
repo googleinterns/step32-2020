@@ -14,33 +14,29 @@
 
 package com.google.sps.data;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.text.SimpleDateFormat;
-
-import com.google.sps.data.StoreDatastoreHandler;
-import com.google.appengine.api.datastore.Entity;
+import java.util.Date;
 
 /*Class to associate data with a date*/
 public final class DataPoint {
 
-    private double value = 0.0;
-    private String date;
+  private double value = 0.0;
+  private String date;
 
-    public DataPoint(double value, Date date) {
-        this.value = value;
+  public DataPoint(double value, Date date) {
+    this.value = value;
 
-        //Format date into standard format
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        this.date = simpleDateFormat.format(date);
-    }
+    // Format date into standard format
+    String pattern = "yyyy-MM-dd";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    this.date = simpleDateFormat.format(date);
+  }
 
-    public double getValue() {
-        return value;
-    }
+  public double getValue() {
+    return value;
+  }
 
-    public String getDate() {
-        return date;
-    }
+  public String getDate() {
+    return date;
+  }
 }

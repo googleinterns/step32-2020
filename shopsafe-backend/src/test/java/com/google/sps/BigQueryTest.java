@@ -15,22 +15,21 @@
 package com.google.sps.data;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-
 @RunWith(JUnit4.class)
 public final class BigQueryTest {
 
-    /*
-     * Should return the same number of confirmed cases as we handle case in
-     * in bigquery search.
-     */
-    @Test
-    public void simpleCaseTest() {
-        Assert.assertTrue(QueryCovidStats.getCovidStatsFips("42071").equals(
-            QueryCovidStats.getCovidStatsFips("42071")));
-    }
+  /*
+   * Should return the same number of confirmed cases as we handle case in
+   * in bigquery search.
+   */
+  @Test
+  public void simpleCaseTest() {
+    Assert.assertTrue(
+        QueryCovidStats.getCovidStatsFips("42071")
+            .equals(QueryCovidStats.getCovidStatsFips("42071")));
+  }
 }

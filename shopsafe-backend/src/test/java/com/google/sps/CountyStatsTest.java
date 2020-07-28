@@ -14,44 +14,40 @@
 
 package com.google.sps;
 
-import com.google.sps.data.LatLng;
-import com.google.sps.data.Store;
 import com.google.sps.data.County;
 import com.google.sps.data.CountyStats;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/** Class that tests fetching stats for Counties*/
+/** Class that tests fetching stats for Counties */
 @RunWith(JUnit4.class)
 public final class CountyStatsTest {
 
-    /*
-     * Fake county should return 0 for all stats
-     */
-    @Test
-    public void fakeCounty() {
-        County county = new County("Fake", "Place", "00000");
-        CountyStats countyStats = new CountyStats(county);
+  /*
+   * Fake county should return 0 for all stats
+   */
+  @Test
+  public void fakeCounty() {
+    County county = new County("Fake", "Place", "00000");
+    CountyStats countyStats = new CountyStats(county);
 
-        Assert.assertEquals(countyStats.getCases(), 0);
-        Assert.assertEquals(countyStats.getDeaths(), 0);
-        Assert.assertEquals(countyStats.getPopulation(), 0);
-    }
+    Assert.assertEquals(countyStats.getCases(), 0);
+    Assert.assertEquals(countyStats.getDeaths(), 0);
+    Assert.assertEquals(countyStats.getPopulation(), 0);
+  }
 
-    /*
-     * Valid County Should return valid Result, testing manhattan
-     */
-    @Test
-    public void simpleCase() {
-        County county = new County("Lancaster", "PA", "42071");
-        CountyStats countyStats = new CountyStats(county);
+  /*
+   * Valid County Should return valid Result, testing manhattan
+   */
+  @Test
+  public void simpleCase() {
+    County county = new County("Lancaster", "PA", "42071");
+    CountyStats countyStats = new CountyStats(county);
 
-        Assert.assertTrue(countyStats.getCases() > 0);
-        Assert.assertTrue(countyStats.getDeaths() > 0);
-        Assert.assertTrue(countyStats.getPopulation() > 0);   
-    }
+    Assert.assertTrue(countyStats.getCases() > 0);
+    Assert.assertTrue(countyStats.getDeaths() > 0);
+    Assert.assertTrue(countyStats.getPopulation() > 0);
+  }
 }

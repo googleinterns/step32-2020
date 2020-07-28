@@ -14,130 +14,125 @@
 
 package com.google.sps.data;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory.Builder;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /*
- * Class that communicates with datastore to get, create, update, and delete 
- * Store and Ratings Entries in datastore. 
+ * Class that communicates with datastore to get, create, update, and delete
+ * Store and Ratings Entries in datastore.
  */
 public class StoreDatastoreHandler {
-    
-    private String storeId;
-    private String userId;
-    private Key storeKey;
-    private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    //Not given a user
-    public StoreDatastoreHandler(String storeId) {
-        this.storeId = storeId; 
-        this.userId = "Anon"; //TODO: Determine best practice for setting default user id
-        this.storeKey = new Builder("Store", storeId).getKey();
+  private String storeId;
+  private String userId;
+  private Key storeKey;
+  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+  // Not given a user
+  public StoreDatastoreHandler(String storeId) {
+    this.storeId = storeId;
+    this.userId = "Anon"; // TODO: Determine best practice for setting default user id
+    this.storeKey = new Builder("Store", storeId).getKey();
+  }
+
+  // Given a user
+  public StoreDatastoreHandler(String storeId, String userId) {
+    this.storeId = storeId;
+    this.userId = userId;
+    this.storeKey = new Builder("Store", storeId).getKey();
+  }
+
+  /*
+   * Wrapper that handles cases where store is in datastore or not
+   */
+  public void placeStore(Map<String, String[]> ratingsMap) {
+    Entity ratingEntity = createRatingsEntity(ratingsMap);
+    datastore.put(ratingEntity);
+    try {
+      // Found store in datastore
+      Entity existingStoreEntity = datastore.get(storeKey);
+    } catch (Exception EntityNotFoundException) {
+      // Store not in datastore
+      Entity storeEntity = new Entity("Store", storeId);
+      datastore.put(storeEntity);
     }
+  }
 
-    //Given a user
-    public StoreDatastoreHandler(String storeId, String userId) {
-        this.storeId = storeId;
-        this.userId = userId;
-        this.storeKey = new Builder("Store", storeId).getKey();
-    }
+  /*
+   * Creates Rating Entity, does not put in datastore
+   */
+  private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
+    // Set store as parent entity
+    Entity ratingEntity = new Entity("Rating", storeKey);
 
-    /*
-     * Wrapper that handles cases where store is in datastore or not
-     */
-    public void placeStore(Map<String, String[]> ratingsMap) {
-        Entity ratingEntity = createRatingsEntity(ratingsMap);
-        datastore.put(ratingEntity);
-        try {
-            //Found store in datastore
-            Entity existingStoreEntity = datastore.get(storeKey);
-        } catch (Exception EntityNotFoundException) {
-            //Store not in datastore
-            Entity storeEntity = new Entity("Store", storeId);
-            datastore.put(storeEntity);
-        }
-    }
-
-    /*
-     * Creates Rating Entity, does not put in datastore
-     */
-    private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
-        //Set store as parent entity
-        Entity ratingEntity = new Entity("Rating", storeKey);
-
-        //Insert ratings
-        ratingsMap.forEach((String ratingField, String[] ratingValue) -> {
-            /* http request getParamMap method formats in array instead of
-             * single value.
-             */
-            ratingEntity.setProperty(ratingField, Double.parseDouble(ratingValue[0]));
+    // Insert ratings
+    ratingsMap.forEach(
+        (String ratingField, String[] ratingValue) -> {
+          /* http request getParamMap method formats in array instead of
+           * single value.
+           */
+          ratingEntity.setProperty(ratingField, Double.parseDouble(ratingValue[0]));
         });
 
-        //Add date when created
-        Date date = new Date();
-        ratingEntity.setProperty("Date", date);
+    // Add date when created
+    Date date = new Date();
+    ratingEntity.setProperty("Date", date);
 
-        //Add user id
-        ratingEntity.setProperty("User", userId);
-        return ratingEntity;
-    }
+    // Add user id
+    ratingEntity.setProperty("User", userId);
+    return ratingEntity;
+  }
 
-
-    /*
-     * Returns the children Rating Entities associated with the Store,
-     * sorted by date.
-     */
-    public List<Entity> getRatings() {
-        Query query = new Query("Rating", storeKey)
+  /*
+   * Returns the children Rating Entities associated with the Store,
+   * sorted by date.
+   */
+  public List<Entity> getRatings() {
+    Query query =
+        new Query("Rating", storeKey)
             .setAncestor(storeKey)
             .addSort("Date", Query.SortDirection.ASCENDING);
-        return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+    return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+  }
+
+  /* Tools For Debugging and Development */
+
+  /*
+   * Deletes store and its ratings from Datastore
+   */
+  public void deleteStoreAndRatings() {
+    List<Entity> ratingEntities = this.getRatings();
+    for (Entity ratingEntity : ratingEntities) {
+      Key ratingKey = ratingEntity.getKey();
+      datastore.delete(ratingKey);
     }
+    datastore.delete(storeKey);
+  }
 
+  /*
+   * Deletes all entries in Datastore,
+   */
+  public void deleteData() {
+    deleteQuery(new Query("Store"));
+    deleteQuery(new Query("Rating"));
+  }
 
-    /* Tools For Debugging and Development */
-
-    /*
-     * Deletes store and its ratings from Datastore
-     */
-    public void deleteStoreAndRatings() {
-        List<Entity> ratingEntities = this.getRatings();
-        for (Entity ratingEntity: ratingEntities) {
-            Key ratingKey =  ratingEntity.getKey();
-            datastore.delete(ratingKey);
-        }
-        datastore.delete(storeKey);
+  /*
+   * Deletes all entries in query
+   */
+  private void deleteQuery(Query query) {
+    PreparedQuery queryResults = datastore.prepare(query);
+    for (Entity entry : queryResults.asIterable()) {
+      datastore.delete(entry.getKey());
     }
-
-    /*
-     * Deletes all entries in Datastore, 
-     */
-    public void deleteData() {
-        deleteQuery(new Query("Store"));
-        deleteQuery(new Query("Rating"));
-    }
-
-    /*
-     * Deletes all entries in query
-     */
-    private void deleteQuery(Query query) {
-        PreparedQuery queryResults = datastore.prepare(query);
-        for (Entity entry: queryResults.asIterable()) {
-            datastore.delete(entry.getKey());
-        }
-    }
-
+  }
 }
-
