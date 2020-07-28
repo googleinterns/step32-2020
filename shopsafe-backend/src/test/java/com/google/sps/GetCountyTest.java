@@ -14,12 +14,10 @@
 
 package com.google.sps;
 
+import com.google.sps.data.County;
 import com.google.sps.data.LatLng;
 import com.google.sps.data.Store;
-import com.google.sps.data.County;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -28,36 +26,52 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class GetCountyTest {
 
-    /*
-     * Check if the county name field is correct for Centre County.
-     */
-    @Test
-    public void checkValidLocation() {
-        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(40.803639, -77.862574), 2.4);
-        String actual = County.GetCounty(store).getCountyName();
-        String expected = "Centre";
-        Assert.assertEquals(expected, actual);
-    }
+  /*
+   * Check if the county name field is correct for Centre County.
+   */
+  @Test
+  public void checkValidLocation() {
+    Store store =
+        new Store(
+            "1234567889",
+            "Walmart",
+            "123 Walnut Street",
+            true,
+            new LatLng(40.803639, -77.862574),
+            2.4);
+    String actual = County.GetCounty(store).getCountyName();
+    String expected = "Centre";
+    Assert.assertEquals(expected, actual);
+  }
 
-    /*
-     * Check if the county name field is empty for location outside the United States.
-     */
-    @Test
-    public void checkLocationOutsideUS() {
-        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(43.650300, -79.383785), 4.6);
-        String actual = County.GetCounty(store).getCountyName();
-        String expected = "";
-        Assert.assertEquals(expected, actual);
-    }
+  /*
+   * Check if the county name field is empty for location outside the United States.
+   */
+  @Test
+  public void checkLocationOutsideUS() {
+    Store store =
+        new Store(
+            "1234567889",
+            "Walmart",
+            "123 Walnut Street",
+            true,
+            new LatLng(43.650300, -79.383785),
+            4.6);
+    String actual = County.GetCounty(store).getCountyName();
+    String expected = "";
+    Assert.assertEquals(expected, actual);
+  }
 
-    /*
-     * Check if the county name field is empty for invalid location.
-     */
-    @Test
-    public void checkInvalidLocation() {
-        Store store = new Store("1234567889", "Walmart", "123 Walnut Street", true, new LatLng(1000.0, 1000.0), 3.2);
-        String actual = County.GetCounty(store).getCountyName();
-        String expected = "";
-        Assert.assertEquals(expected, actual);
-    }
+  /*
+   * Check if the county name field is empty for invalid location.
+   */
+  @Test
+  public void checkInvalidLocation() {
+    Store store =
+        new Store(
+            "1234567889", "Walmart", "123 Walnut Street", true, new LatLng(1000.0, 1000.0), 3.2);
+    String actual = County.GetCounty(store).getCountyName();
+    String expected = "";
+    Assert.assertEquals(expected, actual);
+  }
 }

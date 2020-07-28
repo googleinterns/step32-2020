@@ -14,54 +14,53 @@
 
 package com.google.sps.data;
 
-import com.google.sps.data.LatLng;
-
 /** Class contains all the information for a store without the scores. */
 public class Store {
 
-    protected String id;
-    protected String name;
-    protected String address;
-    protected Boolean open;
-    protected double latitude;
-    protected double longitude;
-    protected double rating;
+  protected String id;
+  protected String name;
+  protected String address;
+  protected Boolean open;
+  protected double latitude;
+  protected double longitude;
+  protected double rating;
 
-    public Store(String id, String name, String address, Boolean open, LatLng location, double rating) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.open = open;
-        this.latitude = location.getLatitude();
-        this.longitude = location.getLongitude();
-        this.rating = rating;
-    }
+  public Store(
+      String id, String name, String address, Boolean open, LatLng location, double rating) {
+    this.id = id;
+    this.name = name;
+    this.address = address;
+    this.open = open;
+    this.latitude = location.getLatitude();
+    this.longitude = location.getLongitude();
+    this.rating = rating;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public Boolean getOpen() {
-        return open;
-    }
+  public Boolean getOpen() {
+    return open;
+  }
 
-    public double getLatitude() {
-        return latitude;
-    }
+  public double getLatitude() {
+    return latitude;
+  }
 
-    public double getLongitude() {
-        return longitude;
-    }
-  
-    public double getRating() {
-        return rating;
-    }
+  public double getLongitude() {
+    return longitude;
+  }
+
+  public double getRating() {
+    return rating;
+  }
 }
