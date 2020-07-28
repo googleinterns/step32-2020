@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
-import { GoogleMap } from '@angular/google-maps';
+import { GoogleMap, MapMarker, MapInfoWindow } from '@angular/google-maps';
 
 @Component({
   selector: 'app-result',
@@ -20,6 +20,8 @@ export class ResultComponent implements OnInit {
   sortingMethods: string[];
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow; // In-template Map info window.
+  infoWindowContent: string = '';
   markers = []; // Array of store markers rendered in Google Map.
   center: google.maps.LatLngLiteral; // Current center of Google Map.
   styles: google.maps.MapTypeStyle[] = [
@@ -235,5 +237,10 @@ export class ResultComponent implements OnInit {
         }
       });
     }
+  }
+
+  openInfo(marker: MapMarker, store, storeScore) {
+    this.infoContent = store + ": " + storeScore + "/10";
+    this.infoWindow.open(marker);
   }
 }

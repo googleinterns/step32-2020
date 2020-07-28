@@ -14,12 +14,15 @@
             [options]="options"
           >
             <map-marker
+              #markerElement
               *ngFor="let marker of markers"
               [position]="marker.position"
               [title]="marker.title"
               [options]="marker.options"
+              (mapClick)="openInfo(markerElement, marker.title, marker.info)"
             >
             </map-marker>
+            <map-info-window>{{ infoWindowContent }}</map-info-window>
           </google-map>
         </div>
         <br/>
