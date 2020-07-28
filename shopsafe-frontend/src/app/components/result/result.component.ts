@@ -205,7 +205,6 @@ export class ResultComponent implements OnInit {
     //scroll to map
     const mapElement = document.getElementById("map");
     mapElement.scrollIntoView({behavior: 'smooth'});
-
   }
 
   /**
