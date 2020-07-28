@@ -24,6 +24,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatSelectModule} from '@angular/material/select';
 
 // Services
 import { ApiService } from './api/api.service';
@@ -60,7 +61,8 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
     FormsModule,
     MatProgressSpinnerModule,
     GoogleChartModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    MatSelectModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

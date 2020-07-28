@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren} from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -17,10 +17,12 @@ export class ResultComponent implements OnInit {
   httpError: boolean;
   httpErrorMessage: string;
 
-  @ViewChildren('googleMap') map: GoogleMap; // In-template Google Map
-  markers = []; // Array of store markers rendered in Google Map
-  center: google.maps.LatLngLiteral; // Current center of Google Map
-  zoom: number;
+  sortingMethods: string[];
+
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
+  markers = []; // Array of store markers rendered in Google Map.
+  center: google.maps.LatLngLiteral; // Current center of Google Map.
+  zoom: number; //zoom level of map
   styles: google.maps.MapTypeStyle[] = [
     {
       featureType: "administrative",
@@ -56,22 +58,26 @@ export class ResultComponent implements OnInit {
         }
       ]
     }
-  ]; // Custom map styling
+  ]; // Custom map styling.
   options: google.maps.MapOptions = {
     disableDefaultUI: true,
     styles: this.styles,
-  }; // Options for Google Map rendered in template
+  }; // Options for Google Map rendered in template.
 
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
-  ) { }
+  ) { 
+    this.sortingMethods = ['Sort by ShopSafe Score', 
+                           'Sort by Google Review',
+                           'Sort by Distance']; // Init sorting methods.
+  }
 
   ngOnInit(): void {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
-    this.getResult();
+    this.getResult('Sort by ShopSafe Score');
   }
 
   zoomMap(): void {
@@ -86,7 +92,7 @@ export class ResultComponent implements OnInit {
    * Calls API to get result and subscribes local variables using data returned
    * in the Observable from the HTTP response.
    */
-  getResult(): void {
+  getResult(method: string): void {
     console.log('CLIENT: results api call at ' + this.location);
     this.apiService.getNearbyStores(this.location)
       .subscribe(data => 
@@ -100,6 +106,7 @@ export class ResultComponent implements OnInit {
           this.httpErrorMessage = err
         },
         () => {
+          this.sortResults(method);
           this.initTemplate()
         }
       );
@@ -143,7 +150,7 @@ export class ResultComponent implements OnInit {
 
     var userIcon = "https://img.icons8.com/material-two-tone/24/000000/street-view.png";
 
-    // Adds current user query location to markers
+    // Adds current user query location to markers.
     this.markers.push({
       position: {
         lat: this.result.latLng.latitude,
@@ -155,9 +162,9 @@ export class ResultComponent implements OnInit {
       }
     })
 
-    // Adds each stores as marker
+    // Adds each stores as marker.
     for (let store of this.result.stores) {
-      // Set icon according to colour
+      // Set icon according to colour.
       if (store.score <= 3.3) {
         currIcon = unsafeIcon;
       } else if (store.score <= 6.6) {
@@ -196,5 +203,51 @@ export class ResultComponent implements OnInit {
     const mapElement = document.getElementById("map");
     mapElement.scrollIntoView({behavior: 'smooth'});
 
+  }
+
+  /**
+   * Sorts results in descending order with the selected method through 
+   * the dropdown in the results page.
+   * Method gets called when the selector is changed.
+   */
+  sortResults(method: string): void {
+    // Get chosen method. Since the user picks from a set list, there are only three.
+    // Sort by ShopSafe Score in descending order.
+    if (method == "Sort by ShopSafe Score") {
+      console.log("CLIENT: sorting by ShopSafe Score");
+      this.result.stores.sort((n1, n2) => {
+        if (n1.score > n2.score) {
+          return -1;
+        } else if (n1.score < n2.score) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    // Sort by Google Review in descending order.
+    } else if (method == "Sort by Google Review") {
+      console.log("CLIENT: sorting by Google Review");
+      this.result.stores.sort((n1, n2) => {
+        if (n1.rating > n2.rating) {
+          return -1;
+        } else if (n1.rating < n2.rating) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    // Sort by distance in ascending order. 
+    } else {
+      this.result.stores.sort((n1, n2) => {
+        console.log("CLIENT: sorting by Distance");
+        if (n1.distance < n2.distance) {
+          return -1;
+        } else if (n1.distance > n2.distance) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
   }
 }
