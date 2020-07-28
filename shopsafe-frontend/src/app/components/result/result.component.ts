@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren} from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -20,6 +20,7 @@ export class ResultComponent implements OnInit {
   @ViewChildren('googleMap') map: GoogleMap; // In-template Google Map
   markers = []; // Array of store markers rendered in Google Map
   center: google.maps.LatLngLiteral; // Current center of Google Map
+  zoom: number;
   styles: google.maps.MapTypeStyle[] = [
     {
       featureType: "administrative",
@@ -75,16 +76,10 @@ export class ResultComponent implements OnInit {
 
   zoomMap(): void {
     console.log("CLIENT: map resized");
-
     //Maximum distance from user latlng
     const maxDistance = Math.max.apply(null, this.result.stores.map(store => store.distance));
 
-    //Create circle with max distance to encapsulate all points
-    const userLatLng = new google.maps.LatLng(this.result.latLng.latitude,this.result.latLng.longitude);
-    const circle = new google.maps.Circle({radius: maxDistance * 1609.34, center: userLatLng});
-    
-    //bound map to fit circle
-    this.map.fitBounds(circle.getBounds());
+    this.zoom = Math.round(14-Math.log(maxDistance)/Math.LN2);
   }
 
   /**
@@ -130,6 +125,7 @@ export class ResultComponent implements OnInit {
       lng: this.result.latLng.longitude
     };
 
+    // Set Zoom
     this.zoomMap();
   }
 
@@ -194,10 +190,11 @@ export class ResultComponent implements OnInit {
       lat: lat,
       lng: lng
     };
-    this.map.center = this.center;
+    // this.map.center = this.center;
 
     //scroll to map
     const mapElement = document.getElementById("map");
     mapElement.scrollIntoView({behavior: 'smooth'});
+
   }
 }
