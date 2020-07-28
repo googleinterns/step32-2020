@@ -25,10 +25,22 @@
         </div>
         <br/>
         <div class="stores-list-heading">
-            <h2 class="left-text">Local Grocery Stores</h2>
-            <p class="right-text subtext">
-              Click on a store to view store statistics, click on the &nbsp; <i class="fas fa-map-marker-alt" style="color:#68BBCF"></i> &nbsp; to view on map
+          <div class="left-text">
+            <h2>Local Grocery Stores</h2>
+            <p class="subtext">
+              Click on a store name to view store statistics, click on the &nbsp; <i class="fas fa-map-marker-alt" style="color:#68BBCF"></i> &nbsp; to view on map
             </p>
+          </div>
+          <div class="right-text">
+            <mat-form-field appearance="fill">
+              <mat-label>Sort Results</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let method of sortingMethods" [value]="method" (click)="getResult(method)">
+                  {{ method }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
         <div class="stores-list" *ngFor="let store of result.stores">
             <div class="stores-list-item">
@@ -41,7 +53,6 @@
                     >
                         {{ store.name }}
                     </a>
-                    <!-- <a class="rating">{{ store.score | round }}/10</a> -->
                 </div>
                 <div class="right-text">
                     <p class="address">{{ store.address }}</p>
@@ -53,7 +64,7 @@
                 <div class="right-text">
                   <a class="tag">{{ store.distance | round }} mi</a>
                   <a class="tag">
-                    {{ store.rating ? ( store.rating | round ) : '-' }}/5 &nbsp;
+                    {{ store.rating ? ( store.rating | round ) : '—' }}/5 &nbsp;
                     <a class="tooltip"
                       matTooltip="Google Review">
                       <i class="far fa-question-circle"></i>
