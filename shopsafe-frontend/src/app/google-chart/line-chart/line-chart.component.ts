@@ -42,18 +42,23 @@ export class LineChartComponent implements OnInit {
 
     let data = new this.gLib.visualization.DataTable();
     data.addColumn('date', 'Date');
-    data.addColumn('number', 'Mask');
-    data.addColumn('number', 'Busy');
-    data.addColumn('number', 'Line');
-    data.addColumn('number', 'Hygiene');
+    data.addColumn('number', 'Mask Usage');
+    data.addColumn('number', 'Social Distancing');
+    data.addColumn('number', 'Wait Time');
+    data.addColumn('number', 'Cleanliness');
 
     for (let i in this.mask) {
       data.addRow([new Date(this.mask[i].date), this.mask[i].value, this.busy[i].value, this.line[i].value, this.hygiene[i].value]);
     }
 
     const options = {
+      focusTarget: "category",
       height: 600,
-      hAxis: { textPosition: 'none' }
+      hAxis: { textPosition: 'none' },
+      pointSize: 5,
+      vAxis: {
+        ticks: [0, 2, 4, 6, 8, 10]
+      }
     }
 
     let chart = new this.gLib.visualization.LineChart(document.getElementById('line-chart'));

@@ -47,8 +47,10 @@ export class CovidChartComponent implements OnInit {
     }
 
     const options = {
+      focusTarget: "category",
       height: 600,
-      hAxis: { textPosition: 'none' }
+      hAxis: { textPosition: 'none' },
+      pointSize: 5
     }
 
     let chart = new this.gLib.visualization.LineChart(document.getElementById('covid-chart'));
