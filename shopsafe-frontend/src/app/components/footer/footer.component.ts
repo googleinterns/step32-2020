@@ -17,7 +17,7 @@ export class FooterComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResizeDown(event) {
     if (event.target.innerWidth <= 699) {
-      this.booleanCheck = false;
+      this.mobileCheck = true;
     }
   }
 
