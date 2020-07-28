@@ -74,14 +74,6 @@ export class ResultComponent implements OnInit {
     this.getResult();
   }
 
-  zoomMap(): void {
-    console.log("CLIENT: map resized");
-    //Maximum distance from user latlng
-    const maxDistance = Math.max.apply(null, this.result.stores.map(store => store.distance));
-
-    this.zoom = Math.round(14-Math.log(maxDistance)/Math.LN2);
-  }
-
   /**
    * Calls API to get result and subscribes local variables using data returned
    * in the Observable from the HTTP response.
@@ -125,7 +117,7 @@ export class ResultComponent implements OnInit {
       lng: this.result.latLng.longitude
     };
 
-    // Set Zoom
+    // Set zoom level of map
     this.zoomMap();
   }
 
@@ -181,6 +173,18 @@ export class ResultComponent implements OnInit {
   }
 
   /**
+   * Calculates and sets zoom level based on maximum distance of a store
+   * from the user latLng.
+   */
+  zoomMap(): void {
+    console.log("CLIENT: map resized");
+    //Maximum distance from user latlng
+    const maxDistance = Math.max.apply(null, this.result.stores.map(store => store.distance));
+
+    this.zoom = Math.round(14-Math.log(maxDistance)/Math.LN2);
+  }
+
+  /**
    * Recenters map based on latLng
    * @param lat latitude to be recentered to
    * @param lng longitude to be recentered to
@@ -190,7 +194,6 @@ export class ResultComponent implements OnInit {
       lat: lat,
       lng: lng
     };
-    // this.map.center = this.center;
 
     //scroll to map
     const mapElement = document.getElementById("map");
