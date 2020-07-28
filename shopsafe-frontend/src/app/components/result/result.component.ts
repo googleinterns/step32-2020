@@ -187,7 +187,7 @@ export class ResultComponent implements OnInit {
     };
     this.map.center = this.center;
 
-    //scroll to map
+    // Scroll to map.
     const mapElement = document.getElementById("map");
     mapElement.scrollIntoView({behavior: 'smooth'});
   }
@@ -198,7 +198,6 @@ export class ResultComponent implements OnInit {
    * Method gets called when the selector is changed.
    */
   sortResults(method: string): void {
-    // Get chosen method. Since the user picks from a set list, there are only three.
     // Sort by ShopSafe Score in descending order.
     if (method == "Sort by ShopSafe Score") {
       console.log("CLIENT: sorting by ShopSafe Score");
@@ -226,7 +225,7 @@ export class ResultComponent implements OnInit {
     // Sort by distance in ascending order. 
     } else {
       this.result.stores.sort((n1, n2) => {
-        console.log("CLIENT: sorting by Distance");
+        console.log("CLIENT: sorting by distance");
         if (n1.distance < n2.distance) {
           return -1;
         } else if (n1.distance > n2.distance) {
