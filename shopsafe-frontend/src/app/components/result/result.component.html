@@ -7,9 +7,10 @@
         </div>
         <div id="map">
           <google-map
+            #googleMap
             height="500px"
             width="100%"
-            [zoom]="14"
+            [zoom]="zoom"
             [center]="center"
             [options]="options"
           >

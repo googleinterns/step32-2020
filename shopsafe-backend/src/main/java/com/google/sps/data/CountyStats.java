@@ -14,8 +14,6 @@
 
 package com.google.sps.data;
 
-import com.google.sps.data.QueryOverTime;
-import com.google.sps.data.DataPoint;
 import com.opencsv.*;
 
 import java.io.BufferedReader;
@@ -48,7 +46,7 @@ public class CountyStats extends County {
         this.population = county.getPopulationFromCsv();
 
         // Make query to find cases and deaths, and cases over time.
-        QueryOverTime queryResults = QueryOverTime.getCovidStatsFips(county.getCountyFips());
+        QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());
         this.cases = queryResults.getCases();
         this.deaths = queryResults.getDeaths();
         this.covidData = queryResults.getCovidData();

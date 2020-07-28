@@ -22,6 +22,7 @@ export class ResultComponent implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
   markers = []; // Array of store markers rendered in Google Map.
   center: google.maps.LatLngLiteral; // Current center of Google Map.
+  zoom: number; //zoom level of map
   styles: google.maps.MapTypeStyle[] = [
     {
       featureType: "administrative",
@@ -122,6 +123,9 @@ export class ResultComponent implements OnInit {
       lat: this.result.latLng.latitude,
       lng: this.result.latLng.longitude
     };
+
+    // Set zoom level of map
+    this.zoomMap();
   }
 
   /**
@@ -176,6 +180,18 @@ export class ResultComponent implements OnInit {
   }
 
   /**
+   * Calculates and sets zoom level based on maximum distance of a store
+   * from the user latLng.
+   */
+  zoomMap(): void {
+    console.log("CLIENT: map resized");
+    //Maximum distance from user latlng
+    const maxDistance = Math.max.apply(null, this.result.stores.map(store => store.distance));
+
+    this.zoom = Math.round(14-Math.log(maxDistance)/Math.LN2);
+  }
+
+  /**
    * Recenters map based on latLng
    * @param lat latitude to be recentered to
    * @param lng longitude to be recentered to
@@ -185,7 +201,6 @@ export class ResultComponent implements OnInit {
       lat: lat,
       lng: lng
     };
-    this.map.center = this.center;
 
     //scroll to map
     const mapElement = document.getElementById("map");

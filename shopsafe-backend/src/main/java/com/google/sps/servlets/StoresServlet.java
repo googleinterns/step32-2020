@@ -195,7 +195,7 @@ public class StoresServlet extends HttpServlet {
 
 
     /*
-     * Populate StoreStats object and add to list
+     * Populate StoreStats object and add to storeStats
      */
     private void addStore(Store store, ConcurrentHashMap<String, Double> countyScores, ConcurrentLinkedQueue<StoreStats> storeStats, LatLng userLocation) {
 

@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps;
-
-import com.google.sps.data.QueryCovidStats;
+package com.google.sps.data;
 
 import org.junit.Assert;
 import org.junit.Before;
