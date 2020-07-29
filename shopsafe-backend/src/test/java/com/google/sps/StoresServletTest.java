@@ -66,6 +66,7 @@ public class StoresServletTest {
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn(null);
+    when(request.getParameter("latlng")).thenReturn(null);
 
     // Read response and save to result.
     StringWriter stringWriter = new StringWriter();
@@ -92,6 +93,7 @@ public class StoresServletTest {
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("  ");
+    when(request.getParameter("latlng")).thenReturn("  ");
 
     // Read response and save to result.
     StringWriter stringWriter = new StringWriter();
@@ -118,6 +120,7 @@ public class StoresServletTest {
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("asdflkasdvojabdskjvaewfnaeskcasdcn");
+    when(request.getParameter("latlng")).thenReturn("false");
 
     // Read response and save to result.
     StringWriter stringWriter = new StringWriter();
@@ -145,6 +148,7 @@ public class StoresServletTest {
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("Toronto");
+    when(request.getParameter("latlng")).thenReturn("false");
 
     // Read response and save to result.
     StringWriter stringWriter = new StringWriter();
@@ -158,7 +162,7 @@ public class StoresServletTest {
   }
 
   /*
-   * Check the formatting for a correct location.
+   * Check the formatting for a correct address location.
    */
   @Test
   public void checkValidLocation() throws IOException, ServletException {
@@ -171,6 +175,51 @@ public class StoresServletTest {
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("Philadelphia");
+    when(request.getParameter("latlng")).thenReturn("false");
+
+    // Read response and save to result.
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    storesServlet.doGet(request, response);
+    String result = stringWriter.getBuffer().toString().trim();
+    printWriter.flush();
+
+    // Test json result to see if certain properties exist.
+    try {
+      JSONObject resultJson = new JSONObject(result);
+
+      JSONArray stores = resultJson.getJSONArray("stores");
+      JSONObject firstStore = stores.getJSONObject(0);
+      String storeId = firstStore.getString("id");
+    }
+
+    // If error, print error, assert False, and return.
+    catch (Exception e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+      return;
+    }
+
+    // If all the fields exist, return true.
+    Assert.assertTrue(true);
+  }
+
+  /*
+   * Check the formatting for a correct LatLng location.
+   */
+  @Test
+  public void checkValidLatLng() throws IOException, ServletException {
+
+    // Initialize request, response, and servlet.
+    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+    StoresServlet storesServlet = new StoresServlet();
+    storesServlet.init();
+
+    // Mock call for location.
+    when(request.getParameter("location")).thenReturn("40.7978417,-77.8556184");
+    when(request.getParameter("latlng")).thenReturn("true");
 
     // Read response and save to result.
     StringWriter stringWriter = new StringWriter();

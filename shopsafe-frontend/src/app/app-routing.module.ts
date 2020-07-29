@@ -15,7 +15,7 @@ const routes: Routes = [
     component: LandingComponent 
   },
   {
-    path: 'result/:location', 
+    path: 'result/:location/:latlng', 
     component: ResultComponent, 
   },
   { 

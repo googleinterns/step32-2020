@@ -43,8 +43,8 @@ public class StoreServlet extends HttpServlet {
   public static final String PLACE_URL =
       "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
   public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry,rating";
-  private String PLACE_KEY;
-  private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
+  private static final String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
+  private String placeKey;
 
   /** For a get request, return all nearby stores. */
   @Override
@@ -54,7 +54,7 @@ public class StoreServlet extends HttpServlet {
     try {
       File myObj = new File(PLACE_KEY_LOCATION);
       Scanner myReader = new Scanner(myObj);
-      PLACE_KEY = "&key=" + myReader.nextLine();
+      placeKey = "&key=" + myReader.nextLine();
       myReader.close();
     }
 
@@ -66,8 +66,6 @@ public class StoreServlet extends HttpServlet {
       response.getWriter().println("Failed to get api key.");
       return;
     }
-
-    // PLACE_KEY = "&key=" + "API_KEY";
 
     // Get id from request.
     String id = request.getParameter("id");
@@ -85,7 +83,7 @@ public class StoreServlet extends HttpServlet {
     try {
 
       // Read response of call to FCC API given lat and lng.
-      URL url = new URL(PLACE_URL + id + PLACE_FIELDS + PLACE_KEY);
+      URL url = new URL(PLACE_URL + id + PLACE_FIELDS + placeKey);
       BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
       // Store response in json, by reading each line.
