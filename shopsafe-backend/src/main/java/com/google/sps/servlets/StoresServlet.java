@@ -53,8 +53,10 @@ public class StoresServlet extends HttpServlet {
   public static final String PLACE_RANK = "&radius=10&rankby=prominence";
   public static final String GEOCODE_URL =
       "https://maps.googleapis.com/maps/api/geocode/json?address=";
-  private String PLACE_KEY;
-  private String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
+  private static final String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
+
+  private String placeKey;
+  private LatLng userLocation;
 
   /** For a get request, return all nearby stores. */
   @Override
@@ -64,7 +66,7 @@ public class StoresServlet extends HttpServlet {
     try {
       File myObj = new File(PLACE_KEY_LOCATION);
       Scanner myReader = new Scanner(myObj);
-      PLACE_KEY = "&key=" + myReader.nextLine();
+      placeKey = "&key=" + myReader.nextLine();
       myReader.close();
     }
 
@@ -100,25 +102,21 @@ public class StoresServlet extends HttpServlet {
     }
 
     // Get location based on geolocation of address or string version of LatLng.
-    LatLng location;
     if (Boolean.TRUE.equals(request.getParameter("latlng"))) {
       String[] latLngArray = address.split(",");
-      location = new LatLng(Double.parseDouble(latLngArray[0]), Double.parseDouble(latLngArray[1]));
+      userLocation =
+          new LatLng(Double.parseDouble(latLngArray[0]), Double.parseDouble(latLngArray[1]));
     } else {
-      location = getLatLngFromAddress(address);
-      if (location.getLatitude() == 1000) {
+      if (!getLatLngFromAddress(address)) {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setContentType("text/html;");
-        response
-            .getWriter()
-            .println(
-                "Failed to find any stores near the address: asdflkasdvojabdskjvaewfnaeskcasdcn");
+        response.getWriter().println("Failed to find any stores near the address: " + address);
         return;
       }
     }
 
     // Get all grocery stores based on LatLng and migrate to the Store class.
-    List<Store> stores = getStores(location);
+    List<Store> stores = getStores();
 
     ConcurrentHashMap<String, Double> countyScores = new ConcurrentHashMap();
 
@@ -135,7 +133,7 @@ public class StoresServlet extends HttpServlet {
       Store store = stores.get(i);
 
       // Run thread for each store
-      pool.execute(() -> addStore(store, countyScores, storeStats, location));
+      pool.execute(() -> addStore(store, countyScores, storeStats));
     }
     pool.shutdown();
     while (!pool.isTerminated()) ;
@@ -153,7 +151,7 @@ public class StoresServlet extends HttpServlet {
     response.setContentType("application/json;");
     response
         .getWriter()
-        .println(gson.toJson(new StoresResult(new ArrayList(storeStats), location)));
+        .println(gson.toJson(new StoresResult(new ArrayList(storeStats), userLocation)));
   }
 
   /*
@@ -162,8 +160,7 @@ public class StoresServlet extends HttpServlet {
   private void addStore(
       Store store,
       ConcurrentHashMap<String, Double> countyScores,
-      ConcurrentLinkedQueue<StoreStats> storeStats,
-      LatLng userLocation) {
+      ConcurrentLinkedQueue<StoreStats> storeStats) {
 
     // Get county based on location of the store
     County county = County.GetCounty(store);
@@ -193,7 +190,7 @@ public class StoresServlet extends HttpServlet {
   }
 
   /** Returns a list of Stores without scores. */
-  public List<Store> getStores(LatLng location) {
+  public List<Store> getStores() {
 
     // List of stores that will be returned, it will be empty if there is an exception.
     List<Store> stores = new ArrayList<>();
@@ -203,11 +200,11 @@ public class StoresServlet extends HttpServlet {
       URL url =
           new URL(
               PLACE_URL
-                  + location.getLatitude()
+                  + userLocation.getLatitude()
                   + ","
-                  + location.getLongitude()
+                  + userLocation.getLongitude()
                   + PLACE_RANK
-                  + PLACE_KEY);
+                  + placeKey);
       BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
       // Store response in json, by reading each line.
@@ -244,15 +241,15 @@ public class StoresServlet extends HttpServlet {
       return stores;
     }
 
-    // If error, print error, and return empty county object
+    // If error, print error, and return the valid stores.
     catch (Exception e) {
       e.printStackTrace();
       return stores;
     }
   }
 
-  /** Returns a LatLng based on an address. */
-  public LatLng getLatLngFromAddress(String address) {
+  /** Updates the userLocation latlng and return boolean for success. */
+  public boolean getLatLngFromAddress(String address) {
 
     // Get a string array for all the words in the request and get its length.
     String[] addressArray = address.trim().split("\\s+");
@@ -274,7 +271,7 @@ public class StoresServlet extends HttpServlet {
     try {
 
       // Read response of call to FCC API given lat and lng.
-      URL url = new URL(GEOCODE_URL + address + PLACE_KEY);
+      URL url = new URL(GEOCODE_URL + address + placeKey);
       BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
       // Store response in json, by reading each line.
@@ -292,13 +289,16 @@ public class StoresServlet extends HttpServlet {
               .getJSONObject(0)
               .getJSONObject("geometry")
               .getJSONObject("location");
-      return new LatLng(jsonLocation.getDouble("lat"), jsonLocation.getDouble("lng"));
+      userLocation = new LatLng(jsonLocation.getDouble("lat"), jsonLocation.getDouble("lng"));
+
+      // Return true for success.
+      return true;
     }
 
-    // If error, print error, and return.
+    // If error, print error, and return false.
     catch (Exception e) {
       e.printStackTrace();
-      return new LatLng(1000, 1000);
+      return false;
     }
   }
 }
