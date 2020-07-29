@@ -17,11 +17,11 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="busy"
-                  [disabled]="socDisSlider"
+                  [disabled]="!socDisSlider"
                   min="0" 
                   max="10" 
                   step="1"
-                  [value]= "socDisAvg"
+                  [value]= "socDis"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -42,12 +42,12 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="line"
-                  [disabled]="waitTimeSlider"
+                  [disabled]="!waitTimeSlider"
                   (click)="waitTimeSlider=true"
                   min="0" 
                   max="10" 
                   step="1" 
-                  [value]="waitTimeAvg"
+                  [value]="waitTime"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -70,12 +70,12 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="hygiene"
-                  [disabled]="cleanSlider"
+                  [disabled]="!cleanSlider"
                   (click)="cleanSlider = true"
                   min="0" 
                   max="10" 
                   step="1" 
-                  [value]="cleanAvg"
+                  [value]="clean"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -97,12 +97,12 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="mask"
-                  [disabled]="maskSlider"
+                  [disabled]="!maskSlider"
                   (click)="maskSlider = true"
                   min="0" 
                   max="10" 
                   step="1" 
-                  [value]="maskAvg"
+                  [value]="msk"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;

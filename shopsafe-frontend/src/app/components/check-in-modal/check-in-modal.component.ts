@@ -21,7 +21,14 @@ export class CheckInModalComponent implements OnInit {
     private dialogRef: MatDialogRef<CheckInModalComponent>,
     private route: ActivatedRoute,
     
-  ) { }
+  ) { 
+    if (CheckInModalComponent.store.checkInCount != 0) {
+      this.socDis = CheckInModalComponent.store.busy;
+      this.waitTime = CheckInModalComponent.store.line;
+      this.clean = CheckInModalComponent.store.hygiene;
+      this.msk = CheckInModalComponent.store.masks;
+    }
+  }
 
   ngOnInit(): void {
   }
@@ -35,10 +42,10 @@ export class CheckInModalComponent implements OnInit {
   maskSlider: boolean = false; 
   
   //Average Values
-  static socDis: number = 0;
-  static waitTime: number = 0;
-  static clean: number = 0;
-  static msk: number = 0; 
+  socDis: number = 0;
+  waitTime: number = 0;
+  clean: number = 0;
+  msk: number = 0; 
 
   busy = '';
   line = '';
@@ -51,12 +58,6 @@ export class CheckInModalComponent implements OnInit {
    */
   public static setParam(store: Store) {
     this.store = store;
-    if (this.store.checkInCount != 0) {
-      this.socDis = this.store.busy;
-      this.waitTime = this.store.line;
-      this.clean = this.store.hygiene;
-      this.msk = this.store.masks;
-    }
     console.log("CLIENT: store id is " + this.store.id);
   }
 
@@ -73,17 +74,6 @@ export class CheckInModalComponent implements OnInit {
     this.apiService.createCheckIn(CheckInModalComponent.store.id, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask))
       .subscribe();
     this.dialogRef.close();
-  }
-
-  get socDisAvg() {
-    return CheckInModalComponent.socDis;
-  }
-  get waitTimeAvg() {
-    return CheckInModalComponent.waitTime;
-  }get cleanAvg() {
-    return CheckInModalComponent.clean;
-  }get maskAvg() {
-    return CheckInModalComponent.msk;
   }
 
 }
