@@ -107,5 +107,14 @@
             </div>
         </div>
     </div>
-    <button id='submit-check-in-button' (click) = "checkIn()">CHECK IN AT THIS STORE</button>
+    <button *ngIf = "maskSlider && cleanSlider && waitTimeSlider && socDisSlider" 
+        id='invalid-check-in'
+        (click) = "checkIn()">
+            CHECK IN AT THIS STORE
+    </button>
+    <button *ngIf = "!maskSlider || !cleanSlider || !waitTimeSlider || !socDisSlider" 
+        id='submit-check-in-button' 
+        (click) = "checkIn()" disabled>
+        CHECK IN AT THIS STORE
+    </button>
 </div>

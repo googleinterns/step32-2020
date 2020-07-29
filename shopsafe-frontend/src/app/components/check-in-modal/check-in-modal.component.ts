@@ -47,11 +47,6 @@ export class CheckInModalComponent implements OnInit {
   clean: number = 0;
   msk: number = 0; 
 
-  busy = '';
-  line = '';
-  hygiene = '';
-  mask = '';
-
   /**
    * Sets ID variable of check in modal based on store id.
    * @param id of the current store
@@ -71,7 +66,7 @@ export class CheckInModalComponent implements OnInit {
    */
   checkIn(): void {
     console.log("CLIENT: check-in api call");
-    this.apiService.createCheckIn(CheckInModalComponent.store.id, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask))
+    this.apiService.createCheckIn(CheckInModalComponent.store.id, this.socDis, this.waitTime, this.clean, this.msk)
       .subscribe();
     this.dialogRef.close();
   }
