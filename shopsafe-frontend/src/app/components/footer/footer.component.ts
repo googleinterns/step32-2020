@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -7,7 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  mobileCheck: boolean = false;
+
+  constructor(
+    private router: Router,
+  ) { }
+
+  @HostListener('window:resize', ['$event'])
+  onResizeDown(event) {
+    if (event.target.innerWidth <= 699) {
+      this.mobileCheck = true;
+    }
+  }
 
   ngOnInit(): void {
   }

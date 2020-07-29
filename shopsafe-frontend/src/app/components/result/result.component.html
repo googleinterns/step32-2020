@@ -19,8 +19,12 @@
               [position]="marker.position"
               [title]="marker.title"
               [options]="marker.options"
+              (mapClick)="openInfo(marker.position, marker.title, marker.info)"
             >
             </map-marker>
+            <map-info-window
+              [options]="infoWindowOptions"
+            ></map-info-window>
           </google-map>
         </div>
         <br/>
