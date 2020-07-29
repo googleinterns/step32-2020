@@ -44,7 +44,7 @@ export class LineChartComponent implements OnInit {
     data.addColumn('date', 'Date');
     data.addColumn('number', 'Mask Usage');
     data.addColumn('number', 'Social Distancing');
-    data.addColumn('number', 'Wait Time');
+    data.addColumn('number', 'Service Speed');
     data.addColumn('number', 'Cleanliness');
 
     for (let i in this.mask) {
