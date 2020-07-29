@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Injectable } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from 'src/app/classes/store/store';
 
 @Component({
   selector: 'app-check-in-modal',
@@ -25,7 +26,7 @@ export class CheckInModalComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  static storeId: string;
+  static store: Store;
   busy = '';
   line = '';
   hygiene = '';
@@ -35,9 +36,9 @@ export class CheckInModalComponent implements OnInit {
    * Sets ID variable of check in modal based on store id.
    * @param id of the current store
    */
-  public static setId(id: string) {
-    this.storeId = id;
-    console.log("CLIENT: store id is " + this.storeId);
+  public static setParam(store: Store) {
+    this.store = store;
+    console.log("CLIENT: store id is " + this.store.id);
   }
 
   /**

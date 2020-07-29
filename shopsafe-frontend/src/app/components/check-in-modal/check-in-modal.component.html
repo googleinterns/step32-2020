@@ -17,6 +17,7 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="busy"
+                  [disabled]="socDisSlider"
                   min="0" 
                   max="10" 
                   step="1" 
@@ -40,6 +41,8 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="line"
+                  [disabled]="waitTimeSlider"
+                  (click)="waitTimeSlider=true"
                   min="0" 
                   max="10" 
                   step="1" 
@@ -65,6 +68,8 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="hygiene"
+                  [disabled]="cleanSlider"
+                  (click)="cleanSlider = true"
                   min="0" 
                   max="10" 
                   step="1" 
@@ -89,6 +94,8 @@
               &nbsp;
               <mat-slider
                   [(ngModel)]="mask"
+                  [disabled]="maskSlider"
+                  (click)="maskSlider = true"
                   min="0" 
                   max="10" 
                   step="1" 
