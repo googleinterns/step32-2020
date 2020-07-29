@@ -20,7 +20,8 @@
                   [disabled]="socDisSlider"
                   min="0" 
                   max="10" 
-                  step="1" 
+                  step="1"
+                  [value]= "socDisAvg"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -46,6 +47,7 @@
                   min="0" 
                   max="10" 
                   step="1" 
+                  [value]="waitTimeAvg"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -73,6 +75,7 @@
                   min="0" 
                   max="10" 
                   step="1" 
+                  [value]="cleanAvg"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -99,6 +102,7 @@
                   min="0" 
                   max="10" 
                   step="1" 
+                  [value]="maskAvg"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;

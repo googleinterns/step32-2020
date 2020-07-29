@@ -27,6 +27,19 @@ export class CheckInModalComponent implements OnInit {
   }
 
   static store: Store;
+  
+  //Enables Sliders
+  socDisSlider: boolean = false;
+  waitTimeSlider: boolean = false;
+  cleanSlider: boolean = false;
+  maskSlider: boolean = false; 
+  
+  //Average Values
+  static socDis: number = 0;
+  static waitTime: number = 0;
+  static clean: number = 0;
+  static msk: number = 0; 
+
   busy = '';
   line = '';
   hygiene = '';
@@ -38,6 +51,12 @@ export class CheckInModalComponent implements OnInit {
    */
   public static setParam(store: Store) {
     this.store = store;
+    if (this.store.checkInCount != 0) {
+      this.socDis = this.store.busy;
+      this.waitTime = this.store.line;
+      this.clean = this.store.hygiene;
+      this.msk = this.store.masks;
+    }
     console.log("CLIENT: store id is " + this.store.id);
   }
 
@@ -51,9 +70,20 @@ export class CheckInModalComponent implements OnInit {
    */
   checkIn(): void {
     console.log("CLIENT: check-in api call");
-    this.apiService.createCheckIn(CheckInModalComponent.storeId, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask))
+    this.apiService.createCheckIn(CheckInModalComponent.store.id, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask))
       .subscribe();
     this.dialogRef.close();
+  }
+
+  get socDisAvg() {
+    return CheckInModalComponent.socDis;
+  }
+  get waitTimeAvg() {
+    return CheckInModalComponent.waitTime;
+  }get cleanAvg() {
+    return CheckInModalComponent.clean;
+  }get maskAvg() {
+    return CheckInModalComponent.msk;
   }
 
 }
