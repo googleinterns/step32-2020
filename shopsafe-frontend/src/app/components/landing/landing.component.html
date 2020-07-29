@@ -6,6 +6,7 @@
             <br/>
             <a [routerLink]="['/about']">Learn more about this tool &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
         </div>
+        <br/><br/>
         <div class="user-input">            
             <app-search-bar (setAddress)="getAddress($event)"></app-search-bar>
             <div class = "loc-button" (click)="getUserLatLng()"><i class="fas fa-map-marked-alt"></i></div>

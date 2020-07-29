@@ -17,6 +17,7 @@ import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CheckInModalComponent } from './components/check-in-modal/check-in-modal.component';
 import { FeedbackFormsComponent } from './components/feedback-forms/feedback-forms.component';
+import { MobileRedirectComponent } from './components/mobile-redirect/mobile-redirect.component';
 
 // Material Angular components
 import { MatDialogModule } from '@angular/material/dialog';
@@ -24,7 +25,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
 // Services
 import { ApiService } from './api/api.service';
@@ -48,6 +49,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
     HttpErrorComponent,
     SearchBarComponent,
     FeedbackFormsComponent,
+    MobileRedirectComponent,
   ],
   imports: [
     BrowserModule,

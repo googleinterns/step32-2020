@@ -7,6 +7,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { StoreComponent } from './components/store/store.component';
 import { AboutComponent } from './components/about/about.component';
 import { FeedbackFormsComponent } from './components/feedback-forms/feedback-forms.component';
+import { MobileRedirectComponent } from './components/mobile-redirect/mobile-redirect.component';
 
 const routes: Routes = [
   { 
@@ -14,7 +15,7 @@ const routes: Routes = [
     component: LandingComponent 
   },
   {
-    path: 'result/:location', 
+    path: 'result/:location/:latlng', 
     component: ResultComponent, 
   },
   { 
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: "feedback",
     component: FeedbackFormsComponent 
+  },
+  {
+    path: "mobile",
+    component: MobileRedirectComponent
   },
   { 
     path: "**", 

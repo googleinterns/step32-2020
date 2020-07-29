@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
-import { GoogleMap } from '@angular/google-maps';
+import { GoogleMap, MapMarker, MapInfoWindow } from '@angular/google-maps';
 
 @Component({
   selector: 'app-result',
@@ -12,6 +12,7 @@ import { GoogleMap } from '@angular/google-maps';
 
 export class ResultComponent implements OnInit {
   result: Result;
+  latlng: boolean;
   location: string;
   isLoaded: boolean;
   httpError: boolean;
@@ -20,6 +21,8 @@ export class ResultComponent implements OnInit {
   sortingMethods: string[];
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap; // In-template Google Map.
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow; // In-template Map info window.
+  infoWindowOptions: google.maps.InfoWindowOptions = {}; // Options for Info Window.
   markers = []; // Array of store markers rendered in Google Map.
   center: google.maps.LatLngLiteral; // Current center of Google Map.
   zoom: number; //zoom level of map
@@ -77,6 +80,7 @@ export class ResultComponent implements OnInit {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
+    this.latlng = JSON.parse(this.route.snapshot.paramMap.get('latlng'));
     this.getResult('Sort by ShopSafe Score');
   }
 
@@ -86,7 +90,7 @@ export class ResultComponent implements OnInit {
    */
   getResult(method: string): void {
     console.log('CLIENT: results api call at ' + this.location);
-    this.apiService.getNearbyStores(this.location)
+    this.apiService.getNearbyStores(this.location, this.latlng)
       .subscribe(data => 
         this.result = {
           stores: (data as any).stores,
@@ -202,18 +206,17 @@ export class ResultComponent implements OnInit {
       lng: lng
     };
 
-    //scroll to map
+    // Scroll to map.
     const mapElement = document.getElementById("map");
     mapElement.scrollIntoView({behavior: 'smooth'});
   }
 
   /**
    * Sorts results in descending order with the selected method through 
-   * the dropdown in the results page.
-   * Method gets called when the selector is changed.
+   * the dropdown in the results page. Method gets called when the selector is changed.
+   * @param method The method from the dropdown selector.
    */
   sortResults(method: string): void {
-    // Get chosen method. Since the user picks from a set list, there are only three.
     // Sort by ShopSafe Score in descending order.
     if (method == "Sort by ShopSafe Score") {
       console.log("CLIENT: sorting by ShopSafe Score");
@@ -241,7 +244,7 @@ export class ResultComponent implements OnInit {
     // Sort by distance in ascending order. 
     } else {
       this.result.stores.sort((n1, n2) => {
-        console.log("CLIENT: sorting by Distance");
+        console.log("CLIENT: sorting by distance");
         if (n1.distance < n2.distance) {
           return -1;
         } else if (n1.distance > n2.distance) {
@@ -251,5 +254,20 @@ export class ResultComponent implements OnInit {
         }
       });
     }
+  }
+
+  /**
+   * Opens info window on map anchored to given marker.
+   * @param marker Marker that the window is anchored to.
+   * @param store The name of the store for the given marker.
+   * @param storeScore The score of the specified store.
+   */
+  openInfo(markerPosition, store, storeScore): void {
+    this.infoWindowOptions = { 
+      content: store + ": " + Math.round(storeScore * 100) / 100 + "/10",
+      position: markerPosition
+    };
+    
+    this.infoWindow.open();
   }
 }
