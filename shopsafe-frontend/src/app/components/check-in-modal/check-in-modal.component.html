@@ -16,12 +16,12 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="busy"
+                  [(ngModel)]="socDis"
+                  (click) = "socDisSlider = true"
                   [disabled]="!socDisSlider"
                   min="0" 
                   max="10" 
                   step="1"
-                  [value]= "socDis"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -41,13 +41,12 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="line"
-                  [disabled]="!waitTimeSlider"
+                  [(ngModel)]="waitTime"
                   (click)="waitTimeSlider=true"
+                  [disabled]="!waitTimeSlider"
                   min="0" 
                   max="10" 
                   step="1" 
-                  [value]="waitTime"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -69,13 +68,12 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="hygiene"
-                  [disabled]="!cleanSlider"
+                  [(ngModel)]="clean"
                   (click)="cleanSlider = true"
+                  [disabled]="!cleanSlider"
                   min="0" 
                   max="10" 
-                  step="1" 
-                  [value]="clean"
+                  step="1"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -96,13 +94,12 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="mask"
-                  [disabled]="!maskSlider"
+                  [(ngModel)]="msk"
                   (click)="maskSlider = true"
+                  [disabled]="!maskSlider"
                   min="0" 
                   max="10" 
                   step="1" 
-                  [value]="msk"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
