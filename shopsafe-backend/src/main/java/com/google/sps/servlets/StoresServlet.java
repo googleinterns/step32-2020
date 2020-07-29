@@ -99,55 +99,22 @@ public class StoresServlet extends HttpServlet {
       return;
     }
 
-    // Get a string array for all the words in the request and get its length.
-    String[] addressArray = address.trim().split("\\s+");
-    int addressWordCount = addressArray.length;
-
-    // Add all words to the string builder with '+' in between each word.
-    StringBuilder addressStringBuilder = new StringBuilder();
-    addressStringBuilder.append(addressArray[0]);
-    int index = 1;
-    while (index < addressWordCount) {
-      addressStringBuilder.append("+" + addressArray[index]);
-      index += 1;
-    }
-
-    // Define the address and initialize the location.
-    address = new String(addressStringBuilder);
+    // Get location based on geolocation of address or string version of LatLng.
     LatLng location;
-
-    // Get LatLng location based on address.
-    try {
-
-      // Read response of call to FCC API given lat and lng.
-      URL url = new URL(GEOCODE_URL + address + PLACE_KEY);
-      BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-
-      // Store response in json, by reading each line.
-      StringBuilder json = new StringBuilder();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        json.append(line);
+    if (Boolean.TRUE.equals(request.getParameter("latlng"))) {
+      String[] latLngArray = address.split(",");
+      location = new LatLng(Double.parseDouble(latLngArray[0]), Double.parseDouble(latLngArray[1]));
+    } else {
+      location = getLatLngFromAddress(address);
+      if (location.getLatitude() == 1000) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setContentType("text/html;");
+        response
+            .getWriter()
+            .println(
+                "Failed to find any stores near the address: asdflkasdvojabdskjvaewfnaeskcasdcn");
+        return;
       }
-      reader.close();
-
-      // Convert json to json object with just the json location, then convert to LatLng.
-      JSONObject jsonLocation =
-          new JSONObject(new String(json))
-              .getJSONArray("results")
-              .getJSONObject(0)
-              .getJSONObject("geometry")
-              .getJSONObject("location");
-      location = new LatLng(jsonLocation.getDouble("lat"), jsonLocation.getDouble("lng"));
-    }
-
-    // If error, print error, and return.
-    catch (Exception e) {
-      e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response.setContentType("text/html;");
-      response.getWriter().println("Failed to find any stores near the address: " + address);
-      return;
     }
 
     // Get all grocery stores based on LatLng and migrate to the Store class.
@@ -281,6 +248,57 @@ public class StoresServlet extends HttpServlet {
     catch (Exception e) {
       e.printStackTrace();
       return stores;
+    }
+  }
+
+  /** Returns a LatLng based on an address. */
+  public LatLng getLatLngFromAddress(String address) {
+
+    // Get a string array for all the words in the request and get its length.
+    String[] addressArray = address.trim().split("\\s+");
+    int addressWordCount = addressArray.length;
+
+    // Add all words to the string builder with '+' in between each word.
+    StringBuilder addressStringBuilder = new StringBuilder();
+    addressStringBuilder.append(addressArray[0]);
+    int index = 1;
+    while (index < addressWordCount) {
+      addressStringBuilder.append("+" + addressArray[index]);
+      index += 1;
+    }
+
+    // Define the address and initialize the location.
+    address = new String(addressStringBuilder);
+
+    // Get LatLng location based on address.
+    try {
+
+      // Read response of call to FCC API given lat and lng.
+      URL url = new URL(GEOCODE_URL + address + PLACE_KEY);
+      BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+
+      // Store response in json, by reading each line.
+      StringBuilder json = new StringBuilder();
+      String line;
+      while ((line = reader.readLine()) != null) {
+        json.append(line);
+      }
+      reader.close();
+
+      // Convert json to json object with just the json location, then convert to LatLng.
+      JSONObject jsonLocation =
+          new JSONObject(new String(json))
+              .getJSONArray("results")
+              .getJSONObject(0)
+              .getJSONObject("geometry")
+              .getJSONObject("location");
+      return new LatLng(jsonLocation.getDouble("lat"), jsonLocation.getDouble("lng"));
+    }
+
+    // If error, print error, and return.
+    catch (Exception e) {
+      e.printStackTrace();
+      return new LatLng(1000, 1000);
     }
   }
 }
