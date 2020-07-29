@@ -1,3 +1,19 @@
+@media only screen and (min-width: 1655px) {
+  .stat-bar-secondary.check-in-stats-wrapper {
+    width: 100%;
+    height: 174px;
+    background: rgba(104, 187, 207, 0.06);
+    border-radius: 8px;
+    padding: 33px;
+  }
+
+  .stat-elem-quarter {
+    float: left;
+    display: flex;
+    width: 50%;
+  }
+}
+
 #store .heading-text h1 {
     clear: both;
     text-transform: uppercase;
@@ -113,4 +129,16 @@
 
 #store .card:hover {
   transform: scale(1.02);
+}
+
+.left-obj {
+  text-align: left;
+}
+
+.right-obj {
+  text-align: right;
+}
+
+.center-obj {
+  text-align: center;
 }
