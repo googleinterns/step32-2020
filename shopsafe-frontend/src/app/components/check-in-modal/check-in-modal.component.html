@@ -108,13 +108,14 @@
         </div>
     </div>
     <button *ngIf = "maskSlider && cleanSlider && waitTimeSlider && socDisSlider" 
-        id='invalid-check-in'
+        id='submit-check-in-button'
         (click) = "checkIn()">
             CHECK IN AT THIS STORE
     </button>
     <button *ngIf = "!maskSlider || !cleanSlider || !waitTimeSlider || !socDisSlider" 
-        id='submit-check-in-button' 
-        (click) = "checkIn()" disabled>
+        id='invalid-check-in'
+        (click) = "fCheckIn()">
         CHECK IN AT THIS STORE
     </button>
+    <p *ngIf = "failedCheckIn" style = "color: red;"> Please, place a rating for all categories</p> 
 </div>

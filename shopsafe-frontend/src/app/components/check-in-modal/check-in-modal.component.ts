@@ -47,6 +47,8 @@ export class CheckInModalComponent implements OnInit {
   clean: number = 0;
   msk: number = 0; 
 
+  failedCheckIn: boolean = false;
+
   /**
    * Sets ID variable of check in modal based on store id.
    * @param id of the current store
@@ -70,5 +72,15 @@ export class CheckInModalComponent implements OnInit {
       .subscribe();
     this.dialogRef.close();
   }
+
+  /**
+   * Indicates to user that they must give each category a rating
+   */
+  fCheckIn(): void {
+      this.failedCheckIn = true;
+      setTimeout(()=>{ this.failedCheckIn = false}, 4000);
+  }
+
+
 
 }
