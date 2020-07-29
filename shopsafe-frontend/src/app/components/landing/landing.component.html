@@ -1,4 +1,4 @@
-<div id="landing" class="segment">
+<div *ngIf="!loadingUserLatLng" id="landing" class="segment">
     <div class="segment-text">
         <div class="heading-text">
             <h1>ShopSafe</h1>
@@ -11,5 +11,13 @@
             <app-search-bar (setAddress)="getAddress($event)"></app-search-bar>
             <div class = "loc-button" (click)="getUserLatLng()"><i class="fas fa-map-marked-alt"></i></div>
         </div>
+        <p *ngIf="failedGeoLoc" style = "color: red;"> failed to get your location, enable location settings for our site or type in an address above.</p>
     </div>
 </div>
+
+<div *ngIf="loadingUserLatLng" class="loading-screen">
+    <mat-spinner style="margin:0 auto;" 
+    mode="indeterminate"></mat-spinner>
+    <br/>
+    <p>Fetching Location...</p>
+ </div>

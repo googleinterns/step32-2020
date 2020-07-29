@@ -85,7 +85,7 @@
 <div *ngIf="!isLoaded && !httpError" class="loading-screen">
   <mat-spinner></mat-spinner>
   <br/>
-  <p>Fetching Results...</p>
+  <p>Fetching Results for {{ location }}...</p>
 </div>
 
 <app-http-error *ngIf="httpError" [httpErrorMessage]='httpErrorMessage'></app-http-error>
