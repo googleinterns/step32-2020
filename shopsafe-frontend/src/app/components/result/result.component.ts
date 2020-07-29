@@ -243,20 +243,22 @@ export class ResultComponent implements OnInit {
     } else {
       this.result.stores.sort((n1, n2) => {
         console.log("CLIENT: sorting by distance");
-        if (n1.distance < n2.distance) {
-          return -1;
-        } else if (n1.distance > n2.distance) {
-          return 1;
-        } else {
-          return 0;
-        }
+        // if (n1.distance < n2.distance) {
+        //   return -1;
+        // } else if (n1.distance > n2.distance) {
+        //   return 1;
+        // } else {
+        //   return 0;
+        
+        // }
+        return n1.distance - n2.distance;
       });
     }
   }
 
   /**
    * Opens info window on map anchored to given marker.
-   * @param marker Marker that the window is anchored to.
+   * @param markerPosition Marker coordinates that the window is anchored to.
    * @param store The name of the store for the given marker.
    * @param storeScore The score of the specified store.
    */
