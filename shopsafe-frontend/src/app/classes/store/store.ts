@@ -8,7 +8,7 @@ export class Store implements StoreInterface {
   open: boolean;
   latitude: number;
   longitude: number;
-  rating:number;
+  rating: number;
   score: number;
   busy: number;
   line: number;

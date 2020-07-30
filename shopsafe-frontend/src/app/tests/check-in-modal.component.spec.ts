@@ -6,11 +6,19 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckInModalComponent } from './check-in-modal.component';
+import { CheckInModalComponent } from '../components/check-in-modal/check-in-modal.component';
 
 describe('CheckInModalComponent', () => {
   let component: CheckInModalComponent;
   let fixture: ComponentFixture<CheckInModalComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [ CheckInModalComponent ]
+    });
+    const fixture = TestBed.createComponent(CheckInModalComponent);
+    const component = fixture.componentInstance;
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,6 +34,7 @@ describe('CheckInModalComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
   });
+
 });

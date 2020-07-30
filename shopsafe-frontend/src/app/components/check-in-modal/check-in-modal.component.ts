@@ -35,13 +35,13 @@ export class CheckInModalComponent implements OnInit {
 
   static store: Store;
   
-  //Enables Sliders
+  // Enables Sliders
   socDisSlider: boolean = false;
   waitTimeSlider: boolean = false;
   cleanSlider: boolean = false;
   maskSlider: boolean = false; 
   
-  //Average Values
+  // Average Values
   socDis: number = 0;
   waitTime: number = 0;
   clean: number = 0;
@@ -78,7 +78,7 @@ export class CheckInModalComponent implements OnInit {
    */
   fCheckIn(): void {
       this.failedCheckIn = true;
-      setTimeout(()=>{ this.failedCheckIn = false}, 4000);
+      setTimeout( () => { this.failedCheckIn = false}, 4000);
   }
 
 
