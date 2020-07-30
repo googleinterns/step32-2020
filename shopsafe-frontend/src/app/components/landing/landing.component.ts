@@ -13,6 +13,7 @@ export class LandingComponent implements OnInit {
   location: string = '';
   loadingUserLatLng: boolean = false;
   failedGeoLoc = false;
+  latlng: boolean = false;
 
   constructor(
     private router: Router,
@@ -24,7 +25,7 @@ export class LandingComponent implements OnInit {
   }
 
   getNearbyStores(): void {
-    this.router.navigate(['/result', this.location]);
+    this.router.navigate(['/result', this.location, this.latlng]);
     console.log("CLIENT: redirecting to results");
   }
 
@@ -35,6 +36,7 @@ export class LandingComponent implements OnInit {
    */
   getAddress(place: object): void {
     this.location = place['formatted_address']
+    this.latlng = false;
     this.zone.run(() => this.getNearbyStores());
   }
 
@@ -49,6 +51,7 @@ export class LandingComponent implements OnInit {
       (position: Position) => {
         const stringLocation:string = position.coords.latitude.toString()+ ',' + position.coords.longitude.toString();
         this.zone.run(() => this.location = stringLocation);
+        this.latlng = true;
         this.getNearbyStores();
       }, 
       (positionError: PositionError) => {

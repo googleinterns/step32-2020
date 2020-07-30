@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Injectable } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from 'src/app/classes/store/store';
 
 @Component({
   selector: 'app-check-in-modal',
@@ -20,24 +21,41 @@ export class CheckInModalComponent implements OnInit {
     private dialogRef: MatDialogRef<CheckInModalComponent>,
     private route: ActivatedRoute,
     
-  ) { }
+  ) { 
+    if (CheckInModalComponent.store.checkInCount != 0) {
+      this.socDis = CheckInModalComponent.store.busy;
+      this.waitTime = CheckInModalComponent.store.line;
+      this.clean = CheckInModalComponent.store.hygiene;
+      this.msk = CheckInModalComponent.store.masks;
+    }
+  }
 
   ngOnInit(): void {
   }
 
-  static storeId: string;
-  busy = '';
-  line = '';
-  hygiene = '';
-  mask = '';
+  static store: Store;
+  
+  //Enables Sliders
+  socDisSlider: boolean = false;
+  waitTimeSlider: boolean = false;
+  cleanSlider: boolean = false;
+  maskSlider: boolean = false; 
+  
+  //Average Values
+  socDis: number = 0;
+  waitTime: number = 0;
+  clean: number = 0;
+  msk: number = 0; 
+
+  failedCheckIn: boolean = false;
 
   /**
    * Sets ID variable of check in modal based on store id.
    * @param id of the current store
    */
-  public static setId(id: string) {
-    this.storeId = id;
-    console.log("CLIENT: store id is " + this.storeId);
+  public static setParam(store: Store) {
+    this.store = store;
+    console.log("CLIENT: store id is " + this.store.id);
   }
 
   /**
@@ -50,9 +68,19 @@ export class CheckInModalComponent implements OnInit {
    */
   checkIn(): void {
     console.log("CLIENT: check-in api call");
-    this.apiService.createCheckIn(CheckInModalComponent.storeId, Number(this.busy), Number(this.line), Number(this.hygiene), Number(this.mask))
+    this.apiService.createCheckIn(CheckInModalComponent.store.id, this.socDis, this.waitTime, this.clean, this.msk)
       .subscribe();
     this.dialogRef.close();
   }
+
+  /**
+   * Indicates to user that they must give each category a rating
+   */
+  fCheckIn(): void {
+      this.failedCheckIn = true;
+      setTimeout(()=>{ this.failedCheckIn = false}, 4000);
+  }
+
+
 
 }

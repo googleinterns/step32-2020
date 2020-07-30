@@ -12,6 +12,7 @@ import { GoogleMap, MapMarker, MapInfoWindow } from '@angular/google-maps';
 
 export class ResultComponent implements OnInit {
   result: Result;
+  latlng: boolean;
   location: string;
   isLoaded: boolean;
   httpError: boolean;
@@ -79,6 +80,7 @@ export class ResultComponent implements OnInit {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
+    this.latlng = JSON.parse(this.route.snapshot.paramMap.get('latlng'));
     this.getResult('Sort by ShopSafe Score');
   }
 
@@ -88,7 +90,7 @@ export class ResultComponent implements OnInit {
    */
   getResult(method: string): void {
     console.log('CLIENT: results api call at ' + this.location);
-    this.apiService.getNearbyStores(this.location)
+    this.apiService.getNearbyStores(this.location, this.latlng)
       .subscribe(data => 
         this.result = {
           stores: (data as any).stores,

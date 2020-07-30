@@ -52,8 +52,8 @@ export class ApiService {
    * @param location inputted by user
    * @returns result as observable
    */
-  public getNearbyStores(location: string): Observable<ResultInterface> {
-    const url = API_URL + '/stores?location=' + location;
+  public getNearbyStores(location: string, latlng: boolean): Observable<ResultInterface> {
+    const url = API_URL + '/stores?location=' + location + '&latlng=' + latlng.toString();
     // const url = API_URL + '/stores';
     return this.http
       .get<ResultInterface>(url)
