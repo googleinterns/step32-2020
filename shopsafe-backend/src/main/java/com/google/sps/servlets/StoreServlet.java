@@ -44,7 +44,9 @@ public class StoreServlet extends HttpServlet {
       "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
   public static final String PLACE_FIELDS = "&fields=name,vicinity,opening_hours,geometry,rating";
   private static final String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
+
   private String placeKey;
+  private Store store;
 
   /** For a get request, return all nearby stores. */
   @Override
@@ -79,7 +81,57 @@ public class StoreServlet extends HttpServlet {
     }
 
     // Get store based on id in form of the Store class.
-    Store store;
+    if (!getStoreFromId(id)) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.setContentType("text/html;");
+      response.getWriter().println("Failed to get store information for the id: " + id);
+      return;
+    }
+
+    // Get county based on location of the store.
+    County county = County.GetCounty(store);
+
+    // If the county was not found, set status to bad reuqest and send error response.
+    if (county.getCountyName() == "") {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.setContentType("text/html;");
+      response.getWriter().println("Failed to get county information for store id: " + id);
+      return;
+    }
+
+    // Get Covid stats based on county.
+    CountyStats countyStats = new CountyStats(county);
+
+    // If the county stats were not obtained, value set to 0, return error message.
+    if (countyStats.getPopulation() == 0) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.setContentType("text/html;");
+      response
+          .getWriter()
+          .println("Failed to get county stats for FIPS: " + county.getCountyFips());
+      return;
+    }
+
+    // Get reviews for a store.
+    CheckInStats checkInStats = new CheckInStats(id);
+
+    // Add score and review stats to the store.
+    StoreStats storeStats = new StoreStats(store, countyStats.getCountyScore(), checkInStats);
+
+    // Return store with stats and the county information.
+    Gson gson = new Gson();
+    response.setContentType("application/json;");
+    response
+        .getWriter()
+        .println(
+            gson.toJson(
+                new StoreResult(storeStats, countyStats, checkInStats.compileRatingDays())));
+  }
+
+  /** Get store based on the id, return true for success. */
+  public boolean getStoreFromId(String id) {
+
+    // Try to get store based on id from Places API.
     try {
 
       // Read response of call to FCC API given lat and lng.
@@ -108,54 +160,14 @@ public class StoreServlet extends HttpServlet {
                   : null,
               new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")),
               result.has("rating") ? result.getDouble("rating") : 0);
+      return true;
     }
 
-    // If error, print error, and set status to bad reuqest and send error response.
+    // If error, print error, log error, and return false.
     catch (Exception e) {
       e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response.setContentType("text/html;");
-      response.getWriter().println("Failed to get store information for the id: " + id);
-      return;
+      System.out.println("Error in getting store from Places API.");
+      return false;
     }
-
-    // Get county based on location of the store.
-    County county = County.GetCounty(store);
-
-    // If the county was not found, set status to bad reuqest and send error response.
-    if (county.getCountyName() == "") {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response.setContentType("text/html;");
-      response.getWriter().println("Failed to get county information for store id: " + id);
-      return;
-    }
-
-    // Get Covid stats based on county.
-    CountyStats countyStats = new CountyStats(county);
-
-    // If the county stats were not obtained, return error message.
-    if (countyStats.getPopulation() == 0) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response.setContentType("text/html;");
-      response
-          .getWriter()
-          .println("Failed to get county stats for FIPS: " + county.getCountyFips());
-      return;
-    }
-
-    // Get reviews for a store.
-    CheckInStats checkInStats = new CheckInStats(id);
-
-    // Add score and review stats to the store.
-    StoreStats storeStats = new StoreStats(store, countyStats.getCountyScore(), checkInStats);
-
-    // Return store with stats and the county information.
-    Gson gson = new Gson();
-    response.setContentType("application/json;");
-    response
-        .getWriter()
-        .println(
-            gson.toJson(
-                new StoreResult(storeStats, countyStats, checkInStats.compileRatingDays())));
   }
 }
