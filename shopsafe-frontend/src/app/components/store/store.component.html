@@ -10,8 +10,8 @@
                 <button id='check-in-button' (click)="openModal()"><i class="fas fa-pencil-alt"></i> &nbsp; CHECK IN AT THIS STORE</button>
             </p>
         </div>
-        <div class="stat-bar-wrapper stats-wrapper">
-            <div class="stat-bar">
+        <div class="stat-bar-wrapper">
+            <div class="stat-bar stats-wrapper">
                 <div class="stat-elem-quarter left-obj">
                     <a class="stat-obj"
                        matTooltip="The number of people who have checked into the current store.">
@@ -24,7 +24,7 @@
                     STATUS</a>
                     <p [ngStyle]="{'color': (store.open) ? '#7AC665' : '#FF5151'}"><b>{{ store.open ? 'OPEN' : 'CLOSED' }}</b></p>
                 </div>
-                <div class="break-divider" [style.visibility]="isSmall ? 'visible' : 'hidden'">
+                <div class="break-divider" *ngIf="isSmall">
                   <br/><br/><br/>
                 </div>
                 <div class="stat-elem-quarter center-obj left-cond">
@@ -70,7 +70,7 @@
                   </a>
                   <p><b>{{ store.checkInCount == 0 ? '—' : store.busy | round }}</b>/10</p>
               </div>
-              <div class="break-divider" [style.visibility]="isSmall ? 'visible' : 'hidden'">
+              <div class="break-divider" *ngIf="isSmall">
                 <br/><br/><br/>
               </div>
               <div class="stat-elem-quarter center-obj left-cond">

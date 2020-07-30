@@ -28,12 +28,16 @@ export class StoreComponent implements OnInit {
   lineData: DataPoint[];
   hygieneData: DataPoint[];
 
-  isSmall: boolean;
+  isSmall: boolean; // Check for resizing elements.
 
   @HostListener('window:resize', ['$event'])
   onResizeDown(event) {
-    if (event.target.innerWidth <= 1655) {
+    if (event.target.innerWidth > 1630) {
+      this.isSmall = false;
+      console.log("CLIENT: resize up");
+    } else {
       this.isSmall = true;
+      console.log("CLIENT: resize down");
     }
   }
 
@@ -41,7 +45,13 @@ export class StoreComponent implements OnInit {
     public matDialog: MatDialog,
     private apiService: ApiService,
     private route: ActivatedRoute
-    ) { }
+    ) {
+      if (window.innerWidth > 1630) {
+        this.isSmall = false;
+      } else {
+        this.isSmall = true;
+      }
+    }
 
   /**
    * Runs when component is loaded

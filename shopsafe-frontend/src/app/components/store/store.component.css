@@ -1,5 +1,5 @@
-@media (max-width: 1655px) {
-  #store stats-wrapper {
+@media (max-width: 1630px) {
+  #store .stat-bar-secondary.stats-wrapper, #store .stat-bar.stats-wrapper {
     width: 100%;
     height: 150px !important;
     background: rgba(104, 187, 207, 0.06);
@@ -154,8 +154,4 @@
 
 .center-obj {
   text-align: center;
-}
-
-.break-divider {
-  visibility: hidden;
 }
