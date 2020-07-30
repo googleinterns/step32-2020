@@ -16,10 +16,12 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="busy"
+                  [(ngModel)]="socDis"
+                  (click) = "socDisSlider = true"
+                  [disabled]="!socDisSlider"
                   min="0" 
                   max="10" 
-                  step="1" 
+                  step="1"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -40,7 +42,9 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="line"
+                  [(ngModel)]="waitTime"
+                  (click)="waitTimeSlider=true"
+                  [disabled]="!waitTimeSlider"
                   min="0" 
                   max="10" 
                   step="1" 
@@ -65,10 +69,12 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="hygiene"
+                  [(ngModel)]="clean"
+                  (click)="cleanSlider = true"
+                  [disabled]="!cleanSlider"
                   min="0" 
                   max="10" 
-                  step="1" 
+                  step="1"
                   thumbLabel tickInterval="1"
               ></mat-slider>
               &nbsp;
@@ -89,7 +95,9 @@
               <i class="far fa-frown"></i>
               &nbsp;
               <mat-slider
-                  [(ngModel)]="mask"
+                  [(ngModel)]="msk"
+                  (click)="maskSlider = true"
+                  [disabled]="!maskSlider"
                   min="0" 
                   max="10" 
                   step="1" 
@@ -100,5 +108,15 @@
             </div>
         </div>
     </div>
-    <button id='submit-check-in-button' (click) = "checkIn()">CHECK IN AT THIS STORE</button>
+    <button *ngIf = "maskSlider && cleanSlider && waitTimeSlider && socDisSlider" 
+        id='submit-check-in-button'
+        (click) = "checkIn()">
+            CHECK IN AT THIS STORE
+    </button>
+    <button *ngIf = "!maskSlider || !cleanSlider || !waitTimeSlider || !socDisSlider" 
+        id='invalid-check-in'
+        (click) = "fCheckIn()">
+        CHECK IN AT THIS STORE
+    </button>
+    <p *ngIf = "failedCheckIn" style = "color: red;"> Please, place a rating for all categories</p> 
 </div>

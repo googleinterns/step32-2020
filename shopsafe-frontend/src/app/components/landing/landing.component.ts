@@ -11,6 +11,8 @@ import { Router } from "@angular/router";
 export class LandingComponent implements OnInit {
 
   location: string = '';
+  loadingUserLatLng: boolean = false;
+  failedGeoLoc = false;
   latlng: boolean = false;
 
   constructor(
@@ -19,6 +21,7 @@ export class LandingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
   }
 
   getNearbyStores(): void {
@@ -43,6 +46,7 @@ export class LandingComponent implements OnInit {
    */
   getUserLatLng(): void {
     console.log("getting user location");
+    this.loadingUserLatLng = true;
     navigator.geolocation.getCurrentPosition(
       (position: Position) => {
         const stringLocation:string = position.coords.latitude.toString()+ ',' + position.coords.longitude.toString();
@@ -52,6 +56,9 @@ export class LandingComponent implements OnInit {
       }, 
       (positionError: PositionError) => {
         console.log(positionError);
+        this.loadingUserLatLng = false;
+        this.failedGeoLoc = true;
+        setTimeout(()=>{ this.failedGeoLoc = false}, 4000);
       }
     );
   }
