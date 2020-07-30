@@ -1,13 +1,13 @@
 @media (max-width: 1655px) {
-  #store .stat-bar-secondary.check-in-stats-wrapper {
+  #store stats-wrapper {
     width: 100%;
-    height: 150px;
+    height: 150px !important;
     background: rgba(104, 187, 207, 0.06);
     border-radius: 8px;
     padding: 33px;
   }
 
-  #store .mask, #store .social-distance, #store .service, #store .cleanliness {
+  #store .stat-elem-quarter {
     float: left;
     display: flex;
     flex-wrap: wrap;
@@ -20,6 +20,10 @@
 
   #store .stat-elem-quarter.center-obj {
     text-align: right !important;
+  }
+
+  #store .stat-elem-quarter.center-obj.left-cond {
+    text-align: left !important;
   }
 }
 
@@ -150,4 +154,8 @@
 
 .center-obj {
   text-align: center;
+}
+
+.break-divider {
+  visibility: hidden;
 }

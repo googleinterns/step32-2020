@@ -10,27 +10,30 @@
                 <button id='check-in-button' (click)="openModal()"><i class="fas fa-pencil-alt"></i> &nbsp; CHECK IN AT THIS STORE</button>
             </p>
         </div>
-        <div class="stat-bar-wrapper check-in-stats-wrapper">
+        <div class="stat-bar-wrapper stats-wrapper">
             <div class="stat-bar">
-                <div class="stat-elem-quarter" style="text-align: left;">
+                <div class="stat-elem-quarter left-obj">
                     <a class="stat-obj"
                        matTooltip="The number of people who have checked into the current store.">
                     CHECKED IN</a>
                     <p>{{ store.checkInCount }}</p>
                 </div>
-                <div class="stat-elem-quarter" style="text-align: center;">
+                <div class="stat-elem-quarter center-obj">
                     <a class="stat-obj"
                        matTooltip="The current operating status of the store.">
                     STATUS</a>
                     <p [ngStyle]="{'color': (store.open) ? '#7AC665' : '#FF5151'}"><b>{{ store.open ? 'OPEN' : 'CLOSED' }}</b></p>
                 </div>
-                <div class="stat-elem-quarter" style="text-align: center;">
+                <div class="break-divider" [style.visibility]="isSmall ? 'visible' : 'hidden'">
+                  <br/><br/><br/>
+                </div>
+                <div class="stat-elem-quarter center-obj left-cond">
                     <a class="stat-obj"
                        matTooltip="The Google Review rating of the score as found on Google Maps.">
                     RATING</a>
                     <p>{{ store.rating ? ( store.rating | round ) : '—' }}/5</p>
                 </div>
-                <div class="stat-elem-quarter" style="text-align: right; margin-top: -5px">
+                <div class="stat-elem-quarter right-obj" style="margin-top: -5px">
                     <a class="stat-obj"
                        matTooltip="The ShopSafe Score of the store calculated using the check-in statistics and county
                                    COVID-19 statistics.">
@@ -48,7 +51,7 @@
               Chart statistics represent check-in entries averaged per day. To view more about the statistics, 
               hover over each of the most current values of the statistics below.
             </p>
-            <div class="stat-bar-secondary check-in-stats-wrapper">
+            <div class="stat-bar-secondary stats-wrapper">
               <div class="stat-elem-quarter left-obj">
                   <a class="stat-obj"
                   matTooltip="How strict is the store with masks? Are the customers and workers 
@@ -67,8 +70,10 @@
                   </a>
                   <p><b>{{ store.checkInCount == 0 ? '—' : store.busy | round }}</b>/10</p>
               </div>
-              <br/><br/>
-              <div class="stat-elem-quarter center-obj">
+              <div class="break-divider" [style.visibility]="isSmall ? 'visible' : 'hidden'">
+                <br/><br/><br/>
+              </div>
+              <div class="stat-elem-quarter center-obj left-cond">
                   <a class="stat-obj"
                   matTooltip="Is there a line to get into the store from the outside? Are 
                               there lines inside the store? How long was the wait? 0 indicates 

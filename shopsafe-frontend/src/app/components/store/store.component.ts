@@ -28,11 +28,11 @@ export class StoreComponent implements OnInit {
   lineData: DataPoint[];
   hygieneData: DataPoint[];
 
-  isSmall: boolean = false;
+  isSmall: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResizeDown(event) {
-    if (event.target.innerWidth < 1655) {
+    if (event.target.innerWidth <= 1655) {
       this.isSmall = true;
     }
   }
