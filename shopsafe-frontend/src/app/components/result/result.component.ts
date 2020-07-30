@@ -221,44 +221,26 @@ export class ResultComponent implements OnInit {
     if (method == "Sort by ShopSafe Score") {
       console.log("CLIENT: sorting by ShopSafe Score");
       this.result.stores.sort((n1, n2) => {
-        if (n1.score > n2.score) {
-          return -1;
-        } else if (n1.score < n2.score) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return n2.rating - n1.rating;
       });
     // Sort by Google Review in descending order.
     } else if (method == "Sort by Google Review") {
       console.log("CLIENT: sorting by Google Review");
       this.result.stores.sort((n1, n2) => {
-        if (n1.rating > n2.rating) {
-          return -1;
-        } else if (n1.rating < n2.rating) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return n2.rating - n1.rating;
       });
     // Sort by distance in ascending order. 
     } else {
       this.result.stores.sort((n1, n2) => {
         console.log("CLIENT: sorting by distance");
-        if (n1.distance < n2.distance) {
-          return -1;
-        } else if (n1.distance > n2.distance) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return n1.distance - n2.distance;
       });
     }
   }
 
   /**
    * Opens info window on map anchored to given marker.
-   * @param marker Marker that the window is anchored to.
+   * @param markerPosition Marker coordinates that the window is anchored to.
    * @param store The name of the store for the given marker.
    * @param storeScore The score of the specified store.
    */

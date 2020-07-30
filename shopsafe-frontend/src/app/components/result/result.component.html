@@ -46,8 +46,8 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="stores-list" *ngFor="let store of result.stores">
-            <div class="stores-list-item">
+        <div class="stores-list" *ngFor="let store of result.stores; let resultIndex = index">
+            <div class="stores-list-item" [style.--index]="resultIndex">
               <div class="row">
                 <div class="left-text markers">
                     <a class="location-icon" (click)="recenterMap(store.latitude, store.longitude)"><i class="fas fa-map-marker-alt"></i></a> &nbsp;

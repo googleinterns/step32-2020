@@ -1,3 +1,28 @@
+@media (max-width: 1655px) {
+  #store .stat-bar-secondary.check-in-stats-wrapper {
+    width: 100%;
+    height: 150px;
+    background: rgba(104, 187, 207, 0.06);
+    border-radius: 8px;
+    padding: 33px;
+  }
+
+  #store .mask, #store .social-distance, #store .service, #store .cleanliness {
+    float: left;
+    display: flex;
+    flex-wrap: wrap;
+    width: 50% !important;
+  }
+
+  #store .mask, #store .service {
+    text-align: left !important;
+  }
+
+  #store .social-distance, #store .cleanliness {
+    text-align: right !important;
+  }
+}
+
 #store .heading-text h1 {
     clear: both;
     text-transform: uppercase;
@@ -113,4 +138,16 @@
 
 #store .card:hover {
   transform: scale(1.02);
+}
+
+.left-obj {
+  text-align: left;
+}
+
+.right-obj {
+  text-align: right;
+}
+
+.center-obj {
+  text-align: center;
 }
