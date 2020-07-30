@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CheckInModalComponent } from '../check-in-modal/check-in-modal.component';
 import { ApiService } from '../../api/api.service';
@@ -28,11 +28,30 @@ export class StoreComponent implements OnInit {
   lineData: DataPoint[];
   hygieneData: DataPoint[];
 
+  isSmall: boolean; // Check for resizing elements.
+
+  @HostListener('window:resize', ['$event'])
+  onResizeDown(event) {
+    if (event.target.innerWidth > 1630) {
+      this.isSmall = false;
+      console.log("CLIENT: resize up");
+    } else {
+      this.isSmall = true;
+      console.log("CLIENT: resize down");
+    }
+  }
+
   constructor(
     public matDialog: MatDialog,
     private apiService: ApiService,
     private route: ActivatedRoute
-    ) { }
+    ) {
+      if (window.innerWidth > 1630) {
+        this.isSmall = false;
+      } else {
+        this.isSmall = true;
+      }
+    }
 
   /**
    * Runs when component is loaded

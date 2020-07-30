@@ -14,7 +14,7 @@
 
 package com.google.sps.data;
 
-import com.opencsv.*;
+import com.opencsv.CSVReader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
@@ -25,8 +25,13 @@ import org.json.JSONObject;
 public class County {
 
   // FCC api url for county information
+  public static final int COUNTY_COUNT = 3142;
   public static final String FCC_BASE_URL = "https://geo.fcc.gov/api/census/area?lat=";
   public static final String FCC_END_URL = "&format=json";
+  public static final String PERCENTILE_LOCATION_UPDATED =
+      "WEB-INF/classes/county_percentile_updated.csv";
+  public static final String PERCENTILE_LOCATION_BACKUP = "WEB-INF/classes/county_percentile.csv";
+  public static final String POPULATION_LOCATION = "WEB-INF/classes/county_population.csv";
 
   // County properties
   protected String countyName;
@@ -92,11 +97,21 @@ public class County {
   public double getCountyScore() {
     try {
 
-      // See if fips in the csv file, if so, return the score.
-      CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_percentile.csv"));
+      // See if fips in the updated csv file, if so, return the score.
+      CSVReader reader = new CSVReader(new FileReader(PERCENTILE_LOCATION_UPDATED));
       String[] nextLine = reader.readNext();
       while ((nextLine = reader.readNext()) != null) {
         if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[0])) {
+          return Double.parseDouble(nextLine[1]) * 10;
+        }
+      }
+
+      // See if fips in the backup csv file, if so, return the score.
+      reader = new CSVReader(new FileReader(PERCENTILE_LOCATION_BACKUP));
+      nextLine = reader.readNext();
+      while ((nextLine = reader.readNext()) != null) {
+        if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[0])) {
+          System.out.println("Using backup score for " + countyName + ", " + stateName);
           return Double.parseDouble(nextLine[1]) * 10;
         }
       }
@@ -122,7 +137,7 @@ public class County {
     try {
 
       // See if fips in the csv file, if so, return the population.
-      CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_population.csv"));
+      CSVReader reader = new CSVReader(new FileReader(POPULATION_LOCATION));
       String[] nextLine = reader.readNext();
       while ((nextLine = reader.readNext()) != null) {
         if (Integer.parseInt(countyFips) == Integer.parseInt(nextLine[3])) {

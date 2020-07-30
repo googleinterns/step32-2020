@@ -35,7 +35,7 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
 
   // Constants used for finding length and reading and writing files.
   public static final int COUNTY_COUNT = 3142;
-  public static final String PERCENTILE_LOCATION = "WEB-INF/classes/county_percentile.csv";
+  public static final String PERCENTILE_LOCATION = "WEB-INF/classes/county_percentile_updated.csv";
   public static final String POPULATION_LOCATION = "WEB-INF/classes/county_population.csv";
 
   // Static date used to check if county percentile needs to be updated.
@@ -102,10 +102,10 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
     // Get all the active cases per capita, value used for percentiles.
     List<CountyPercentile> countyPercentiles = getCountyPercentiles(populations);
 
-    // If not all counties are obtained from bigquery, log error and return.
-    if (countyPercentiles.size() < COUNTY_COUNT) {
+    // If there are no counties to be updated from bigquery, log error and return.
+    if (countyPercentiles.size() == 0) {
       System.out.println(
-          "Failed to update all county percentiles, the previous stats are being used.");
+          "Failed to update any county percentiles, the previous stats are being used.");
       return;
     }
 
@@ -181,32 +181,33 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
         throw new RuntimeException(queryJobForecast.getStatus().getError().toString());
       }
 
-      // Get most recent recovered values, there should only be one result.
+      // Add county percentile for each county in the query results and populations.
       int index = 0;
       for (FieldValueList row : queryJobForecast.getQueryResults().iterateAll()) {
-        if (Integer.parseInt(populations.get(index)[0])
-            == Integer.parseInt(row.get("county_fips_code").getStringValue())) {
-          countyPercentiles.add(
-              new CountyPercentile(
-                  row.get("county_fips_code").getStringValue(),
-                  (row.get("cumulative_confirmed").getDoubleValue()
-                          - row.get("cumulative_deaths").getDoubleValue()
-                          - row.get("recovered").getDoubleValue())
-                      / Double.parseDouble(populations.get(index)[1])));
+        while (Integer.parseInt(populations.get(index)[0])
+            != Integer.parseInt(row.get("county_fips_code").getStringValue())) {
+          index += 1;
         }
-
+        countyPercentiles.add(
+            new CountyPercentile(
+                row.get("county_fips_code").getStringValue(),
+                (row.get("cumulative_confirmed").getDoubleValue()
+                        - row.get("cumulative_deaths").getDoubleValue()
+                        - row.get("recovered").getDoubleValue())
+                    / Double.parseDouble(populations.get(index)[1])));
         index += 1;
       }
+
+      // Return the county percentiles.
+      return countyPercentiles;
     }
 
-    // If there is an error, report it, print error, and return.
+    // If there is an error, report it, print error, and return an empty list.
     catch (Exception e) {
       e.printStackTrace();
       System.out.println("An error occured while getting projections from BigQuery.");
+      return new ArrayList<CountyPercentile>();
     }
-
-    // Return the coutny percentiles.
-    return countyPercentiles;
   }
 
   /*
@@ -216,6 +217,7 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
 
     // Try to rewrite the county percentile file.
     try {
+
       FileWriter csvWriter = new FileWriter(PERCENTILE_LOCATION);
       csvWriter.append("county_fips_code");
       csvWriter.append(",");
@@ -245,13 +247,13 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
       // Close the writer and log success.
       csvWriter.flush();
       csvWriter.close();
-      System.out.println("County percentile file updated.");
+      System.out.println("Updated: " + PERCENTILE_LOCATION);
     }
 
     // If there is an error, report it and print error.
     catch (Exception e) {
       e.printStackTrace();
-      System.out.println("Failed to update county percentile file.");
+      System.out.println("Failed to update: " + PERCENTILE_LOCATION);
     }
   }
 }
