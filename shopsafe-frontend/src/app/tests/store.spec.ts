@@ -7,21 +7,28 @@ describe('Store', () => {
 
   it('should accept values in the constructor', () => {
     let result = new Store({
-      id: 'temp',
-      name: 'test',
-      address: '1234 Test St.',
-      score: 10,
-      checkedIn: 10,
-      status: true,
-      latLng: [0, 0],
-      busy: 1,
-      line: 1,
-      hygiene: 1,
-      masks: 1
+      id: 'temp';
+      name: 'test';
+      address: '1234 Test St.';
+      open: true;
+      latitude: 0;
+      longitude: 0;
+      rating: 5;
+      score: number;
+      busy: number;
+      line: number;
+      hygiene: number;
+      masks: number;
+      checkInCount: number;
+      distance: number;
     });
     expect(result.id).toEqual('temp');
     expect(result.name).toEqual('test');
     expect(result.address).toEqual('1234 Test St.');
+    expect(result.open).toEqual(true);
+    expect(result.latitude).toEqual(0);
+    expect(result.longitude).toEqual(0);
+    expect(result.rating).toEqual(5);
     expect(result.score).toEqual(10);
     expect(result.checkedIn).toEqual(10);
     expect(result.status).toEqual(true);
