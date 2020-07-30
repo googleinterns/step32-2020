@@ -101,6 +101,14 @@
     cursor: auto;
 }
 
+#result .stores-list-animate-box {
+  animation-delay: calc(0.045s * var(--index));
+  animation-name: animateIn;
+  animation-duration: 350ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
 #result .stores-list-item {
   clear: both; 
   padding: 30px;
@@ -109,11 +117,6 @@
   border-radius: 8px;
   margin-bottom: 20px;
   transition: 0.2s transform !important;
-  animation-delay: calc(0.045s * var(--index));
-  animation-name: animateIn;
-  animation-duration: 350ms;
-  animation-fill-mode: both;
-  animation-timing-function: ease-in-out;
 }
 
 #result .stores-list-item:hover {

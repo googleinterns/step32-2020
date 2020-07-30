@@ -14,11 +14,11 @@
     width: 50% !important;
   }
 
-  #store .mask, #store .service {
+  #store .stat-elem-quarter.left-obj, #store .stat-elem-quarter.left-obj {
     text-align: left !important;
   }
 
-  #store .social-distance, #store .cleanliness {
+  #store .stat-elem-quarter.center-obj {
     text-align: right !important;
   }
 }
