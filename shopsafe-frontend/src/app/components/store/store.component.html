@@ -67,7 +67,7 @@
                   </a>
                   <p><b>{{ store.checkInCount == 0 ? '—' : store.busy | round }}</b>/10</p>
               </div>
-              <break [ngStyle]="{'visibility': (isSmall) ? 'visible' : 'hidden'}"></break>
+              <break [ngStyle]="{'visibility': (isSmall) ? 'hidden' : 'visible'}"></break>
               <div class="stat-elem-quarter center-obj service">
                   <a class="stat-obj"
                   matTooltip="Is there a line to get into the store from the outside? Are 
