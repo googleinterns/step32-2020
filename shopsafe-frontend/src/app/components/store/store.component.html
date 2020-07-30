@@ -11,26 +11,29 @@
             </p>
         </div>
         <div class="stat-bar-wrapper">
-            <div class="stat-bar">
-                <div class="stat-elem-quarter" style="text-align: left;">
+            <div class="stat-bar stats-wrapper">
+                <div class="stat-elem-quarter left-obj">
                     <a class="stat-obj"
                        matTooltip="The number of people who have checked into the current store.">
                     CHECKED IN</a>
                     <p>{{ store.checkInCount }}</p>
                 </div>
-                <div class="stat-elem-quarter" style="text-align: center;">
+                <div class="stat-elem-quarter center-obj">
                     <a class="stat-obj"
                        matTooltip="The current operating status of the store.">
                     STATUS</a>
                     <p [ngStyle]="{'color': (store.open) ? '#7AC665' : '#FF5151'}"><b>{{ store.open ? 'OPEN' : 'CLOSED' }}</b></p>
                 </div>
-                <div class="stat-elem-quarter" style="text-align: center;">
+                <div class="break-divider" *ngIf="isSmall">
+                  <br/><br/><br/>
+                </div>
+                <div class="stat-elem-quarter center-obj left-cond">
                     <a class="stat-obj"
                        matTooltip="The Google Review rating of the score as found on Google Maps.">
                     RATING</a>
                     <p>{{ store.rating ? ( store.rating | round ) : '—' }}/5</p>
                 </div>
-                <div class="stat-elem-quarter" style="text-align: right; margin-top: -5px">
+                <div class="stat-elem-quarter right-obj" style="margin-top: -5px">
                     <a class="stat-obj"
                        matTooltip="The ShopSafe Score of the store calculated using the check-in statistics and county
                                    COVID-19 statistics.">
@@ -48,8 +51,8 @@
               Chart statistics represent check-in entries averaged per day. To view more about the statistics, 
               hover over each of the most current values of the statistics below.
             </p>
-            <div class="stat-bar-secondary">
-              <div class="stat-elem-quarter" style="text-align: left">
+            <div class="stat-bar-secondary stats-wrapper">
+              <div class="stat-elem-quarter left-obj">
                   <a class="stat-obj"
                   matTooltip="How strict is the store with masks? Are the customers and workers 
                               wearing masks properly? 0 indicates no to little mask policy 
@@ -58,7 +61,7 @@
                   </a>
                   <p><b>{{ store.checkInCount == 0 ? '—' : store.masks | round }}</b>/10</p>
               </div>
-              <div class="stat-elem-quarter" style="text-align: center;">
+              <div class="stat-elem-quarter center-obj">
                   <a class="stat-obj"
                   matTooltip="How crowded is it inside the store? Essentially, is there 
                               enough space to social distance, maintain 6 feet? 0 indicates 
@@ -67,7 +70,10 @@
                   </a>
                   <p><b>{{ store.checkInCount == 0 ? '—' : store.busy | round }}</b>/10</p>
               </div>
-              <div class="stat-elem-quarter" style="text-align: center;">
+              <div class="break-divider" *ngIf="isSmall">
+                <br/><br/><br/>
+              </div>
+              <div class="stat-elem-quarter center-obj left-cond">
                   <a class="stat-obj"
                   matTooltip="Is there a line to get into the store from the outside? Are 
                               there lines inside the store? How long was the wait? 0 indicates 
@@ -76,7 +82,7 @@
                   </a>
                   <p><b>{{ store.checkInCount == 0 ? '—' : store.line | round }}</b>/10</p>
               </div>
-              <div class="stat-elem-quarter" style="text-align: right;">
+              <div class="stat-elem-quarter right-obj">
                   <a class="stat-obj"
                   matTooltip="How clean is the store overall? Are the shared carts, 
                               baskets, and surfaces sanitized? 0 indicates poor hygiene 
@@ -103,7 +109,7 @@
                       <a class="stat-obj">TOTAL CASES</a>
                       <p>{{ countyStats.cases }}</p>
                   </div>
-                  <div class="stat-elem" style="text-align: center;">
+                  <div class="stat-elem center-obj" style="text-align: center;">
                       <a class="stat-obj">TOTAL DEATHS</a>
                       <p>{{ countyStats.deaths }}</p>
                   </div>

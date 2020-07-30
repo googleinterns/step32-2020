@@ -83,8 +83,6 @@
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
-    /* line-height: 30px;
-    display: flex; */
     color: #FF8756;
     padding-left: 10px;
     cursor: auto;
@@ -103,6 +101,14 @@
     cursor: auto;
 }
 
+#result .stores-list-animate-box {
+  animation-delay: calc(0.045s * var(--index));
+  animation-name: animateIn;
+  animation-duration: 350ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
 #result .stores-list-item {
   clear: both; 
   padding: 30px;
@@ -110,40 +116,51 @@
   overflow: hidden;
   border-radius: 8px;
   margin-bottom: 20px;
+  transition: 0.2s transform !important;
 }
 
 #result .stores-list-item:hover {
   transform: scale(1.02);
+  transition-duration: 0.2s !important;
 }
 
 #result .maps-button {
-    background: #68BBCF;
-    border-radius: 8px;
-    padding: 10px 15px 10px;
-    color: #EEEEEE;
-    margin-right: 15px;
-    border: none;
-    font-weight: 600;
-    font-size: 15px;
-    margin-top: 20px;
-    cursor: pointer;
+  background: #68BBCF;
+  border-radius: 8px;
+  padding: 10px 15px 10px;
+  color: #EEEEEE;
+  margin-right: 15px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 20px;
+  cursor: pointer;
 }
 
 #result .maps-button:hover {
-    background: rgba(104, 187, 207, 0.3);
-    color: #68BBCF;
+  background: rgba(104, 187, 207, 0.3);
+  color: #68BBCF;
 }
 
 #result .tag {
-  /* background: rgba(255, 135, 86, 0.3); */
   color: rgba(0, 0, 0, 0.3);
   padding: 5px 7px 5px;
   margin-left: 10px;
-  /* border-radius: 4px; */
   cursor: auto;
 }
 
 #result .tooltip {
   cursor: pointer;
   color: #68BBCF !important;
+}
+
+@keyframes animateIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(-8px);
+  }
+  
+  100% {
+    opacity: 1;
+  }
 }

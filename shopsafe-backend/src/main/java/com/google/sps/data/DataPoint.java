@@ -29,7 +29,7 @@ public final class DataPoint {
     // Format date into standard format
     String pattern = "yyyy-MM-dd";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-    this.date = simpleDateFormat.format(date);
+    this.date = simpleDateFormat.format(date) + " 00:00";
   }
 
   public double getValue() {
@@ -38,5 +38,10 @@ public final class DataPoint {
 
   public String getDate() {
     return date;
+  }
+
+  @Override
+  public String toString() {
+    return "{value: " + value + ", " + " date: " + date + "}";
   }
 }
