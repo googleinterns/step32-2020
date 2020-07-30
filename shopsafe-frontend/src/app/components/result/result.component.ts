@@ -221,7 +221,7 @@ export class ResultComponent implements OnInit {
     if (method == "Sort by ShopSafe Score") {
       console.log("CLIENT: sorting by ShopSafe Score");
       this.result.stores.sort((n1, n2) => {
-        return n2.rating - n1.rating;
+        return n2.score - n1.score;
       });
     // Sort by Google Review in descending order.
     } else if (method == "Sort by Google Review") {

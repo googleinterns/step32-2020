@@ -54,7 +54,6 @@ export class ApiService {
    */
   public getNearbyStores(location: string, latlng: boolean): Observable<ResultInterface> {
     const url = API_URL + '/stores?location=' + location + '&latlng=' + latlng.toString();
-    // const url = API_URL + '/stores';
     return this.http
       .get<ResultInterface>(url)
       .pipe(
