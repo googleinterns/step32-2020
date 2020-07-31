@@ -22,41 +22,37 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that handles user's rating of a store */
-// TODO: determine url
+/** Servlet that handles user's rating of a store. */
 @WebServlet("/checkin")
 public class CheckInServlet extends HttpServlet {
 
-  /*
-   * Request:
-   *    storeId - valid Places API ID
-   *    userId
-   *    RatingField1 - RatingValue1
-   *    RatingField2 - RatingValue2
-   *    .....
-   *    *TODO: Solidify rating fields and values*
-   *
-   * Updates datastore to reflect new rating
+  /**
+   * Updates datastore to reflect new rating. Request: storeId - valid Places API ID userId
+   * RatingField1 - RatingValue1 RatingField2 - RatingValue2
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    // If storeId is null, return error.
     String placesID = request.getParameter("storeId");
     if (placesID == null) {
-      response.sendError(400, "Provided no store ID");
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.setContentType("text/html;");
+      response.getWriter().println("No storeId is found.");
+      return;
     }
 
-    // null case handled in StoreDatastoreHandler
+    // Handle null case in StoreDatastoreHandler.
     String userID = request.getParameter("userId");
 
     StoreDatastoreHandler store = new StoreDatastoreHandler(placesID);
 
-    // Create mutable hashmap from params to values and only keep ratings
+    // Create mutable hashmap from params to values and only keep ratings.
     HashMap<String, String[]> ratingsMap = new HashMap(request.getParameterMap());
     ratingsMap.remove("storeId");
     ratingsMap.remove("userId");
 
-    // Update Datastore
+    // Update Datastore.
     store.placeStore(ratingsMap);
   }
 }

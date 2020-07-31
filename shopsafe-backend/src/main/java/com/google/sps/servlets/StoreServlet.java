@@ -28,7 +28,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
 import java.util.Scanner;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,10 +57,9 @@ public class StoreServlet extends HttpServlet {
       Scanner myReader = new Scanner(myObj);
       placeKey = "&key=" + myReader.nextLine();
       myReader.close();
-    }
+    } catch (FileNotFoundException e) {
 
-    // If error, print error, set status to bad reuqest and send error response.
-    catch (FileNotFoundException e) {
+      // If error, print error, set status to bad reuqes, and send error response.
       e.printStackTrace();
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       response.setContentType("text/html;");
@@ -89,7 +87,7 @@ public class StoreServlet extends HttpServlet {
     }
 
     // Get county based on location of the store.
-    County county = County.GetCounty(store);
+    County county = County.getCounty(store);
 
     // If the county was not found, set status to bad reuqest and send error response.
     if (county.getCountyName() == "") {
@@ -161,10 +159,9 @@ public class StoreServlet extends HttpServlet {
               new LatLng(storeLocation.getDouble("lat"), storeLocation.getDouble("lng")),
               result.has("rating") ? result.getDouble("rating") : 0);
       return true;
-    }
+    } catch (Exception e) {
 
-    // If error, print error, log error, and return false.
-    catch (Exception e) {
+      // If error, print error, log error, and return false.
       e.printStackTrace();
       System.out.println("Error in getting store from Places API.");
       return false;

@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -68,10 +67,9 @@ public class StoresServlet extends HttpServlet {
       Scanner myReader = new Scanner(myObj);
       placeKey = "&key=" + myReader.nextLine();
       myReader.close();
-    }
+    } catch (FileNotFoundException e) {
 
-    // If error, print error, and set status to bad reuqest and send error response.
-    catch (FileNotFoundException e) {
+      // If error, print error, and set status to bad reuqest and send error response.
       e.printStackTrace();
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       response.setContentType("text/html;");
@@ -79,8 +77,8 @@ public class StoresServlet extends HttpServlet {
       return;
     }
 
-    // Update CountyPercentile, if necessary.
-    CountyPercentile.Update();
+    // Update the county percentile file, if necessary.
+    CountyPercentile.updatePercentileFile();
 
     // Get the address input from the param.
     String address = request.getParameter("location");
@@ -136,7 +134,9 @@ public class StoresServlet extends HttpServlet {
       pool.execute(() -> addStore(store, countyScores, storeStats));
     }
     pool.shutdown();
-    while (!pool.isTerminated()) ;
+    while (!pool.isTerminated()) {
+      continue;
+    }
 
     // If there are no valid stores found, set status to bad reuqest and send error response.
     if (storeStats.size() == 0) {
@@ -163,7 +163,7 @@ public class StoresServlet extends HttpServlet {
       ConcurrentLinkedQueue<StoreStats> storeStats) {
 
     // Get county based on location of the store
-    County county = County.GetCounty(store);
+    County county = County.getCounty(store);
 
     // If the county was not found, log error message and don't add the store.
     if (county.getCountyName() == "") {
@@ -171,12 +171,9 @@ public class StoresServlet extends HttpServlet {
       return;
     }
 
-    // If county not in hashmap, add to hashmap and counties list.
+    // If county not in hashmap, calculate score and add to hashmap.
     if (!countyScores.containsKey(county.getCountyFips())) {
-
-      // Calculate and store the score for county and add the county stats to the list.
       countyScores.put(county.getCountyFips(), county.getCountyScore());
-      ;
     }
 
     // Todo: Get reviews for a store.
@@ -239,10 +236,9 @@ public class StoresServlet extends HttpServlet {
 
       // Return county using strings from the results.
       return stores;
-    }
+    } catch (Exception e) {
 
-    // If error, print error, and return the valid stores.
-    catch (Exception e) {
+      // If error, print error, and return the valid stores.
       e.printStackTrace();
       return stores;
     }
@@ -293,10 +289,9 @@ public class StoresServlet extends HttpServlet {
 
       // Return true for success.
       return true;
-    }
+    } catch (Exception e) {
 
-    // If error, print error, and return false.
-    catch (Exception e) {
+      // If error, print error, and return false.
       e.printStackTrace();
       return false;
     }
