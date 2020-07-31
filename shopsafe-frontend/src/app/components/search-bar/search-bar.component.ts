@@ -1,5 +1,6 @@
-import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit } from '@angular/core';
 import { } from 'googlemaps';
+import { BehaviorSubject, Observable } from 'rxjs'
 
 @Component({
   selector: 'app-search-bar',
@@ -16,20 +17,17 @@ export class SearchBarComponent implements OnInit {
 
   constructor() {
     // Check if API is loaded
-    if (google.maps == null) {
-      this.queryWait = false;
-    }
-    else 
-    if (google.maps.places) {
+    if (google.maps.places && google.maps) {
+      console.log('CLIENT: apis loaded');
       this.queryWait = true;
     } else {
+      console.log('CLIENT: apis not loaded');
       this.queryWait = false;
     }
   }
 
-  ngOnInit(): void {
-  }
-  
+  ngOnInit(): void {}
+
   ngAfterViewInit(): void {
     this.getPlace();
   }
