@@ -30,8 +30,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-/** Class contains the name, state, and fips of a county. */
+/** Class handles updating the couny percentiles. */
 public class CountyPercentile implements Comparable<CountyPercentile> {
+
+  // Constants used for finding length and reading and writing files.
+  public static final int COUNTY_COUNT = 3142;
+  public static final String PERCENTILE_LOCATION = "WEB-INF/classes/county_percentile_updated.csv";
+  public static final String POPULATION_LOCATION = "WEB-INF/classes/county_population.csv";
 
   // Static date used to check if county percentile needs to be updated.
   public static LocalDate date = LocalDate.of(2020, 7, 22);
@@ -40,15 +45,24 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
   protected String countyFips;
   protected double activeCasesPerCapita;
 
+  /*
+   * Constructor for county percentile class.
+   */
   public CountyPercentile(String countyFips, double activeCasesPerCapita) {
     this.countyFips = countyFips;
     this.activeCasesPerCapita = activeCasesPerCapita;
   }
 
+  /*
+   * Get the county fips code.
+   */
   public String getCountyFips() {
     return countyFips;
   }
 
+  /*
+   * Get active cases per caipta.
+   */
   public Double getActiveCasesPerCapita() {
     return activeCasesPerCapita;
   }
@@ -65,7 +79,7 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
   }
 
   /*
-   * Get a county score based on the county percentile csv file.
+   * Update the county percentile csv file.
    */
   public static void Update() {
 
@@ -76,10 +90,41 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
     CountyPercentile.date = LocalDate.now();
     System.out.println("Updating County Percentile csv file to: " + date);
 
+    // Get the population of all counties.
+    List<String[]> populations = readPopulationCSV();
+
+    // If not all county populations are read, log error and return.
+    if (populations.size() < COUNTY_COUNT) {
+      System.out.println("Failed to read all populations, the previous stats are being used.");
+      return;
+    }
+
+    // Get all the active cases per capita, value used for percentiles.
+    List<CountyPercentile> countyPercentiles = getCountyPercentiles(populations);
+
+    // If there are no counties to be updated from bigquery, log error and return.
+    if (countyPercentiles.size() == 0) {
+      System.out.println(
+          "Failed to update any county percentiles, the previous stats are being used.");
+      return;
+    }
+
+    // Sort countyPercentile using special comparison.
+    Collections.sort(countyPercentiles);
+
+    // Rewrite the percentile csv file.
+    writePercentileCSV(countyPercentiles);
+  }
+
+  /*
+   * Read the county population csv file.
+   */
+  public static List<String[]> readPopulationCSV() {
+
     // Add all the populations with fips code from the population file.
     List<String[]> populations = new ArrayList<String[]>();
     try {
-      CSVReader reader = new CSVReader(new FileReader("WEB-INF/classes/county_population.csv"));
+      CSVReader reader = new CSVReader(new FileReader(POPULATION_LOCATION));
       String[] nextLine = reader.readNext();
       while ((nextLine = reader.readNext()) != null) {
         if (Integer.parseInt(nextLine[3]) % 1000 > 0) {
@@ -89,13 +134,20 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
       }
     }
 
-    // If there is an error, report it, print error, and return.
+    // If there is an error, report it and print error.
     catch (Exception e) {
       e.printStackTrace();
-      System.out.println(
-          "An error occured while getting the populations from in county_population.csv.");
-      return;
+      System.out.println("An error occured while reading the county populations.");
     }
+
+    // Return the populations.
+    return populations;
+  }
+
+  /*
+   * Get the cases per capita for each county, which will be used for percentiles.
+   */
+  public static List<CountyPercentile> getCountyPercentiles(List<String[]> populations) {
 
     // Create list of CountyPercentiles to add to.
     List<CountyPercentile> countyPercentiles = new ArrayList<CountyPercentile>();
@@ -129,42 +181,50 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
         throw new RuntimeException(queryJobForecast.getStatus().getError().toString());
       }
 
-      // Get most recent recovered values, there should only be one result.
+      // Add county percentile for each county in the query results and populations.
       int index = 0;
       for (FieldValueList row : queryJobForecast.getQueryResults().iterateAll()) {
-        if (Integer.parseInt(populations.get(index)[0])
-            == Integer.parseInt(row.get("county_fips_code").getStringValue())) {
-          countyPercentiles.add(
-              new CountyPercentile(
-                  row.get("county_fips_code").getStringValue(),
-                  (row.get("cumulative_confirmed").getDoubleValue()
-                          - row.get("cumulative_deaths").getDoubleValue()
-                          - row.get("recovered").getDoubleValue())
-                      / Double.parseDouble(populations.get(index)[1])));
+        while (Integer.parseInt(populations.get(index)[0])
+            != Integer.parseInt(row.get("county_fips_code").getStringValue())) {
+          index += 1;
         }
-
+        countyPercentiles.add(
+            new CountyPercentile(
+                row.get("county_fips_code").getStringValue(),
+                (row.get("cumulative_confirmed").getDoubleValue()
+                        - row.get("cumulative_deaths").getDoubleValue()
+                        - row.get("recovered").getDoubleValue())
+                    / Double.parseDouble(populations.get(index)[1])));
         index += 1;
       }
+
+      // Return the county percentiles.
+      return countyPercentiles;
     }
 
-    // If there is an error, report it, print error, and return.
+    // If there is an error, report it, print error, and return an empty list.
     catch (Exception e) {
       e.printStackTrace();
       System.out.println("An error occured while getting projections from BigQuery.");
-      return;
+      return new ArrayList<CountyPercentile>();
     }
+  }
 
-    // Sort countyPercentile using special comparison.
-    Collections.sort(countyPercentiles);
+  /*
+   * Rewrite the percentile csv file using newer statistics.
+   */
+  public static void writePercentileCSV(List<CountyPercentile> countyPercentiles) {
 
     // Try to rewrite the county percentile file.
     try {
-      FileWriter csvWriter = new FileWriter("WEB-INF/classes/county_percentile.csv");
+
+      FileWriter csvWriter = new FileWriter(PERCENTILE_LOCATION);
       csvWriter.append("county_fips_code");
       csvWriter.append(",");
       csvWriter.append("percentile_rank");
       csvWriter.append("\n");
 
+      // Loop through all county percentiles, stepping down for each new value.
       double latestValue = 0.0;
       double latestPercentile = 1.0;
       int index = 0;
@@ -184,16 +244,16 @@ public class CountyPercentile implements Comparable<CountyPercentile> {
         index += 1;
       }
 
-      // Close the writer.
+      // Close the writer and log success.
       csvWriter.flush();
       csvWriter.close();
+      System.out.println("Updated: " + PERCENTILE_LOCATION);
     }
 
-    // If there is an error, report it, print error, and return.
+    // If there is an error, report it and print error.
     catch (Exception e) {
       e.printStackTrace();
-      System.out.println("Failed to write csv file.");
-      return;
+      System.out.println("Failed to update: " + PERCENTILE_LOCATION);
     }
   }
 }
