@@ -17,7 +17,7 @@ export class LandingComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public zone: NgZone
+    public zone: NgZone,
   ) { }
 
   ngOnInit(): void {
@@ -55,10 +55,10 @@ export class LandingComponent implements OnInit {
         this.getNearbyStores();
       }, 
       (positionError: PositionError) => {
-        console.log(positionError);
         this.loadingUserLatLng = false;
-        this.failedGeoLoc = true;
-        setTimeout(()=>{ this.failedGeoLoc = false}, 4000);
+        console.log(positionError);
+        setTimeout(()=>
+        alert("Failed to get your location, adjust your location settings for our site or insert an address in the search bar"), 100);
       }
     );
   }
