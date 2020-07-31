@@ -40,7 +40,7 @@ export class ApiService {
               .set('hygiene', hygiene.toString())
               .set('mask', mask.toString());
     return this.http
-      .post(API_URL + '/checkin?' + params.toString(),{}, this.httpOptions)
+      .post(API_URL + '/checkin?' + params.toString(), {}, this.httpOptions)
       .pipe(
         tap(_ => console.log("API: check in from " + storeId)),
         catchError(error => throwError(error.message || error))

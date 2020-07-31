@@ -3,92 +3,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpParams } from '@angular/common/http';
 import { ApiService } from '../api/api.service';
 
-// Dummy results for service testing
-const dummyStores = [
-  {
-    id: 'temp',
-    name: 'test',
-    address: '1234 Test St.',
-    open: true,
-    latitude: 0,
-    longitude: 0,
-    rating: 5,
-    score: 10,
-    busy: 1,
-    line: 1,
-    hygiene: 1,
-    masks: 1,
-    checkInCount: 10,
-    distance: 0
-  },
-  {
-    id: 'temp',
-    name: 'test',
-    address: '1234 Test St.',
-    open: true,
-    latitude: 0,
-    longitude: 0,
-    rating: 5,
-    score: 10,
-    busy: 1,
-    line: 1,
-    hygiene: 1,
-    masks: 1,
-    checkInCount: 10,
-    distance: 0
-  }
-];
-
-const dummyResult = {
-  stores: dummyStores,
-  latLng: { latitude: 0, longitude: 0 }
-};
-
-const dummyStore = [
-  {
-    id: 'temp',
-    name: 'test',
-    address: '1234 Test St.',
-    open: true,
-    latitude: 0,
-    longitude: 0,
-    rating: 5,
-    score: 10,
-    busy: 1,
-    line: 1,
-    hygiene: 1,
-    masks: 1,
-    checkInCount: 10,
-    distance: 0
-  }
-];
-
-const dummyDataPoint = {
-  value: 10,
-  date: '2020-01-01'
-};
-
-const dummyCountyStats = [
-  {
-    countyName: 'test',
-    stateName: 'test',
-    cases: 10,
-    deaths: 10,
-    activeCases: 10,
-    population: 100,
-    covidData: dummyDataPoint
-  }
-];
-
-const dummyStoreResult = {
-  store: dummyStore,
-  countyStats: dummyCountyStats,
-  maskData: dummyDataPoint,
-  busyData: dummyDataPoint,
-  lineData: dummyDataPoint,
-  hygieneData: dummyDataPoint
-};
-
 describe('ApiService', () => {
   let service: ApiService;
   let injector: TestBed;
@@ -115,40 +29,100 @@ describe('ApiService', () => {
 
   // GET /stores
   describe('getNearbyStores', () => {
-    const dummyParams = new HttpParams().set('location', 'Philadelphia').set('latLng', 'true');
+    const dummyParams = new HttpParams().set('location', '19104').set('latLng', 'true');
 
     it('should return an Observable<ResultInterface>', () => {
-      service.getNearbyStores('Philadelphia', true).subscribe( result => {
-        expect(result).toEqual(dummyResult);
+      service.getNearbyStores('19104', true).subscribe( result => {
+        expect(result).toBeTruthy(); // TODO: get length of results
       });
 
-      const req = httpMock.expectOne('${service.API_URL}/stores?location=Philadelphia&latLng=true');
+      const req = httpMock.expectOne('${service.API_URL}/stores?location=19104&latLng=true');
       expect(req.request.method).toBe("GET");
       expect(req.request.params).toEqual(dummyParams);
-      req.flush(dummyResult); // TODO: fix this
+      req.flush({
+        incomplete_results: false,
+        items: [],
+        total_count: 20
+      }); // TODO: fix this
     });
 
     it('should throw an error', () => {
+      const mockErrorResponse = { status: 400, statusText: 'Bad Request' };
+      const errorMessage = "400 Bad Request";
       service.getNearbyStores('unknown', true).subscribe(
         () => {},
         err => {
           expect(err).toBeTruthy();
         }
       );
-      httpMock.expectNone('${service.API_URL}/stores?location=unknown&latLng=true');
+      const req = httpMock.expectOne('${service.API_URL}/stores?location=unknown&latLng=true');
+      req.flush(errorMessage, mockErrorResponse);
     });
   });
 
   // GET /store
   describe('getNearbyStore', () => {
     it('should return an Observable<StoreResultInterface>', () => {
+      const dummyParams = new HttpParams().set('id', 'ChIJizCzRjbGxokRYeittvdIjSU');
+      
       service.getStoreById('ChIJizCzRjbGxokRYeittvdIjSU').subscribe( result => {
-        expect(result).toBeTruthy();
+        expect(result).toBeTruthy(); // TODO: get attribute or length of results
       });
 
       const req = httpMock.expectOne('${service.API_URL}/store?id=ChIJizCzRjbGxokRYeittvdIjSU');
       expect(req.request.method).toBe("GET");
-      req.flush(dummyStoreResult); // TODO: fix this
+      expect(req.request.params).toEqual(dummyParams);
+      req.flush({
+        incomplete_results: false,
+        items: [],
+        total_count: 1
+      }); // TODO: fix this
+    });
+
+    it('should throw an error', () => {
+      const mockErrorResponse = { status: 400, statusText: 'Bad Request' };
+      const errorMessage = "400 Bad Request";
+      service.getStoreById('12345').subscribe(
+        () => {},
+        err => {
+          expect(err).toBeTruthy();
+        }
+      );
+      const req = httpMock.expectOne('${service.API_URL}/store?id=12345');
+      req.flush(errorMessage, mockErrorResponse);
+    });
+  });
+
+  // POST /checkin
+  describe('createCheckIn', () => {
+    it('should return Observable<Object>', () => {
+      const dummyParams = new HttpParams().set('storeId', 'ChIJizCzRjbGxokRYeittvdIjSU')
+                                          .set('busy', '5')
+                                          .set('line', '5')
+                                          .set('hygiene', '5')
+                                          .set('mask', '5');
+
+      service.createCheckIn('ChIJizCzRjbGxokRYeittvdIjSU', 5, 5, 5, 5).subscribe( result => {
+        expect(result).toBeTruthy();
+      });
+
+      const req = httpMock.expectOne('${service.API_URL}/checkin?storeId=ChIJizCzRjbGxokRYeittvdIjSU&busy=5&line=5&hygiene=5&mask=5');
+      expect(req.request.method).toBe("POST");
+      expect(req.request.params).toEqual(dummyParams);
+      req.flush(''); // Server could send back any response
+    });
+
+    it('should throw an error', () => {
+      const mockErrorResponse = { status: 400, statusText: 'Bad Request' };
+      const errorMessage = "400 Bad Request";
+      service.createCheckIn('12345', 5, 5, 5, 5).subscribe(
+        () => {},
+        err => {
+          expect(err).toBeTruthy();
+        }
+      );
+      const req = httpMock.expectOne('${service.API_URL}/store?id=12345');
+      req.flush(errorMessage, mockErrorResponse);
     });
   });
 
