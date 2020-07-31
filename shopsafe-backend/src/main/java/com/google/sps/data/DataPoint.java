@@ -23,6 +23,7 @@ public final class DataPoint {
   private double value = 0.0;
   private String date;
 
+  /** DataPoint constructor. */
   public DataPoint(double value, Date date) {
     this.value = value;
 

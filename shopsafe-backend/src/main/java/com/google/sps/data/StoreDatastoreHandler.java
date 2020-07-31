@@ -37,39 +37,35 @@ public class StoreDatastoreHandler {
   private Key storeKey;
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-  // Not given a user
+  /** StoreDatastoreHandler constructor, notgiven a user. */
   public StoreDatastoreHandler(String storeId) {
     this.storeId = storeId;
-    this.userId = "Anon"; // TODO: Determine best practice for setting default user id
+    this.userId = "Anon";
     this.storeKey = new Builder("Store", storeId).getKey();
   }
 
-  // Given a user
+  /** StoreDatastoreHandler constructor, given a user. */
   public StoreDatastoreHandler(String storeId, String userId) {
     this.storeId = storeId;
     this.userId = userId;
     this.storeKey = new Builder("Store", storeId).getKey();
   }
 
-  /*
-   * Wrapper that handles cases where store is in datastore or not
-   */
+  /** Wrapper that handles cases where store is in datastore or not. */
   public void placeStore(Map<String, String[]> ratingsMap) {
     Entity ratingEntity = createRatingsEntity(ratingsMap);
     datastore.put(ratingEntity);
     try {
       // Found store in datastore
       Entity existingStoreEntity = datastore.get(storeKey);
-    } catch (Exception EntityNotFoundException) {
+    } catch (Exception e) {
       // Store not in datastore
       Entity storeEntity = new Entity("Store", storeId);
       datastore.put(storeEntity);
     }
   }
 
-  /*
-   * Creates Rating Entity, does not put in datastore
-   */
+  /** Creates Rating Entity, does not put in datastore. */
   private Entity createRatingsEntity(Map<String, String[]> ratingsMap) {
     // Set store as parent entity
     Entity ratingEntity = new Entity("Rating", storeKey);
@@ -77,9 +73,7 @@ public class StoreDatastoreHandler {
     // Insert ratings
     ratingsMap.forEach(
         (String ratingField, String[] ratingValue) -> {
-          /* http request getParamMap method formats in array instead of
-           * single value.
-           */
+          // Http request getParamMap method formats in array instead of single value.
           ratingEntity.setProperty(ratingField, Double.parseDouble(ratingValue[0]));
         });
 
@@ -92,10 +86,7 @@ public class StoreDatastoreHandler {
     return ratingEntity;
   }
 
-  /*
-   * Returns the children Rating Entities associated with the Store,
-   * sorted by date.
-   */
+  /** Returns the children Rating Entities associated with the Store, sorted by date. */
   public List<Entity> getRatings() {
     Query query =
         new Query("Rating", storeKey)
@@ -104,11 +95,9 @@ public class StoreDatastoreHandler {
     return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
   }
 
-  /* Tools For Debugging and Development */
+  // Tools For Debugging and Development
 
-  /*
-   * Deletes store and its ratings from Datastore
-   */
+  /** Deletes store and its ratings from Datastore. */
   public void deleteStoreAndRatings() {
     List<Entity> ratingEntities = this.getRatings();
     for (Entity ratingEntity : ratingEntities) {
@@ -118,17 +107,13 @@ public class StoreDatastoreHandler {
     datastore.delete(storeKey);
   }
 
-  /*
-   * Deletes all entries in Datastore,
-   */
+  /** Deletes all entries in Datastore. */
   public void deleteData() {
     deleteQuery(new Query("Store"));
     deleteQuery(new Query("Rating"));
   }
 
-  /*
-   * Deletes all entries in query
-   */
+  /** Deletes all entries in query. */
   private void deleteQuery(Query query) {
     PreparedQuery queryResults = datastore.prepare(query);
     for (Entity entry : queryResults.asIterable()) {

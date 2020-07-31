@@ -35,6 +35,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
 
+/** Class that tests the speed. */
 @RunWith(JUnit4.class)
 public final class StoresSpeedBenchmarkTest {
 
@@ -51,9 +52,7 @@ public final class StoresSpeedBenchmarkTest {
     helper.tearDown();
   }
 
-  /*
-   * For benchmarking speed
-   */
+  /** Find speed for Philly area. */
   @Test
   public void phillyInput() throws IOException, ServletException {
 

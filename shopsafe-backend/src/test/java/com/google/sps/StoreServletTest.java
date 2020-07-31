@@ -52,9 +52,7 @@ public class StoreServletTest {
     helper.tearDown();
   }
 
-  /*
-   * Check if correct error message is sent for null case.
-   */
+  /** Check if correct error message is sent for null case. */
   @Test
   public void checkNullId() throws IOException, ServletException {
 
@@ -78,9 +76,7 @@ public class StoreServletTest {
     Assert.assertEquals(result, "Failed to get the id parameter from the request.");
   }
 
-  /*
-   * Check if correct error message is sent for empty id.
-   */
+  /** Check if correct error message is sent for empty id. */
   @Test
   public void checkEmptyId() throws IOException, ServletException {
 
@@ -104,9 +100,7 @@ public class StoreServletTest {
     Assert.assertEquals(result, "Failed to get store information for the id:");
   }
 
-  /*
-   * Check if correct error message is sent for invalid id.
-   */
+  /** Check if correct error message is sent for invalid id. */
   @Test
   public void checkInvalidId() throws IOException, ServletException {
 
@@ -130,9 +124,7 @@ public class StoreServletTest {
     Assert.assertEquals(result, "Failed to get store information for the id: 12");
   }
 
-  /*
-   * Check the formatting for a correct id.
-   */
+  /** Check the formatting for a correct id. */
   @Test
   public void checkValidId() throws IOException, ServletException {
 

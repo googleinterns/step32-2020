@@ -35,19 +35,13 @@ public class QueryCovidStats {
 
   private long cases;
   private long deaths;
-  private long activeCases;
   private boolean failedQuery;
   private ArrayList<DataPoint> covidData;
 
   private QueryCovidStats(
-      long cases,
-      long deaths,
-      long activeCases,
-      boolean failedQuery,
-      ArrayList<DataPoint> covidData) {
+      long cases, long deaths, boolean failedQuery, ArrayList<DataPoint> covidData) {
     this.cases = cases;
     this.deaths = deaths;
-    this.activeCases = activeCases;
     this.failedQuery = failedQuery;
     this.covidData = covidData;
   }
@@ -58,10 +52,6 @@ public class QueryCovidStats {
 
   public long getDeaths() {
     return deaths;
-  }
-
-  public long getActiveCases() {
-    return activeCases;
   }
 
   public boolean failedQuery() {
@@ -90,57 +80,54 @@ public class QueryCovidStats {
 
     return (this.cases == other.cases
         && this.deaths == other.deaths
-        && this.activeCases == other.activeCases
         && this.failedQuery == other.failedQuery);
   }
 
-  /*
-   * Return instance of QueryOverTime if possible, otherwise, return failure.
-   */
-
+  /** Return instance of QueryOverTime if possible, otherwise, return failure. */
   public static QueryCovidStats getCovidStatsFips(String fips) {
 
     // Set up BigQuery service.
     BigQuery bigquery =
         BigQueryOptions.newBuilder().setProjectId("shopsafe-step-2020").build().getService();
 
-    // Prepare SQL query for getting cases and deaths from C.
-    QueryJobConfiguration queryConfigUSA =
+    // Prepare SQL query for getting cases and deaths from USA facts.
+    QueryJobConfiguration queryConfigUsa =
         QueryJobConfiguration.newBuilder(
-                "SELECT confirmed_cases, deaths, date FROM `bigquery-public-data.covid19_usafacts.summary` WHERE county_fips_code = '"
+                "SELECT confirmed_cases, deaths, date "
+                    + "FROM `bigquery-public-data.covid19_usafacts.summary` "
+                    + "WHERE county_fips_code = '"
                     + fips
                     + "' ORDER BY date DESC LIMIT 7")
             .setUseLegacySql(false)
             .build();
 
-    // Create unique job id and job for call to USA.
-    JobId jobIdUSA = JobId.of(UUID.randomUUID().toString());
-    Job queryJobUSA =
-        bigquery.create(JobInfo.newBuilder(queryConfigUSA).setJobId(jobIdUSA).build());
+    // Create unique job id and job for call to USA facts.
+    JobId jobIdUsa = JobId.of(UUID.randomUUID().toString());
+    Job queryJobUsa =
+        bigquery.create(JobInfo.newBuilder(queryConfigUsa).setJobId(jobIdUsa).build());
 
-    // Store the stats
+    // Store the statistics.
     long cases = -1;
     long deaths = -1;
     long recovered = -1;
     String date = "";
     ArrayList<DataPoint> covidData = new ArrayList();
 
+    // Query the USA facts job.
     try {
-
-      // Query USA.
-      queryJobUSA = queryJobUSA.waitFor();
+      queryJobUsa = queryJobUsa.waitFor();
 
       // Check for and throw errors.
-      if (queryJobUSA == null) {
+      if (queryJobUsa == null) {
         throw new RuntimeException("Job no longer exists.");
-      } else if (queryJobUSA.getStatus().getError() != null) {
-        throw new RuntimeException(queryJobUSA.getStatus().getError().toString());
+      } else if (queryJobUsa.getStatus().getError() != null) {
+        throw new RuntimeException(queryJobUsa.getStatus().getError().toString());
       }
 
       // Get most recent case and death values, there should only be one result.
-      for (FieldValueList row : queryJobUSA.getQueryResults().iterateAll()) {
+      for (FieldValueList row : queryJobUsa.getQueryResults().iterateAll()) {
 
-        // assign most recent case but insert previous data
+        // Assign most recent case and insert previous data.
         if (cases == -1) {
           cases = row.get("confirmed_cases").getLongValue();
           deaths = row.get("deaths").getLongValue();
@@ -149,73 +136,30 @@ public class QueryCovidStats {
         double casesNum = row.get("confirmed_cases").getDoubleValue();
         String dateString = row.get("date").getStringValue();
         Date dateObj = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+
         // Insert at beginning so order increases by date
         DataPoint data = new DataPoint(casesNum, dateObj);
         covidData.add(0, data);
       }
-    }
+    } catch (InterruptedException exception) {
 
-    // Set failedQuery to true and log error if query fails.
-    catch (InterruptedException exception) {
+      // Set failedQuery to true and log error if query fails.
       System.out.println("Error: Big Query Failure!");
-      return new QueryCovidStats(0, 0, 0, true, covidData);
+      return new QueryCovidStats(0, 0, true, covidData);
     } catch (ParseException e) {
+
+      // Set failedQuery to true and log error if unable to parse.
       System.out.println("Unable to parse date");
-      return new QueryCovidStats(0, 0, 0, true, covidData);
+      return new QueryCovidStats(0, 0, true, covidData);
     }
 
     // If there are null values, set failedQuery to true and log error.
     if (cases == -1 || deaths == -1 || date == "") {
       System.out.println("Error: Failed to obtain values for fips: " + fips);
-      return new QueryCovidStats(0, 0, 0, true, covidData);
-    }
-    // bigquery-public-data.covid19_public_forecasts.county_14d
-    // Prepare SQL query for getting projected recovered cases Forecasts.
-    QueryJobConfiguration queryConfigForecast =
-        QueryJobConfiguration.newBuilder(
-                "SELECT recovered FROM `bigquery-public-data.covid19_public_forecasts.county_14d` WHERE county_fips_code = '"
-                    + fips
-                    + "' AND prediction_date = '"
-                    + date
-                    + "' ORDER BY prediction_date DESC LIMIT 1")
-            .setUseLegacySql(false)
-            .build();
-
-    // Create unique job id and job for call to Forecasts.
-    JobId jobIdForecast = JobId.of(UUID.randomUUID().toString());
-    Job queryJobForecast =
-        bigquery.create(JobInfo.newBuilder(queryConfigForecast).setJobId(jobIdForecast).build());
-
-    // Try to query forecast.
-    try {
-      queryJobForecast = queryJobForecast.waitFor();
-
-      // Check for and throw errors.
-      if (queryJobForecast == null) {
-        throw new RuntimeException("Job no longer exists.");
-      } else if (queryJobForecast.getStatus().getError() != null) {
-        throw new RuntimeException(queryJobForecast.getStatus().getError().toString());
-      }
-
-      // Get most recent recovered values, there should only be one result.
-      for (FieldValueList row : queryJobForecast.getQueryResults().iterateAll()) {
-        recovered = (long) row.get("recovered").getDoubleValue();
-      }
-    }
-
-    // Set failedQuery to true and log error if query fails.
-    catch (InterruptedException exception) {
-      System.out.println("Error: Big Query Failure!");
-      return new QueryCovidStats(0, 0, 0, true, covidData);
-    }
-
-    // If recovered is -1, set failedQuery to true and log error.
-    if (recovered == -1) {
-      System.out.println("Error: Failed to obtain values");
-      return new QueryCovidStats(0, 0, 0, true, covidData);
+      return new QueryCovidStats(0, 0, true, covidData);
     }
 
     // Return Query Covid-19 stats for a county.
-    return new QueryCovidStats(cases, deaths, cases - (deaths + recovered), false, covidData);
+    return new QueryCovidStats(cases, deaths, false, covidData);
   }
 }

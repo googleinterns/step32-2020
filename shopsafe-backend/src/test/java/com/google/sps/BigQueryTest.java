@@ -19,13 +19,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/** Class that tests fetching BigQuery data. */
 @RunWith(JUnit4.class)
 public final class BigQueryTest {
 
-  /*
-   * Should return the same number of confirmed cases as we handle case in
-   * in bigquery search.
-   */
+  /** Should return the same number of confirmed cases as we handle case in in bigquery search. */
   @Test
   public void simpleCaseTest() {
     Assert.assertTrue(

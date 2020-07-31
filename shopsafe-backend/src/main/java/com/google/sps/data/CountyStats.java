@@ -14,23 +14,23 @@
 
 package com.google.sps.data;
 
-import com.opencsv.*;
 import java.util.ArrayList;
 
 /** Class contains the name, state, population and covid cases and deaths of a county. */
 public class CountyStats extends County {
 
-  protected long cases;
-  protected long deaths;
-  protected long population;
-  protected ArrayList<DataPoint> covidData;
+  private long cases;
+  private long deaths;
+  private long population;
+  private ArrayList<DataPoint> covidData;
 
+  /** CountyStats constructor. */
   public CountyStats(County county) {
 
     super(county.countyName, county.stateName, county.countyFips);
 
     // Get population from the Csv file.
-    this.population = county.getPopulationFromCsv();
+    this.population = county.getCountyPopulationFromCsv();
 
     // Make query to find cases and deaths, and cases over time.
     QueryCovidStats queryResults = QueryCovidStats.getCovidStatsFips(county.getCountyFips());

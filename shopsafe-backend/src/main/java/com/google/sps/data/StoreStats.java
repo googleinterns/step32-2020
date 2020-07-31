@@ -30,6 +30,7 @@ public final class StoreStats extends Store {
   private static final double COUNTY_WEIGHT = 0.5;
   private static final double CHECK_IN_WEIGHT = 0.5;
 
+  /** StoreStats constructor, does not calculate distance. */
   public StoreStats(Store store, double countyScore, CheckInStats stats) {
     super(
         store.id,
@@ -47,7 +48,7 @@ public final class StoreStats extends Store {
     this.distance = 0; // default value
   }
 
-  /** Overloaded constructor to include userLocation to calculate distance between user and store */
+  /** Overloaded constructor, uses userLocation to calculate distance between user and store. */
   public StoreStats(Store store, double countyScore, CheckInStats stats, LatLng userLocation) {
     super(
         store.id,
@@ -146,7 +147,5 @@ public final class StoreStats extends Store {
 
     distance = c * earthRadius;
     return distance;
-
-    // TODO: add error handling
   }
 }

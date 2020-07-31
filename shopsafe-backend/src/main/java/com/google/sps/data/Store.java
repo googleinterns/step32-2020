@@ -25,6 +25,7 @@ public class Store {
   protected double longitude;
   protected double rating;
 
+  /** Store constructor. */
   public Store(
       String id, String name, String address, Boolean open, LatLng location, double rating) {
     this.id = id;

@@ -25,6 +25,7 @@ public final class StoresResult {
   private final List<StoreStats> stores;
   private final LatLng latLng;
 
+  /** StoresResult constructor. */
   public StoresResult(List<StoreStats> stores, LatLng latLng) {
     this.stores = stores;
     this.latLng = latLng;

@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/** Class that tests Datastore. */
 @RunWith(JUnit4.class)
 public final class DatastoreTest {
 
@@ -46,9 +47,7 @@ public final class DatastoreTest {
     helper.tearDown();
   }
 
-  /*
-   * Newly created Store with no inserted reviews should return no reviews
-   */
+  /** Newly created Store with no inserted reviews should return no reviews. */
   @Test
   public void simpleCase() {
     String sampleplacesID = "sample1";
@@ -63,9 +62,7 @@ public final class DatastoreTest {
     Assert.assertEquals(expectedRatings, storeRatings);
   }
 
-  /*
-   * Newly created Store with review should return review which was inserted
-   */
+  /** Newly created Store with review should return review which was inserted. */
   @Test
   public void addRating() {
     String sampleplacesID = "sample1";
@@ -89,7 +86,7 @@ public final class DatastoreTest {
 
   /*
    * Inserting review in previously created Store with review should
-   * return the old and new Review
+   * return the old and new Review.
    */
   @Test
   public void addSecondRating() {
@@ -97,17 +94,17 @@ public final class DatastoreTest {
     HashMap<String, String[]> sampleHttpRequestParam = new HashMap();
     sampleHttpRequestParam.put("Rating1", new String[] {"9.0"});
 
-    // Insert store and Rating into DataStore
+    // Insert store and Rating into DataStore.
     StoreDatastoreHandler store = new StoreDatastoreHandler(sampleplacesID);
     store.placeStore(sampleHttpRequestParam);
 
-    // Place another rating in store following flow of servlet
+    // Place another rating in store following flow of servlet.
     StoreDatastoreHandler storeSometimeLater = new StoreDatastoreHandler(sampleplacesID);
     HashMap<String, String[]> sampleHttpRequestParam2 = new HashMap();
     sampleHttpRequestParam2.put("Rating1", new String[] {"5.0"});
     storeSometimeLater.placeStore(sampleHttpRequestParam2);
 
-    // Retrieve second ratings
+    // Retrieve second ratings.
     List<Entity> storeRatings = storeSometimeLater.getRatings();
     Entity insertedRating2 = storeRatings.get(1);
 
@@ -118,9 +115,9 @@ public final class DatastoreTest {
     store.deleteStoreAndRatings();
   }
 
-  /*
-   * Having created two objects which reference the same datastore entry, and deleting
-   * one of those object's datastore reference should delete the others reference as wel
+  /**
+   * Having created two objects which reference the same datastore entry, and deleting one of those
+   * object's datastore reference should delete the others reference as well.
    */
   @Test
   public void twoReferenceOneDataStoreEntry() {
@@ -143,9 +140,7 @@ public final class DatastoreTest {
     Assert.assertEquals(new ArrayList(), store.getRatings());
   }
 
-  /*
-   * Simple test for compiling ratings overtime
-   */
+  /** Simple test for compiling ratings overtime. */
   @Test
   public void compileRatingsForDataVisualization() {
     String sampleplacesID = "sample1";
@@ -155,11 +150,11 @@ public final class DatastoreTest {
     sampleHttpRequestParam.put("hygiene", new String[] {"6.0"});
     sampleHttpRequestParam.put("mask", new String[] {"7.0"});
 
-    // Insert store and Rating into DataStore
+    // Insert store and Rating into DataStore.
     StoreDatastoreHandler store = new StoreDatastoreHandler(sampleplacesID);
     store.placeStore(sampleHttpRequestParam);
 
-    // Place another rating in store following flow of servlet
+    // Place another rating in store following flow of servlet.
     StoreDatastoreHandler storeSometimeLater = new StoreDatastoreHandler(sampleplacesID);
     HashMap<String, String[]> sampleHttpRequestParam2 = new HashMap();
     sampleHttpRequestParam2.put("busy", new String[] {"5.0"});
@@ -169,18 +164,18 @@ public final class DatastoreTest {
 
     storeSometimeLater.placeStore(sampleHttpRequestParam2);
 
-    // Populate CheckinStats Class
+    // Populate CheckinStats Class.
     CheckInStats storeStats = new CheckInStats(sampleplacesID);
 
     HashMap<String, ArrayList<DataPoint>> compiledRatings = storeStats.compileRatingDays();
 
-    // Both reviews are on the same day so there should only be one rating
+    // Both reviews are on the same day so there should only be one rating.
     Assert.assertEquals(compiledRatings.get("mask").size(), 1);
     Assert.assertEquals(compiledRatings.get("hygiene").size(), 1);
     Assert.assertEquals(compiledRatings.get("line").size(), 1);
     Assert.assertEquals(compiledRatings.get("busy").size(), 1);
 
-    // compiled rating should be average of two reviews
+    // compiled rating should be average of two reviews.
     Assert.assertEquals((int) compiledRatings.get("mask").get(0).getValue(), 4);
     Assert.assertEquals((int) compiledRatings.get("hygiene").get(0).getValue(), 8);
     Assert.assertEquals((int) compiledRatings.get("line").get(0).getValue(), 7);
