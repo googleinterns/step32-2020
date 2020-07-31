@@ -1,5 +1,6 @@
-import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, ViewChild, EventEmitter, Output, OnInit, AfterViewInit } from '@angular/core';
 import { } from 'googlemaps';
+import { BehaviorSubject, Observable } from 'rxjs'
 
 @Component({
   selector: 'app-search-bar',
@@ -25,9 +26,8 @@ export class SearchBarComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-  }
-  
+  ngOnInit(): void {}
+
   ngAfterViewInit(): void {
     this.getPlace();
   }
