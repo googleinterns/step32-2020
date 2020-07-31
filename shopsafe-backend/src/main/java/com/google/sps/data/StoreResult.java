@@ -30,6 +30,7 @@ public final class StoreResult {
   private final ArrayList<DataPoint> lineData;
   private final ArrayList<DataPoint> hygieneData;
 
+  /** StoreResult constructor. */
   public StoreResult(
       StoreStats store,
       CountyStats countyStats,

@@ -24,20 +24,22 @@ import org.json.JSONObject;
 /** Class contains the name, state, and fips of a county. */
 public class County {
 
-  // FCC api url for county information
-  public static final int COUNTY_COUNT = 3142;
-  public static final String FCC_BASE_URL = "https://geo.fcc.gov/api/census/area?lat=";
-  public static final String FCC_END_URL = "&format=json";
-  public static final String PERCENTILE_LOCATION_UPDATED =
+  // FCC api url for county information and file locations.
+  protected static final int COUNTY_COUNT = 3142;
+  protected static final String FCC_BASE_URL = "https://geo.fcc.gov/api/census/area?lat=";
+  protected static final String FCC_END_URL = "&format=json";
+  protected static final String PERCENTILE_LOCATION_UPDATED =
       "WEB-INF/classes/county_percentile_updated.csv";
-  public static final String PERCENTILE_LOCATION_BACKUP = "WEB-INF/classes/county_percentile.csv";
-  public static final String POPULATION_LOCATION = "WEB-INF/classes/county_population.csv";
+  protected static final String PERCENTILE_LOCATION_BACKUP =
+      "WEB-INF/classes/county_percentile.csv";
+  protected static final String POPULATION_LOCATION = "WEB-INF/classes/county_population.csv";
 
-  // County properties
+  // Class properties of a county.
   protected String countyName;
   protected String stateName;
   protected String countyFips;
 
+  /** Class contains the name, state, and fips of a county. */
   public County(String countyName, String stateName, String countyFips) {
     this.countyName = countyName;
     this.stateName = stateName;
@@ -57,7 +59,7 @@ public class County {
   }
 
   /** Returns the county based on the coordinates of a store, or empty county if error. */
-  public static County GetCounty(Store store) {
+  public static County getCounty(Store store) {
     try {
 
       // Read response of call to FCC API given lat and lng.
@@ -82,18 +84,15 @@ public class County {
           result.getString("county_name"),
           result.getString("state_name"),
           result.getString("county_fips"));
-    }
+    } catch (Exception e) {
 
-    // If error, print error, and return empty county object
-    catch (Exception e) {
+      // If error, log error and return empty county object
       e.printStackTrace();
       return new County("", "", "");
     }
   }
 
-  /*
-   * Get a county score based on the county percentile csv file.
-   */
+  /** Get a county score based on the county percentile csv file. */
   public double getCountyScore() {
     try {
 
@@ -119,10 +118,9 @@ public class County {
       // Otherwise, log failure and return 5.0.
       System.out.println("Unable to get the score for " + countyName + ", " + stateName);
       return 5.0;
-    }
+    } catch (Exception e) {
 
-    // If there is an exception, send error message and return 5.0.
-    catch (Exception e) {
+      // If there is an exception, send error message and return 5.0.
       e.printStackTrace();
       System.out.println(
           "An error occured while getting the score for " + countyName + ", " + stateName);
@@ -130,10 +128,8 @@ public class County {
     }
   }
 
-  /*
-   * Given a county, find the population using the population csv file.
-   */
-  public long getPopulationFromCsv() {
+  /** Given a county, find the population using the population csv file. */
+  public long getCountyPopulationFromCsv() {
     try {
 
       // See if fips in the csv file, if so, return the population.
@@ -145,13 +141,12 @@ public class County {
         }
       }
 
-      // Otherwise, log failure and return 0.
+      // Otherwise, print error message and return 0.
       System.out.println("Unable to get population for " + countyName + ", " + stateName);
       return 0;
-    }
+    } catch (Exception e) {
 
-    // If there is an exception, send error message and return 0.
-    catch (Exception e) {
+      // If there is an exception, log error, print error message, and return 0.
       e.printStackTrace();
       System.out.println(
           "An error occured while getting the population for " + countyName + ", " + stateName);
