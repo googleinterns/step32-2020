@@ -1,6 +1,6 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
+import { HttpParams } from '@angular/common/http';
 import { ApiService } from '../api/api.service';
 
 // Dummy results for service testing
@@ -115,27 +115,41 @@ describe('ApiService', () => {
 
   // GET /stores
   describe('getNearbyStores', () => {
-    it('should return an Observable<ResultInterface>'), () => {
-      this.service.getNearbyStores().subscribe( result => {
+    const dummyParams = new HttpParams().set('location', 'Philadelphia').set('latLng', 'true');
+
+    it('should return an Observable<ResultInterface>', () => {
+      service.getNearbyStores('Philadelphia', true).subscribe( result => {
         expect(result).toEqual(dummyResult);
       });
 
-      const req = httpMock.expectOne('${service.API_URL}/stores');
+      const req = httpMock.expectOne('${service.API_URL}/stores?location=Philadelphia&latLng=true');
       expect(req.request.method).toBe("GET");
-      req.flush(dummyResult); // Flush method provides dummy values as a response.
-    }
+      expect(req.request.params).toEqual(dummyParams);
+      req.flush(dummyResult); // TODO: fix this
+    });
+
+    it('should throw an error', () => {
+      service.getNearbyStores('unknown', true).subscribe(
+        () => {},
+        err => {
+          expect(err).toBeTruthy();
+        }
+      );
+      httpMock.expectNone('${service.API_URL}/stores?location=unknown&latLng=true');
+    });
   });
 
   // GET /store
   describe('getNearbyStore', () => {
-    it('should return an Observable<StoreResultInterface>'), () => {
-      this.service.getNearbyStores().subscribe( result => {
-        expect(result).toEqual(dummyStoreResult);
+    it('should return an Observable<StoreResultInterface>', () => {
+      service.getStoreById('ChIJizCzRjbGxokRYeittvdIjSU').subscribe( result => {
+        expect(result).toBeTruthy();
       });
 
-      const req = httpMock.expectOne('${service.API_URL}/store');
+      const req = httpMock.expectOne('${service.API_URL}/store?id=ChIJizCzRjbGxokRYeittvdIjSU');
       expect(req.request.method).toBe("GET");
-      req.flush(dummyStoreResult);
-    }
-  })
+      req.flush(dummyStoreResult); // TODO: fix this
+    });
+  });
+
 });
