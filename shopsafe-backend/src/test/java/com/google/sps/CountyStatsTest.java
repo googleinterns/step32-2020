@@ -26,20 +26,20 @@ import org.junit.runners.JUnit4;
 public final class CountyStatsTest {
 
   /*
-   * Fake county should return 0 for all stats
+   * Fake county should return 0 for all stats.
    */
   @Test
   public void fakeCounty() {
-    County county = new County("Fake", "Place", "00000");
+    County county = new County("Fake", "Place", "100000");
     CountyStats countyStats = new CountyStats(county);
 
-    Assert.assertEquals(countyStats.getCases(), 0);
-    Assert.assertEquals(countyStats.getDeaths(), 0);
-    Assert.assertEquals(countyStats.getPopulation(), 0);
+    Assert.assertEquals(0, countyStats.getCases());
+    Assert.assertEquals(0, countyStats.getDeaths());
+    Assert.assertEquals(0, countyStats.getPopulation());
   }
 
   /*
-   * Valid County Should return valid Result, testing manhattan
+   * Valid County Should return valid Result, testing Lancaster.
    */
   @Test
   public void simpleCase() {

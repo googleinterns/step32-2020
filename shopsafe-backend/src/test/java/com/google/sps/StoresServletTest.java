@@ -52,9 +52,7 @@ public class StoresServletTest {
     helper.tearDown();
   }
 
-  /*
-   * Check if correct error message is sent for null case.
-   */
+  /** Check if correct error message is sent for null case. */
   @Test
   public void checkNullLocation() throws IOException, ServletException {
 
@@ -79,9 +77,7 @@ public class StoresServletTest {
     Assert.assertEquals(result, "Failed to get the location parameter from the request.");
   }
 
-  /*
-   * Check if correct error message is sent for empty location.
-   */
+  /** Check if correct error message is sent for empty location. */
   @Test
   public void checkEmptyLocation() throws IOException, ServletException {
 
@@ -106,9 +102,7 @@ public class StoresServletTest {
     Assert.assertEquals(result, "Failed to get location, an address must be submitted.");
   }
 
-  /*
-   * Check if correct error message is sent for invalid location.
-   */
+  /** Check if correct error message is sent for invalid location. */
   @Test
   public void checkNonsenseLocation() throws IOException, ServletException {
 
@@ -134,9 +128,7 @@ public class StoresServletTest {
         result, "Failed to find any stores near the address: asdflkasdvojabdskjvaewfnaeskcasdcn");
   }
 
-  /*
-   * Check if correct error message is sent for invalid location.
-   */
+  /** Check if correct error message is sent for invalid location. */
   @Test
   public void checkLocationOutsideUs() throws IOException, ServletException {
 
@@ -161,9 +153,7 @@ public class StoresServletTest {
     Assert.assertEquals(result, "Failed to find any valid stores near the address: Toronto");
   }
 
-  /*
-   * Check the formatting for a correct address location.
-   */
+  /** Check the formatting for a correct address location. */
   @Test
   public void checkValidLocation() throws IOException, ServletException {
 
@@ -205,9 +195,7 @@ public class StoresServletTest {
     Assert.assertTrue(true);
   }
 
-  /*
-   * Check the formatting for a correct LatLng location.
-   */
+  /** Check the formatting for a correct LatLng location. */
   @Test
   public void checkValidLatLng() throws IOException, ServletException {
 

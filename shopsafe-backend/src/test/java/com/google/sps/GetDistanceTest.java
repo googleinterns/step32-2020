@@ -44,9 +44,7 @@ public final class GetDistanceTest {
     helper.tearDown();
   }
 
-  /*
-   * Gets distance between Philadelphia and New York for fake store.
-   */
+  /** Gets distance between Philadelphia and New York for fake store. */
   @Test
   public void getDistanceTest() {
     Store store =
@@ -54,7 +52,7 @@ public final class GetDistanceTest {
     CheckInStats stats = new CheckInStats("0");
     StoreStats storeStats = new StoreStats(store, 0.0, stats, new LatLng(40.712776, -74.005974));
 
-    Assert.assertEquals(storeStats.getDistance(), 80.48319052067637, 0.01);
+    Assert.assertEquals(80.48319052067637, storeStats.getDistance(), 0.01);
   }
 
   /** Gets distance between two equal points. */
@@ -65,6 +63,6 @@ public final class GetDistanceTest {
     CheckInStats stats = new CheckInStats("0");
     StoreStats storeStats = new StoreStats(store, 0.0, stats, new LatLng(39.952583, -75.165222));
 
-    Assert.assertEquals(storeStats.getDistance(), 0.0, 0.001);
+    Assert.assertEquals(0.0, storeStats.getDistance(), 0.001);
   }
 }
