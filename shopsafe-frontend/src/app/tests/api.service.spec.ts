@@ -33,17 +33,13 @@ describe('ApiService', () => {
 
     it('should return an Observable<ResultInterface>', () => {
       service.getNearbyStores('19104', true).subscribe( result => {
-        expect(result).toBeTruthy(); // TODO: get length of results
+        expect(result).toBeTruthy();
       });
 
       const req = httpMock.expectOne('${service.API_URL}/stores?location=19104&latLng=true');
       expect(req.request.method).toBe("GET");
       expect(req.request.params).toEqual(dummyParams);
-      req.flush({
-        incomplete_results: false,
-        items: [],
-        total_count: 20
-      }); // TODO: fix this
+      req.flush('');
     });
 
     it('should throw an error', () => {
@@ -66,17 +62,13 @@ describe('ApiService', () => {
       const dummyParams = new HttpParams().set('id', 'ChIJizCzRjbGxokRYeittvdIjSU');
       
       service.getStoreById('ChIJizCzRjbGxokRYeittvdIjSU').subscribe( result => {
-        expect(result).toBeTruthy(); // TODO: get attribute or length of results
+        expect(result).toBeTruthy();
       });
 
       const req = httpMock.expectOne('${service.API_URL}/store?id=ChIJizCzRjbGxokRYeittvdIjSU');
       expect(req.request.method).toBe("GET");
       expect(req.request.params).toEqual(dummyParams);
-      req.flush({
-        incomplete_results: false,
-        items: [],
-        total_count: 1
-      }); // TODO: fix this
+      req.flush('');
     });
 
     it('should throw an error', () => {

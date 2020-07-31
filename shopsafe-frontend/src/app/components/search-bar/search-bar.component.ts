@@ -16,13 +16,11 @@ export class SearchBarComponent implements OnInit {
 
   constructor() {
     // Check if API is loaded
-    if (google.maps == null) {
-      this.queryWait = false;
-    }
-    else 
-    if (google.maps.places) {
+    if (google.maps.places && google.maps) {
+      console.log('CLIENT: apis loaded');
       this.queryWait = true;
     } else {
+      console.log('CLIENT: apis not loaded');
       this.queryWait = false;
     }
   }
