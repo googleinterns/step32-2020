@@ -1,5 +1,0 @@
-indexes:
-- kind: Rating
-  ancestor: yes
-  properties:
-  - name: Date

@@ -112,7 +112,7 @@ export class StoreComponent implements OnInit {
    * Opens check in modal dialog using check in modal component.
    * Opens new check in modal on screen.
    */
-  openModal() {
+  openModal(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = "check-in-modal";
     dialogConfig.height = "510px";
@@ -127,7 +127,7 @@ export class StoreComponent implements OnInit {
   /**
    * Opens Google Maps link using Places ID of the store.
    */
-  redirectToMap() {
+  redirectToMap(): void {
     const url = 'https://www.google.com/maps/place/?q=place_id:' + this.storeId;
     window.open(url, "_blank");
   }
@@ -135,7 +135,7 @@ export class StoreComponent implements OnInit {
   /**
    * Redirects to result page (previous page).
    */
-  goBack() {
+  goBack(): void {
     window.history.back();
   }
 

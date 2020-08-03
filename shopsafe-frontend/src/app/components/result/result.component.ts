@@ -249,7 +249,7 @@ export class ResultComponent implements OnInit {
    * @param store The name of the store for the given marker.
    * @param storeScore The score of the specified store.
    */
-  openInfo(markerPosition, store, storeScore): void {
+  openInfo(markerPosition: google.maps.LatLngLiteral, store: string, storeScore: number): void {
     this.infoWindowOptions = { 
       content: store + ": " + Math.round(storeScore * 100) / 100 + "/10",
       position: markerPosition
