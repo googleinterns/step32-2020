@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, NgZone } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { Result } from '../../classes/result/result';
 import { ActivatedRoute } from '@angular/router';
@@ -70,6 +70,7 @@ export class ResultComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
+    public zone: NgZone
   ) { 
     this.sortingMethods = ['Sort by ShopSafe Score', 
                            'Sort by Google Review',
@@ -81,14 +82,14 @@ export class ResultComponent implements OnInit {
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
     this.latlng = JSON.parse(this.route.snapshot.paramMap.get('latlng'));
-    this.getResult('Sort by ShopSafe Score');
+    this.getResult();
   }
 
   /**
    * Calls API to get result and subscribes local variables using data returned
    * in the Observable from the HTTP response.
    */
-  getResult(method: string): void {
+  getResult(): void {
     console.log('CLIENT: results api call at ' + this.location);
     this.apiService.getNearbyStores(this.location, this.latlng)
       .subscribe(data => 
@@ -102,10 +103,14 @@ export class ResultComponent implements OnInit {
           this.httpErrorMessage = err
         },
         () => {
-          this.sortResults(method);
+          this.sortResults('Sort by ShopSafe Score'); // Initial sort by ShopSafe Score
           this.initTemplate()
         }
       );
+  }
+
+  getSortedResult(method: string): void {
+    this.zone.run(() => { this.sortResults(method) });
   }
 
   /**
