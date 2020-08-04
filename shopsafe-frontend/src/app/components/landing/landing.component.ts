@@ -12,7 +12,7 @@ export class LandingComponent implements OnInit {
 
   location: string = '';
   loadingUserLatLng: boolean = false;
-  failedGeoLoc = false;
+  failedGeoLoc: boolean = false;
   latlng: boolean = false;
 
   constructor(

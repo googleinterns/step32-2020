@@ -71,13 +71,12 @@ export class ResultComponent implements OnInit {
     private apiService: ApiService,
     private route: ActivatedRoute,
     public zone: NgZone
-  ) { 
+  ) { }
+
+  ngOnInit(): void {
     this.sortingMethods = ['Sort by ShopSafe Score', 
                            'Sort by Google Review',
                            'Sort by Distance']; // Init sorting methods.
-  }
-
-  ngOnInit(): void {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
@@ -104,7 +103,7 @@ export class ResultComponent implements OnInit {
         },
         () => {
           this.sortResults('Sort by ShopSafe Score'); // Initial sort by ShopSafe Score
-          this.initTemplate()
+          this.initTemplate();
         }
       );
   }
@@ -249,7 +248,7 @@ export class ResultComponent implements OnInit {
    * @param store The name of the store for the given marker.
    * @param storeScore The score of the specified store.
    */
-  openInfo(markerPosition, store, storeScore): void {
+  openInfo(markerPosition: google.maps.LatLngLiteral, store: string, storeScore: number): void {
     this.infoWindowOptions = { 
       content: store + ": " + Math.round(storeScore * 100) / 100 + "/10",
       position: markerPosition
