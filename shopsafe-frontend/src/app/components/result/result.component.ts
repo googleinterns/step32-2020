@@ -71,13 +71,12 @@ export class ResultComponent implements OnInit {
     private apiService: ApiService,
     private route: ActivatedRoute,
     public zone: NgZone
-  ) { 
+  ) { }
+
+  ngOnInit(): void {
     this.sortingMethods = ['Sort by ShopSafe Score', 
                            'Sort by Google Review',
                            'Sort by Distance']; // Init sorting methods.
-  }
-
-  ngOnInit(): void {
     this.isLoaded = false; // Defaults to API not called yet
     this.httpError = false; // Defaults to no HTTP error
     this.location = this.route.snapshot.paramMap.get('location').toString();
@@ -104,7 +103,7 @@ export class ResultComponent implements OnInit {
         },
         () => {
           this.sortResults('Sort by ShopSafe Score'); // Initial sort by ShopSafe Score
-          this.initTemplate()
+          this.initTemplate();
         }
       );
   }
