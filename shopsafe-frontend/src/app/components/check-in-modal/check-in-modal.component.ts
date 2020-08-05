@@ -23,10 +23,10 @@ export class CheckInModalComponent implements OnInit {
     
   ) { 
     if (CheckInModalComponent.store.checkInCount != 0) {
-      this.socDis = CheckInModalComponent.store.busy;
-      this.waitTime = CheckInModalComponent.store.line;
-      this.clean = CheckInModalComponent.store.hygiene;
-      this.msk = CheckInModalComponent.store.masks;
+      this.socDis = Number(CheckInModalComponent.store.busy.toFixed(2));
+      this.waitTime = Number(CheckInModalComponent.store.line.toFixed(2)); 
+      this.clean = Number(CheckInModalComponent.store.hygiene.toFixed(2));
+      this.msk = Number(CheckInModalComponent.store.masks.toFixed(2));
     }
   }
 
