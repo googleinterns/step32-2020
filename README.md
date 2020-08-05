@@ -14,8 +14,6 @@ A web application for informed and safe shopping during COVID-19.
 
 ![shopsafe-landing](https://i.imgur.com/eThPtro.gif)
 
-![shopsafe-results](https://media1.giphy.com/media/SV6OJEX8JIfRbo1cTR/giphy.gif)
-
 ## Development Information
 
 ### Formatting Java Code
