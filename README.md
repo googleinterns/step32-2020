@@ -1,13 +1,30 @@
-# ShopSafe
-A web application for informed and safe shopping during COVID-19. Created by [Gabriel Stewart](https://github.com/glstewart17), [Raul Palomo](https://github.com/Raulp8), and [Carol Li](https://github.com/caroljli).
+# ShopSafe :shopping_cart:
+A web application for informed and safe shopping during COVID-19. 
 
-## Formatting Java Code
+### Contributors
+* [Gabriel Stewart](https://github.com/glstewart17)
+* [Raul Palomo](https://github.com/Raulp8)
+* [Carol Li](https://github.com/caroljli)
+
+### Mentors
+* Aditi Jain
+* Carl Atupem
+
+### Static Demo
+
+![shopsafe-landing](https://i.imgur.com/eThPtro.gif)
+
+![shopsafe-results](https://media1.giphy.com/media/SV6OJEX8JIfRbo1cTR/giphy.gif)
+
+## Development Information
+
+### Formatting Java Code
 ```
 cd shopsafe-backend/
 mvn com.theoryinpractise:googleformatter-maven-plugin:format
 ```
 
-## Running Development Server
+### Running Development Server
 ```
 // Install Angular
 npm install -g @angular/cli
@@ -23,7 +40,7 @@ mvn package appengine:run
 // Add -Dmaven.test.skip to skip tests
 ```
 
-## Deployment Instructions
+### Deployment Instructions
 ```
 // Install Angular
 npm install -g @angular/cli
@@ -36,4 +53,6 @@ ng build --prod --delete-output-path=false
 cd ../shopsafe-backend/
 mvn package appengine:deploy
 
-//Add -Dmaven.test.skip to skip tests
+// To skip Java tests, add
+-Dmaven.test.skip
+
