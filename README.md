@@ -12,7 +12,10 @@ A web application for informed and safe shopping during COVID-19.
 
 ### Static Demo
 
-![shopsafe-landing](https://i.imgur.com/eThPtro.gif)
+<img src="/demo-gifs/shopsafe-landing.gif?raw=true" width="max">
+<img src="/demo-gifs/shopsafe-results.gif?raw=true" width="max">
+<img src="/demo-gifs/shopsafe-results-sorting.gif?raw=true" width="max">
+<img src="/demo-gifs/shopsafe-checkin.gif?raw=true" width="max">
 
 ## Development Information
 
