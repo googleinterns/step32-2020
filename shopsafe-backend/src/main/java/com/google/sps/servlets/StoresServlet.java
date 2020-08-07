@@ -47,6 +47,7 @@ import org.json.JSONObject;
 @WebServlet("/stores")
 public class StoresServlet extends HttpServlet {
 
+  // Constants for API calls and key reading.
   public static final String PLACE_URL =
       "https://maps.googleapis.com/maps/api/place/textsearch/json?query=grocery+store&location=";
   public static final String PLACE_RANK = "&radius=10&rankby=prominence";
@@ -54,6 +55,7 @@ public class StoresServlet extends HttpServlet {
       "https://maps.googleapis.com/maps/api/geocode/json?address=";
   private static final String PLACE_KEY_LOCATION = "WEB-INF/classes/key.txt";
 
+  // Globals used to make code more modular.
   private String placeKey;
   private LatLng userLocation;
 
@@ -99,16 +101,39 @@ public class StoresServlet extends HttpServlet {
       return;
     }
 
-    // Get location based on geolocation of address or string version of LatLng.
-    if (Boolean.TRUE.equals(request.getParameter("latlng"))) {
+    // Set userLocation based on location if that "latlng" is true, otherwise geocode the address.
+    if (Boolean.valueOf(request.getParameter("latlng"))) {
       String[] latLngArray = address.split(",");
-      userLocation =
-          new LatLng(Double.parseDouble(latLngArray[0]), Double.parseDouble(latLngArray[1]));
+
+      // If the latLngArray is the incorrect size, send an error response
+      if (latLngArray.length != 2) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setContentType("text/html;");
+        response
+            .getWriter()
+            .println("Location not provided in latitude, longitude format: " + address);
+        return;
+      }
+
+      // Try to get userLocation, but log error and send error response if nonumeric values.
+      try {
+        userLocation =
+            new LatLng(Double.parseDouble(latLngArray[0]), Double.parseDouble(latLngArray[1]));
+      } catch (NumberFormatException e) {
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setContentType("text/html;");
+        response
+            .getWriter()
+            .println("Invalid value types for latitude, longitude format: " + address);
+        return;
+      }
+
     } else {
       if (!getLatLngFromAddress(address)) {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setContentType("text/html;");
-        response.getWriter().println("Failed to find any stores near the address: " + address);
+        response.getWriter().println("Failed to find the location of: " + address);
         return;
       }
     }
@@ -116,17 +141,16 @@ public class StoresServlet extends HttpServlet {
     // Get all grocery stores based on LatLng and migrate to the Store class.
     List<Store> stores = getStores();
 
+    // Create Hash Map and Queue for concurrent.
     ConcurrentHashMap<String, Double> countyScores = new ConcurrentHashMap();
-
-    // Add fake score values to the stores.
     ConcurrentLinkedQueue<StoreStats> storeStats = new ConcurrentLinkedQueue();
 
-    // For every store, get reviews and county data and add scores to the store.
+    // Create Thread Factory Scoped to request.
     int count = stores.size();
-
-    // Create Thread Factory Scoped to request
     ThreadFactory factory = ThreadManager.currentRequestThreadFactory();
     ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(count, factory);
+
+    // For every store, get reviews and county data and add scores to the store.
     for (int i = 0; i < count; i++) {
       Store store = stores.get(i);
 
@@ -134,6 +158,8 @@ public class StoresServlet extends HttpServlet {
       pool.execute(() -> addStore(store, countyScores, storeStats));
     }
     pool.shutdown();
+
+    // Continue until all threads have terminated.
     while (!pool.isTerminated()) {
       continue;
     }
@@ -146,7 +172,7 @@ public class StoresServlet extends HttpServlet {
       return;
     }
 
-    // Todo: Return stores with scores and county info as json as StoresResult.
+    // Return stores with scores and userLocation as json as StoresResult.
     Gson gson = new Gson();
     response.setContentType("application/json;");
     response
@@ -176,8 +202,7 @@ public class StoresServlet extends HttpServlet {
       countyScores.put(county.getCountyFips(), county.getCountyScore());
     }
 
-    // Todo: Get reviews for a store.
-
+    // Get check in stats for a store.
     CheckInStats checkInStats = new CheckInStats(store.getId());
 
     // Add score and review stats to the store.
