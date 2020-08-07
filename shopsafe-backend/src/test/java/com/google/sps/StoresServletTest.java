@@ -42,9 +42,14 @@ public class StoresServletTest {
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
+  private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+  private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+  private StoresServlet storesServlet = new StoresServlet();
+
   @Before
-  public void setUp() {
+  public void setUp() throws ServletException {
     helper.setUp();
+    storesServlet.init();
   }
 
   @After
@@ -55,12 +60,6 @@ public class StoresServletTest {
   /** Check if correct error message is sent for null case. */
   @Test
   public void checkNullLocation() throws IOException, ServletException {
-
-    // Initialize request, response, and servlet.
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    StoresServlet storesServlet = new StoresServlet();
-    storesServlet.init();
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn(null);
@@ -74,18 +73,12 @@ public class StoresServletTest {
     String result = stringWriter.getBuffer().toString().trim();
     printWriter.flush();
 
-    Assert.assertEquals(result, "Failed to get the location parameter from the request.");
+    Assert.assertEquals("Failed to get the location parameter from the request.", result);
   }
 
   /** Check if correct error message is sent for empty location. */
   @Test
   public void checkEmptyLocation() throws IOException, ServletException {
-
-    // Initialize request, response, and servlet.
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    StoresServlet storesServlet = new StoresServlet();
-    storesServlet.init();
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("  ");
@@ -99,18 +92,12 @@ public class StoresServletTest {
     String result = stringWriter.getBuffer().toString().trim();
     printWriter.flush();
 
-    Assert.assertEquals(result, "Failed to get location, an address must be submitted.");
+    Assert.assertEquals("Failed to get location, an address must be submitted.", result);
   }
 
   /** Check if correct error message is sent for invalid location. */
   @Test
   public void checkNonsenseLocation() throws IOException, ServletException {
-
-    // Initialize request, response, and servlet.
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    StoresServlet storesServlet = new StoresServlet();
-    storesServlet.init();
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("asdflkasdvojabdskjvaewfnaeskcasdcn");
@@ -125,18 +112,12 @@ public class StoresServletTest {
     printWriter.flush();
 
     Assert.assertEquals(
-        result, "Failed to find any stores near the address: asdflkasdvojabdskjvaewfnaeskcasdcn");
+        "Failed to find the location of: asdflkasdvojabdskjvaewfnaeskcasdcn", result);
   }
 
   /** Check if correct error message is sent for invalid location. */
   @Test
   public void checkLocationOutsideUs() throws IOException, ServletException {
-
-    // Initialize request, response, and servlet.
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    StoresServlet storesServlet = new StoresServlet();
-    storesServlet.init();
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("Toronto");
@@ -150,18 +131,12 @@ public class StoresServletTest {
     String result = stringWriter.getBuffer().toString().trim();
     printWriter.flush();
 
-    Assert.assertEquals(result, "Failed to find any valid stores near the address: Toronto");
+    Assert.assertEquals("Failed to find any valid stores near the address: Toronto", result);
   }
 
   /** Check the formatting for a correct address location. */
   @Test
   public void checkValidLocation() throws IOException, ServletException {
-
-    // Initialize request, response, and servlet.
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    StoresServlet storesServlet = new StoresServlet();
-    storesServlet.init();
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("Philadelphia");
@@ -182,10 +157,9 @@ public class StoresServletTest {
       JSONArray stores = resultJson.getJSONArray("stores");
       JSONObject firstStore = stores.getJSONObject(0);
       String storeId = firstStore.getString("id");
-    }
+    } catch (Exception e) {
 
-    // If error, print error, assert False, and return.
-    catch (Exception e) {
+      // If error, print error, assert False, and return.
       e.printStackTrace();
       Assert.assertTrue(false);
       return;
@@ -195,15 +169,48 @@ public class StoresServletTest {
     Assert.assertTrue(true);
   }
 
+  /** Check the error response of a LatLng location of invalid length and content. */
+  @Test
+  public void checkInvalidLatLngLength() throws IOException, ServletException {
+
+    // Mock call for location.
+    when(request.getParameter("location")).thenReturn("Philadelphia");
+    when(request.getParameter("latlng")).thenReturn("true");
+
+    // Read response and save to result.
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    storesServlet.doGet(request, response);
+    String result = stringWriter.getBuffer().toString().trim();
+    printWriter.flush();
+
+    Assert.assertEquals(
+        "Location not provided in latitude, longitude format: Philadelphia", result);
+  }
+
+  /** Check the error response of a LatLng location of invalid type. */
+  @Test
+  public void checkInvalidLatLngType() throws IOException, ServletException {
+
+    // Mock call for location.
+    when(request.getParameter("location")).thenReturn("Hello, World");
+    when(request.getParameter("latlng")).thenReturn("true");
+
+    // Read response and save to result.
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter printWriter = new PrintWriter(stringWriter);
+    when(response.getWriter()).thenReturn(printWriter);
+    storesServlet.doGet(request, response);
+    String result = stringWriter.getBuffer().toString().trim();
+    printWriter.flush();
+
+    Assert.assertEquals("Invalid value types for latitude, longitude format: Hello, World", result);
+  }
+
   /** Check the formatting for a correct LatLng location. */
   @Test
   public void checkValidLatLng() throws IOException, ServletException {
-
-    // Initialize request, response, and servlet.
-    HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-    HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    StoresServlet storesServlet = new StoresServlet();
-    storesServlet.init();
 
     // Mock call for location.
     when(request.getParameter("location")).thenReturn("40.7978417,-77.8556184");
@@ -224,10 +231,9 @@ public class StoresServletTest {
       JSONArray stores = resultJson.getJSONArray("stores");
       JSONObject firstStore = stores.getJSONObject(0);
       String storeId = firstStore.getString("id");
-    }
+    } catch (Exception e) {
 
-    // If error, print error, assert False, and return.
-    catch (Exception e) {
+      // If error, print error, assert False, and return.
       e.printStackTrace();
       Assert.assertTrue(false);
       return;
